@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.2.0
   google_fonts: ^6.1.0
+    fl_chart: ^0.64.0
+
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +61,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+      - assets/
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
