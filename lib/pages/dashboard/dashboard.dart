@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dashboard UI',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xFF00897B),
-      ),
-      home: const HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // AppBar bisa disembunyikan jika ingin custom header di dalam body
+    return WillPopScope(
+        onWillPop: () async {
+          bool exitConfirmed = await _showExitPopup(context);
+          return exitConfirmed;
+        },
+    child:  Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: SingleChildScrollView(
@@ -35,31 +21,28 @@ class HomeScreen extends StatelessWidget {
               // HEADER / PROFIL
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                color: Colors.white,
                 child: Row(
                   children: [
-                    // Foto profil dummy
                     CircleAvatar(
                       radius: 24,
                       backgroundColor: Colors.grey[300],
                       child: Icon(Icons.person, color: Colors.grey[600]),
                     ),
                     const SizedBox(width: 12),
-                    // Nama dan status
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'KOKO Faisal',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             'Dosen',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 14,
                               color: Colors.grey,
                             ),
@@ -67,14 +50,21 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Icon notifikasi dan lainnya
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.notifications_none),
+                      icon: Image.asset(
+                        'assets/icons/notification.png', // Sesuaikan dengan path gambar Anda
+                        width: 24, // Sesuaikan ukuran gambar
+                        height: 24,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.person),
+                      icon: Image.asset(
+                        'assets/icons/pusatbantuan.png', // Sesuaikan dengan path gambar Anda
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ],
                 ),
@@ -87,56 +77,70 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.teal[700],
                   borderRadius: BorderRadius.circular(8),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/detail.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Anda memiliki data yang belum terisi',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    // List data
-                    const Text(
+                    Text(
                       '1. Data Semester genap 2023 / 2024\n'
                           '2. Data Semester ganjil 2022 / 2023\n'
                           '3. Data Semester ganjil 2024 / 2025',
-                      style: TextStyle(color: Colors.white),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    // Tombol + progress bar
                     Row(
                       children: [
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.teal[700],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           onPressed: () {},
-                          child: const Text('Isi sekarang'),
+                          child: Text(
+                            'Isi sekarang',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text(
+                              Text(
                                 '45%',
-                                style: TextStyle(color: Colors.white),
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(height: 4),
-                              // Progress bar
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(4),
                                 child: LinearProgressIndicator(
-                                  value: 0.45, // 45%
+                                  value: 0.45,
                                   minHeight: 6,
                                   backgroundColor: Colors.white.withOpacity(0.3),
-                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                  valueColor: const AlwaysStoppedAnimation<Color>(
                                     Colors.white,
                                   ),
                                 ),
@@ -157,63 +161,89 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
-                    // Header tabel
                     Row(
-                      children: const [
+                      children: [
                         Expanded(
                           flex: 3,
                           child: Text(
                             'Tahun Ajaran',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Text(
                             'Semester',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Text(
                             'Aksi',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
                     ),
                     const Divider(),
-
-                    // Contoh data
                     for (int i = 0; i < 6; i++) ...[
                       Row(
                         children: [
                           Expanded(
                             flex: 3,
-                            child: Text('2022 / 2023'),
+                            child: Text(
+                              '2022 / 2023',
+                              style: GoogleFonts.poppins(fontWeight: FontWeight.w300, color: Colors.black54),
+                            ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(i % 2 == 0 ? 'Ganjil' : 'Genap'),
+                            child: Text(
+                              i % 2 == 0 ? 'Ganjil' : 'Genap',
+                              style: GoogleFonts.poppins(fontWeight: FontWeight.w300, color: Colors.black54),
+                            ),
                           ),
                           Expanded(
-                            flex: 2,
+                            flex: 3,
                             child: ElevatedButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UbahData(
+                                    ),
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.teal[700],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                               icon: const Icon(Icons.edit, size: 16, color: Colors.white),
-                              label: const Text('Ubah Data', style: TextStyle(color: Colors.white, fontSize:12 )),
+                              label: Text(
+                                'Ubah Data',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      // Garis pemisah antar baris
                       if (i < 5) const Divider(),
                     ],
                   ],
@@ -223,6 +253,44 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+     ),
     );
+  }
+  Future<bool> _showExitPopup(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(
+          'Konfirmasi Keluar',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin keluar?',
+          style: GoogleFonts.poppins(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'Batal',
+              style: GoogleFonts.poppins(color: Colors.black),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF00B98F),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              'Keluar',
+              style: GoogleFonts.poppins(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 }
