@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/pages/dashboard/dashboard.dart';
-import '../onboarding/onboarding.dart';
+import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 
 // Pastikan file dashboard.dart ada
 

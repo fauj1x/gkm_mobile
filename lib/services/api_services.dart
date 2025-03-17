@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/user_profiles.dart';  // Import model dengan path yang benar
+import 'package:gkm_mobile/models/user_profiles.dart';  // Import model dengan path yang benar
 
 class ApiService {
   static const String baseUrl = "http://127.0.0.1:8000";

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/diagram/diagram.dart';
-import 'package:gkm_mobile/pages/rekapdata/rekapdata.dart';
 import 'package:gkm_mobile/pages/submenukerjasamatridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';

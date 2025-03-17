@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:gkm_mobile/pages/onboarding/onboarding.dart";
 import "package:gkm_mobile/pages/rekapdata/rekapdata.dart";
-import "package:gkm_mobile/pages/splashscreen/splashscreen.dart";
 import "package:gkm_mobile/pages/login/login.dart";
 import "package:gkm_mobile/pages/register/register.dart";
 import "package:gkm_mobile/pages/dashboard/dashboard.dart";
