@@ -36,8 +36,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^1.2.0
+  web: ^0.5.0
   google_fonts: ^6.1.0
-    fl_chart: ^0.64.0
+  fl_chart: ^0.64.0
+  flutter_spinkit: ^5.1.0
+  another_flushbar: ^1.12.29
 
 
 dev_dependencies:
@@ -56,12 +59,27 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logoGKM.png
+    - assets/images/logopolije.png
+    - assets/images/onboarding.png
+    - assets/images/detail.png
+    - assets/icons/notification.png
+    - assets/icons/pusatbantuan.png
+    - assets/images/ilustrasi1.png
+    - assets/images/ilustrasi2.png
+    - assets/images/ilustrasi3.png
+    - assets/images/ilustrasi4.png
+
+
+
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
-      - assets/
 
 
   # To add assets to your application, add an assets section, like this:
