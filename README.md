@@ -1,6 +1,6 @@
 # gkm_mobile
 
-A new Flutter project.
+GKM Mobile
 
 ## Getting Started
 
