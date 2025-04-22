@@ -13,7 +13,7 @@ String _camelToSnake(String input) {
 }
 
 class ApiService {
-  String baseUrl = "http://localhost:9000/api";
+  String baseUrl = "http://165.22.243.128:8000/api";
 
   // Fungsi umum untuk GET semua data
   Future<List<T>> getData<T>(
