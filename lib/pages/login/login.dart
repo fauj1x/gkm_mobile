@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/dashboard/dashboard.dart';
 import 'package:gkm_mobile/pages/register/register.dart';
+import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatefulWidget {
   @override
@@ -49,7 +53,8 @@ class _LoginScreenState extends State<login> {
                     SizedBox(height: 5),
                     Text.rich(
                       TextSpan(
-                        text: "Silahkan masukkan akunmu dan mulai petualangan\n",
+                        text:
+                            "Silahkan masukkan akunmu dan mulai petualangan\n",
                         style: GoogleFonts.poppins(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
@@ -70,8 +75,13 @@ class _LoginScreenState extends State<login> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    _buildInputField("Email", "Masukkan emailmu di sini", emailController, false),
-                    _buildInputField("Kata Sandi", "Masukkan kata sandimu di sini", passwordController, true),
+                    _buildInputField("Email", "Masukkan emailmu di sini",
+                        emailController, false),
+                    _buildInputField(
+                        "Kata Sandi",
+                        "Masukkan kata sandimu di sini",
+                        passwordController,
+                        true),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -92,7 +102,8 @@ class _LoginScreenState extends State<login> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal[900],
                         minimumSize: Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
                       ),
                       child: Text(
                         "Log in",
@@ -143,14 +154,16 @@ class _LoginScreenState extends State<login> {
     );
   }
 
-  Widget _buildInputField(String label, String hint, TextEditingController controller, bool isPassword) {
+  Widget _buildInputField(String label, String hint,
+      TextEditingController controller, bool isPassword) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 10),
         Text(
           label,
-          style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
+          style: GoogleFonts.poppins(
+              fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
         SizedBox(height: 5),
         TextField(
@@ -159,13 +172,16 @@ class _LoginScreenState extends State<login> {
           style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+            hintStyle: GoogleFonts.poppins(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            enabledBorder: OutlineInputBorder( // Default border tetap sama
+            enabledBorder: OutlineInputBorder(
+              // Default border tetap sama
               borderSide: BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(10),
             ),
-            focusedBorder: OutlineInputBorder( // Border berubah saat ditekan
+            focusedBorder: OutlineInputBorder(
+              // Border berubah saat ditekan
               borderSide: BorderSide(color: Color(0xFF00B98F), width: 2),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -174,13 +190,15 @@ class _LoginScreenState extends State<login> {
             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             suffixIcon: isPassword
                 ? IconButton(
-              icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-            )
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  )
                 : null,
           ),
         ),
@@ -188,7 +206,7 @@ class _LoginScreenState extends State<login> {
     );
   }
 
-  void login(BuildContext context) {
+  void login(BuildContext context) async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -197,110 +215,120 @@ class _LoginScreenState extends State<login> {
       return;
     }
 
+    var loginSuccess = await Provider
+      .of<AuthProvider>(context, listen: false)
+      .login(email, password);
+
+    if (!loginSuccess) {
+      _showDialog(context, "Email atau kata sandi salah!");
+      return;
+    }
+
+    // TODO: sudah masuk ke dashboard tapi animasi loading masih ada
     // Menampilkan loading dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            padding: EdgeInsets.all(25),
-            width: 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SpinKitThreeBounce(
-                  color: Color(0xFF00B98F),
-                  size: 40,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Loading...",
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return Center(
+    //       child: Container(
+    //         decoration: BoxDecoration(
+    //           color: Colors.white.withOpacity(0.9),
+    //           borderRadius: BorderRadius.circular(15),
+    //         ),
+    //         padding: EdgeInsets.all(25),
+    //         width: 150,
+    //         child: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             SpinKitThreeBounce(
+    //               color: Color(0xFF00B98F),
+    //               size: 40,
+    //             ),
+    //             SizedBox(height: 10),
+    //             Text(
+    //               "Loading...",
+    //               style: GoogleFonts.poppins(
+    //                 fontSize: 14,
+    //                 fontWeight: FontWeight.w500,
+    //                 color: Colors.black87,
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
 
-    // Simulasi delay sebelum berpindah halaman
-    Future.delayed(Duration(seconds: 2), () {
-      if (!mounted) return; // Pastikan widget masih ada sebelum pop
-      Navigator.of(context, rootNavigator: true).pop(); // Tutup dialog loading
+    // // Simulasi delay sebelum berpindah halaman
+    // Future.delayed(Duration(seconds: 2), () {
+    //   if (!mounted) return; // Pastikan widget masih ada sebelum pop
+    //   Navigator.of(context, rootNavigator: true).pop(); // Tutup dialog loading
 
-      if (!mounted) return; // Pastikan widget masih ada sebelum navigasi
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
-      );
-    });
+    //   if (!mounted) return; // Pastikan widget masih ada sebelum navigasi
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => dashboard()),
+    //   );
+    // });
   }
-
 
   void _showDialog(BuildContext context, String message) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
-                SizedBox(height: 10),
-                Text(
-                  "Pemberitahuan",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.red,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black54,
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00B98F),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
+                  SizedBox(height: 10),
+                  Text(
+                    "Pemberitahuan",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red,
                     ),
-                    minimumSize: Size(120, 40),
                   ),
-                  child: Text(
-                    "OK",
+                  SizedBox(height: 10),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black54,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF00B98F),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: Size(120, 40),
+                    ),
+                    child: Text(
+                      "OK",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-    });
+          );
+        });
   }
 }

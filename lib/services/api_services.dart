@@ -1,33 +1,37 @@
 import 'dart:convert';
+import 'package:gkm_mobile/services/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Utility untuk mengubah CamelCase ke snake_case
 String _camelToSnake(String input) {
   final RegExp regex = RegExp(r'(?<=[a-z])[A-Z]');
-  return input.replaceAllMapped(regex, (Match m) => '_${m.group(0)}').toLowerCase();
+  return input
+      .replaceAllMapped(regex, (Match m) => '_${m.group(0)}')
+      .toLowerCase();
 }
 
 class ApiService {
-  static const String baseUrl = "http://10.0.2.2:8000/api";
+  String baseUrl = "http://localhost:9000/api";
 
   // Fungsi umum untuk GET semua data
   Future<List<T>> getData<T>(
-      T Function(Map<String, dynamic>) fromJson, {
-        String? customEndpoint,
-        Map<String, String>? customHeaders,
-      }) async {
+      T Function(Map<String, dynamic>) fromJson, String? customEndpoint) async {
     String endpoint = customEndpoint ?? _camelToSnake(T.toString());
     final response = await http.get(
       Uri.parse("$baseUrl/$endpoint"),
       headers: {
         "Accept": "application/json",
-        ...?customHeaders,
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
       },
     );
 
     if (response.statusCode == 200) {
       final decoded = jsonDecode(response.body);
-      final data = decoded is Map && decoded.containsKey('data') ? decoded['data'] : decoded;
+      final data = decoded is Map && decoded.containsKey('data')
+          ? decoded['data']
+          : decoded;
       return List<Map<String, dynamic>>.from(data)
           .map((json) => fromJson(json))
           .toList();
@@ -37,19 +41,15 @@ class ApiService {
   }
 
   // Fungsi POST data
-  Future<T> postData<T>(
-      T Function(Map<String, dynamic>) fromJson,
-      Map<String, dynamic> body, {
-        String? customEndpoint,
-        Map<String, String>? customHeaders,
-      }) async {
+  Future<T> postData<T>(T Function(Map<String, dynamic>) fromJson,
+      Map<String, dynamic> body, String? customEndpoint) async {
     String endpoint = customEndpoint ?? _camelToSnake(T.toString());
     final response = await http.post(
       Uri.parse("$baseUrl/$endpoint"),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        ...?customHeaders,
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
       },
       body: jsonEncode(body),
     );
@@ -62,20 +62,15 @@ class ApiService {
   }
 
   // Fungsi PUT data
-  Future<T> updateData<T>(
-      T Function(Map<String, dynamic>) fromJson,
-      int id,
-      Map<String, dynamic> body, {
-        String? customEndpoint,
-        Map<String, String>? customHeaders,
-      }) async {
+  Future<T> updateData<T>(T Function(Map<String, dynamic>) fromJson, int id,
+      Map<String, dynamic> body, String? customEndpoint) async {
     String endpoint = customEndpoint ?? _camelToSnake(T.toString());
     final response = await http.put(
       Uri.parse("$baseUrl/$endpoint/$id"),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        ...?customHeaders,
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
       },
       body: jsonEncode(body),
     );
@@ -89,16 +84,15 @@ class ApiService {
 
   // Fungsi DELETE data
   Future<void> deleteData<T>(
-      int id, {
-        String? customEndpoint,
-        Map<String, String>? customHeaders,
-      }) async {
+    int id,
+    String? customEndpoint,
+  ) async {
     String endpoint = customEndpoint ?? _camelToSnake(T.toString());
     final response = await http.delete(
       Uri.parse("$baseUrl/$endpoint/$id"),
       headers: {
         "Accept": "application/json",
-        ...?customHeaders,
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
       },
     );
 

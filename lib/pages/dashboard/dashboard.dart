@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DashboardScreen(),
+    );
+  }
+}
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
