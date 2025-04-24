@@ -4,8 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
-  bool _isAuthenticated = false;
-  bool get isAuthenticated => _isAuthenticated;
   String baseUrl = ApiService().baseUrl;
 
   Future<bool> login(String email, String password) async {
@@ -18,8 +16,8 @@ class AuthProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       String token = response.body;
+      print(token);
       await setToken(token);
-      _isAuthenticated = true;
       notifyListeners();
       return true;
     }
@@ -35,5 +33,11 @@ class AuthProvider extends ChangeNotifier {
   getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
+  }
+
+  Future<bool> checkAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    return token != null;
   }
 }

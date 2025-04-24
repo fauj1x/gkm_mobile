@@ -23,12 +23,28 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var auth = Provider.of<AuthProvider>(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Aplikasi Flutter',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: auth.isAuthenticated ? dashboard() : onboarding(),
+    return FutureBuilder<bool>(
+      future: Provider.of<AuthProvider>(context, listen: false).checkAuth(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GKM POLIJE',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        } else {
+          bool isAuthenticated = snapshot.data ?? false;
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GKM POLIJE',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home: isAuthenticated ? dashboard() : onboarding(),
+          );
+        }
+      },
     );
   }
 }
