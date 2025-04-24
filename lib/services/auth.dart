@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:http/http.dart' as http;
@@ -15,9 +17,8 @@ class AuthProvider extends ChangeNotifier {
     });
 
     if (response.statusCode == 200) {
-      String token = response.body;
-      print(token);
-      await setToken(token);
+      final decodedResponse = jsonDecode(response.body);
+      await setTokenId(decodedResponse['token'], decodedResponse['id'].toString());
       notifyListeners();
       return true;
     }
@@ -25,14 +26,20 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
-  setToken(String token) async {
+  setTokenId(String token, String id) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
+    await prefs.setString('id', id);
   }
 
   getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
+  }
+
+  getId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('id');
   }
 
   Future<bool> checkAuth() async {
