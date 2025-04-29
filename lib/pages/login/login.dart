@@ -215,9 +215,8 @@ class _LoginScreenState extends State<login> {
       return;
     }
 
-    var loginSuccess = await Provider
-      .of<AuthProvider>(context, listen: false)
-      .login(email, password);
+    var loginSuccess = await Provider.of<AuthProvider>(context, listen: false)
+        .login(email, password);
 
     if (!loginSuccess) {
       _showDialog(context, "Email atau kata sandi salah!");

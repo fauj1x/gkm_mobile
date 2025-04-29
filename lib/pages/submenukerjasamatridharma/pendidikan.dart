@@ -139,6 +139,7 @@ class _PendidikanState extends State<pendidikan> {
                           _headerCell("Tingkat", 270),
                           _headerCell("Judul Kerjasama", 200),
                           _headerCell("Manfaat bagi PS", 200),
+                          _headerCell("Waktu Durasi", 150),
                           _headerCell("Bukti Kerjasama", 150),
                           _headerCell("Tahun Berakhir", 150),
                           _headerCell("Aksi", 50),
@@ -160,6 +161,7 @@ class _PendidikanState extends State<pendidikan> {
                           _emptyCell(200),
                           _emptyCell(150),
                           _emptyCell(150),
+                          _emptyCell(150),
                           _emptyCell(50),
                         ],
                       ),
@@ -178,7 +180,8 @@ class _PendidikanState extends State<pendidikan> {
                         6: FixedColumnWidth(200),
                         7: FixedColumnWidth(150),
                         8: FixedColumnWidth(150),
-                        9: FixedColumnWidth(50),
+                        9: FixedColumnWidth(150),
+                        10: FixedColumnWidth(50),
                       },
                       children: dataList.asMap().entries.map((entry) {
                         List<String> row = [
@@ -195,6 +198,7 @@ class _PendidikanState extends State<pendidikan> {
                               : "-", // Tingkat: Wilayah/Lokal
                           entry.value.judulKegiatan, // Judul Kerjasama
                           entry.value.manfaat, // Manfaaat
+                          entry.value.waktuDurasi, // Manfaaat
                           entry.value.buktiKerjasama, // Bukti Kerjasama
                           entry.value.tahunBerakhir, // Tahun Berakhir
                         ];
@@ -227,6 +231,7 @@ class _PendidikanState extends State<pendidikan> {
                                         'manfaat': entry.value.manfaat,
                                         'bukti_kerjasama':
                                             entry.value.buktiKerjasama,
+                                        'waktu_durasi': entry.value.waktuDurasi,
                                         'tahun_berakhir':
                                             entry.value.tahunBerakhir,
                                       });
@@ -312,6 +317,7 @@ class _PendidikanState extends State<pendidikan> {
     final TextEditingController tingkatController = TextEditingController();
     final TextEditingController judulController = TextEditingController();
     final TextEditingController manfaatController = TextEditingController();
+    final TextEditingController waktuController = TextEditingController();
     final TextEditingController buktiController = TextEditingController();
     final TextEditingController tahunController = TextEditingController();
 
@@ -336,6 +342,9 @@ class _PendidikanState extends State<pendidikan> {
                     controller: manfaatController,
                     decoration: InputDecoration(labelText: 'Manfaat')),
                 TextField(
+                    controller: waktuController,
+                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                TextField(
                     controller: buktiController,
                     decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
                 TextField(
@@ -355,12 +364,13 @@ class _PendidikanState extends State<pendidikan> {
               onPressed: () {
                 _tambahData({
                   'user_id': 5, // Ganti dengan ID user yang sesuai
-                  'tahun_ajaran_id': 8, // Ganti dengan ID tahun ajaran yang sesuai
+                  'tahun_ajaran_id':
+                      8, // Ganti dengan ID tahun ajaran yang sesuai
                   'lembaga_mitra': lembagaController.text,
                   'tingkat': tingkatController.text,
                   'judul_kegiatan': judulController.text,
                   'manfaat': manfaatController.text,
-                  'waktu_durasi': 'mboh', // Ganti dengan waktu durasi yang sesuai
+                  'waktu_durasi': waktuController.text,
                   'bukti_kerjasama': buktiController.text,
                   'tahun_berakhir': tahunController.text,
                 });
@@ -383,6 +393,8 @@ class _PendidikanState extends State<pendidikan> {
         TextEditingController(text: currentData['judul_kegiatan']);
     final TextEditingController manfaatController =
         TextEditingController(text: currentData['manfaat']);
+    final TextEditingController waktuController =
+        TextEditingController(text: currentData['waktu_durasi']);
     final TextEditingController buktiController =
         TextEditingController(text: currentData['bukti_kerjasama']);
     final TextEditingController tahunController =
@@ -409,6 +421,9 @@ class _PendidikanState extends State<pendidikan> {
                     controller: manfaatController,
                     decoration: InputDecoration(labelText: 'Manfaat')),
                 TextField(
+                    controller: waktuController,
+                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                TextField(
                     controller: buktiController,
                     decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
                 TextField(
@@ -431,6 +446,7 @@ class _PendidikanState extends State<pendidikan> {
                   'tingkat': tingkatController.text,
                   'judul_kegiatan': judulController.text,
                   'manfaat': manfaatController.text,
+                  'waktu_durasi': waktuController.text,
                   'bukti_kerjasama': buktiController.text,
                   'tahun_berakhir': tahunController.text,
                 });
