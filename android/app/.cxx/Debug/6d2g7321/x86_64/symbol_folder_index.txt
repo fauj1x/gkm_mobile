@@ -1,1 +1,0 @@
-/home/diaz/flutter/gkm_mobile/build/app/intermediates/cxx/Debug/6d2g7321/obj/x86_64

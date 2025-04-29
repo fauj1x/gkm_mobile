@@ -215,9 +215,8 @@ class _LoginScreenState extends State<login> {
       return;
     }
 
-    var loginSuccess = await Provider
-      .of<AuthProvider>(context, listen: false)
-      .login(email, password);
+    var loginSuccess = await Provider.of<AuthProvider>(context, listen: false)
+        .login(email, password);
 
     if (!loginSuccess) {
       _showDialog(context, "Email atau kata sandi salah!");
@@ -226,52 +225,52 @@ class _LoginScreenState extends State<login> {
 
     // TODO: sudah masuk ke dashboard tapi animasi loading masih ada
     // Menampilkan loading dialog
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (BuildContext context) {
-    //     return Center(
-    //       child: Container(
-    //         decoration: BoxDecoration(
-    //           color: Colors.white.withOpacity(0.9),
-    //           borderRadius: BorderRadius.circular(15),
-    //         ),
-    //         padding: EdgeInsets.all(25),
-    //         width: 150,
-    //         child: Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           children: [
-    //             SpinKitThreeBounce(
-    //               color: Color(0xFF00B98F),
-    //               size: 40,
-    //             ),
-    //             SizedBox(height: 10),
-    //             Text(
-    //               "Loading...",
-    //               style: GoogleFonts.poppins(
-    //                 fontSize: 14,
-    //                 fontWeight: FontWeight.w500,
-    //                 color: Colors.black87,
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: EdgeInsets.all(25),
+            width: 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitThreeBounce(
+                  color: Color(0xFF00B98F),
+                  size: 40,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Loading...",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
 
-    // // Simulasi delay sebelum berpindah halaman
-    // Future.delayed(Duration(seconds: 2), () {
-    //   if (!mounted) return; // Pastikan widget masih ada sebelum pop
-    //   Navigator.of(context, rootNavigator: true).pop(); // Tutup dialog loading
+    // Simulasi delay sebelum berpindah halaman
+    Future.delayed(Duration(seconds: 2), () {
+      if (!mounted) return; // Pastikan widget masih ada sebelum pop
+      Navigator.of(context, rootNavigator: true).pop(); // Tutup dialog loading
 
-    //   if (!mounted) return; // Pastikan widget masih ada sebelum navigasi
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => dashboard()),
-    //   );
-    // });
+      if (!mounted) return; // Pastikan widget masih ada sebelum navigasi
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => dashboard()),
+      );
+    });
   }
 
   void _showDialog(BuildContext context, String message) {
