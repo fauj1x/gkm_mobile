@@ -61,6 +61,7 @@ class _PendidikanState extends State<pendidikan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -86,7 +87,6 @@ class _PendidikanState extends State<pendidikan> {
           ],
         ),
       ),
-      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -116,156 +116,160 @@ class _PendidikanState extends State<pendidikan> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
 
+            const SizedBox(height: 10),
             const Text(
               "Tabel Kerjasama Pendidikan",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
 
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Column(
-                  children: [
-                    // Header Baris 1
-                    Container(
-                      color: Colors.teal,
-                      child: Row(
-                        children: [
-                          _headerCell("No", 50),
-                          _headerCell("Lembaga Mitra", 150),
-                          _headerCell("Tingkat", 270),
-                          _headerCell("Judul Kerjasama", 200),
-                          _headerCell("Manfaat bagi PS", 200),
-                          _headerCell("Waktu Durasi", 150),
-                          _headerCell("Bukti Kerjasama", 150),
-                          _headerCell("Tahun Berakhir", 150),
-                          _headerCell("Aksi", 50),
-                        ],
-                      ),
-                    ),
-
-                    // Header Baris 2 (Tingkat)
-                    Container(
-                      color: const Color(0xFF009688),
-                      child: Row(
-                        children: [
-                          _emptyCell(50),
-                          _emptyCell(150),
-                          _headerCell("Internasional", 90),
-                          _headerCell("Nasional", 90),
-                          _headerCell("Wilayah/Lokal", 90),
-                          _emptyCell(200),
-                          _emptyCell(200),
-                          _emptyCell(150),
-                          _emptyCell(150),
-                          _emptyCell(150),
-                          _emptyCell(50),
-                        ],
-                      ),
-                    ),
-
-                    // Isi Data
-                    Table(
-                      border: TableBorder.all(color: Colors.black54),
-                      columnWidths: const {
-                        0: FixedColumnWidth(50),
-                        1: FixedColumnWidth(150),
-                        2: FixedColumnWidth(90),
-                        3: FixedColumnWidth(90),
-                        4: FixedColumnWidth(90),
-                        5: FixedColumnWidth(200),
-                        6: FixedColumnWidth(200),
-                        7: FixedColumnWidth(150),
-                        8: FixedColumnWidth(150),
-                        9: FixedColumnWidth(150),
-                        10: FixedColumnWidth(50),
-                      },
-                      children: dataList.asMap().entries.map((entry) {
-                        List<String> row = [
-                          entry.value.id.toString(), // Nomor
-                          entry.value.lembagaMitra, // Lembaga Mitra
-                          entry.value.tingkat == "internasional"
-                              ? "Internasional"
-                              : "-", // Tingkat: Internasional
-                          entry.value.tingkat == "nasional"
-                              ? "Nasional"
-                              : "-", // Tingkat: Nasional
-                          entry.value.tingkat == "lokal"
-                              ? "Lokal"
-                              : "-", // Tingkat: Wilayah/Lokal
-                          entry.value.judulKegiatan, // Judul Kerjasama
-                          entry.value.manfaat, // Manfaaat
-                          entry.value.waktuDurasi, // Manfaaat
-                          entry.value.buktiKerjasama, // Bukti Kerjasama
-                          entry.value.tahunBerakhir, // Tahun Berakhir
-                        ];
-                        return TableRow(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      // Header Baris 1
+                      Container(
+                        color: Colors.teal,
+                        child: Row(
                           children: [
-                            ...row.map((cell) {
-                              return TableCell(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                      child: Text(cell.isEmpty ? "-" : cell)),
-                                ),
-                              );
-                            }).toList(),
+                            _headerCell("No", 50),
+                            _headerCell("Lembaga Mitra", 150),
+                            _headerCell("Tingkat", 270),
+                            _headerCell("Judul Kerjasama", 200),
+                            _headerCell("Manfaat bagi PS", 200),
+                            _headerCell("Waktu Durasi", 150),
+                            _headerCell("Bukti Kerjasama", 150),
+                            _headerCell("Tahun Berakhir", 150),
+                            _headerCell("Aksi", 50),
+                          ],
+                        ),
+                      ),
 
-                            // Aksi Button
-                            TableCell(
-                              child: Center(
-                                child: PopupMenuButton<String>(
-                                  icon: const Icon(Icons.more_vert,
-                                      color: Colors.black87),
-                                  onSelected: (String choice) {
-                                    if (choice == "Edit") {
-                                      _showEditDialog(entry.value.id, {
-                                        'lembaga_mitra':
-                                            entry.value.lembagaMitra,
-                                        'tingkat': entry.value.tingkat,
-                                        'judul_kegiatan':
-                                            entry.value.judulKegiatan,
-                                        'manfaat': entry.value.manfaat,
-                                        'bukti_kerjasama':
-                                            entry.value.buktiKerjasama,
-                                        'waktu_durasi': entry.value.waktuDurasi,
-                                        'tahun_berakhir':
-                                            entry.value.tahunBerakhir,
-                                      });
-                                    } else if (choice == "Hapus") {
-                                      _hapusData(entry.value.id);
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                      <PopupMenuEntry<String>>[
-                                    const PopupMenuItem<String>(
-                                      value: "Edit",
-                                      child: ListTile(
-                                        leading: Icon(Icons.edit,
-                                            color: Colors.blue),
-                                        title: Text("Edit"),
+                      // Header Baris 2 (Tingkat)
+                      Container(
+                        color: const Color(0xFF009688),
+                        child: Row(
+                          children: [
+                            _emptyCell(50),
+                            _emptyCell(150),
+                            _headerCell("Internasional", 90),
+                            _headerCell("Nasional", 90),
+                            _headerCell("Wilayah/Lokal", 90),
+                            _emptyCell(200),
+                            _emptyCell(200),
+                            _emptyCell(150),
+                            _emptyCell(150),
+                            _emptyCell(150),
+                            _emptyCell(50),
+                          ],
+                        ),
+                      ),
+
+                      // Isi Data
+                      Table(
+                        border: TableBorder.all(color: Colors.black54),
+                        columnWidths: const {
+                          0: FixedColumnWidth(50),
+                          1: FixedColumnWidth(150),
+                          2: FixedColumnWidth(90),
+                          3: FixedColumnWidth(90),
+                          4: FixedColumnWidth(90),
+                          5: FixedColumnWidth(200),
+                          6: FixedColumnWidth(200),
+                          7: FixedColumnWidth(150),
+                          8: FixedColumnWidth(150),
+                          9: FixedColumnWidth(150),
+                          10: FixedColumnWidth(50),
+                        },
+                        children: dataList.asMap().entries.map((entry) {
+                          List<String> row = [
+                            entry.value.id.toString(), // Nomor
+                            entry.value.lembagaMitra, // Lembaga Mitra
+                            entry.value.tingkat == "internasional"
+                                ? "Internasional"
+                                : "-", // Tingkat: Internasional
+                            entry.value.tingkat == "nasional"
+                                ? "Nasional"
+                                : "-", // Tingkat: Nasional
+                            entry.value.tingkat == "lokal"
+                                ? "Lokal"
+                                : "-", // Tingkat: Wilayah/Lokal
+                            entry.value.judulKegiatan, // Judul Kerjasama
+                            entry.value.manfaat, // Manfaat
+                            entry.value.waktuDurasi, // Waktu Durasi
+                            entry.value.buktiKerjasama, // Bukti Kerjasama
+                            entry.value.tahunBerakhir, // Tahun Berakhir
+                          ];
+                          return TableRow(
+                            children: [
+                              ...row.map((cell) {
+                                return TableCell(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: Text(cell.isEmpty ? "-" : cell)),
+                                  ),
+                                );
+                              }).toList(),
+
+                              // Aksi Button
+                              TableCell(
+                                child: Center(
+                                  child: PopupMenuButton<String>(
+                                    icon: const Icon(Icons.more_vert,
+                                        color: Colors.black87),
+                                    onSelected: (String choice) {
+                                      if (choice == "Edit") {
+                                        _showEditDialog(entry.value.id, {
+                                          'lembaga_mitra':
+                                              entry.value.lembagaMitra,
+                                          'tingkat': entry.value.tingkat,
+                                          'judul_kegiatan':
+                                              entry.value.judulKegiatan,
+                                          'manfaat': entry.value.manfaat,
+                                          'bukti_kerjasama':
+                                              entry.value.buktiKerjasama,
+                                          'waktu_durasi':
+                                              entry.value.waktuDurasi,
+                                          'tahun_berakhir':
+                                              entry.value.tahunBerakhir,
+                                        });
+                                      } else if (choice == "Hapus") {
+                                        _hapusData(entry.value.id);
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) =>
+                                        <PopupMenuEntry<String>>[
+                                      const PopupMenuItem<String>(
+                                        value: "Edit",
+                                        child: ListTile(
+                                          leading: Icon(Icons.edit,
+                                              color: Colors.blue),
+                                          title: Text("Edit"),
+                                        ),
                                       ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: "Hapus",
-                                      child: ListTile(
-                                        leading: Icon(Icons.delete,
-                                            color: Colors.red),
-                                        title: Text("Hapus"),
+                                      const PopupMenuItem<String>(
+                                        value: "Hapus",
+                                        child: ListTile(
+                                          leading: Icon(Icons.delete,
+                                              color: Colors.red),
+                                          title: Text("Hapus"),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
