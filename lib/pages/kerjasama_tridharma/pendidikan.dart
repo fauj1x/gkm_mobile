@@ -11,6 +11,7 @@ class Pendidikan extends StatefulWidget {
 }
 
 class PendidikanState extends State<Pendidikan> {
+  final List<String> tingkatOptions = ['lokal', 'nasional', 'internasional'];
   List<KerjasamaTridharmaAIO> dataList = [];
   ApiService apiService = ApiService();
   String menuName = "Kerjasama Tridharma";
@@ -336,12 +337,13 @@ class PendidikanState extends State<Pendidikan> {
 
   void _showAddDialog() {
     final TextEditingController lembagaController = TextEditingController();
-    final TextEditingController tingkatController = TextEditingController();
     final TextEditingController judulController = TextEditingController();
     final TextEditingController manfaatController = TextEditingController();
     final TextEditingController waktuController = TextEditingController();
     final TextEditingController buktiController = TextEditingController();
     final TextEditingController tahunController = TextEditingController();
+
+    String? selectedTingkat;
 
     showDialog(
       context: context,
@@ -354,9 +356,20 @@ class PendidikanState extends State<Pendidikan> {
                 TextField(
                     controller: lembagaController,
                     decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                TextField(
-                    controller: tingkatController,
-                    decoration: InputDecoration(labelText: 'Tingkat')),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(labelText: 'Tingkat'),
+                  value: selectedTingkat,
+                  items: tingkatOptions
+                      .map((String value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                                value[0].toUpperCase() + value.substring(1)),
+                          ))
+                      .toList(),
+                  onChanged: (newValue) {
+                    selectedTingkat = newValue;
+                  },
+                ),
                 TextField(
                     controller: judulController,
                     decoration: InputDecoration(labelText: 'Judul Kerjasama')),
@@ -388,7 +401,7 @@ class PendidikanState extends State<Pendidikan> {
                   'user_id': userId,
                   'tahun_ajaran_id': widget.tahunAjaranId,
                   'lembaga_mitra': lembagaController.text,
-                  'tingkat': tingkatController.text,
+                  'tingkat': selectedTingkat ?? '',
                   'judul_kegiatan': judulController.text,
                   'manfaat': manfaatController.text,
                   'waktu_durasi': waktuController.text,
@@ -408,8 +421,6 @@ class PendidikanState extends State<Pendidikan> {
   void _showEditDialog(int id, Map<String, dynamic> currentData) {
     final TextEditingController lembagaController =
         TextEditingController(text: currentData['lembaga_mitra']);
-    final TextEditingController tingkatController =
-        TextEditingController(text: currentData['tingkat']);
     final TextEditingController judulController =
         TextEditingController(text: currentData['judul_kegiatan']);
     final TextEditingController manfaatController =
@@ -420,6 +431,8 @@ class PendidikanState extends State<Pendidikan> {
         TextEditingController(text: currentData['bukti_kerjasama']);
     final TextEditingController tahunController =
         TextEditingController(text: currentData['tahun_berakhir']);
+
+    String? selectedTingkat = currentData['tingkat'];
 
     showDialog(
       context: context,
@@ -432,9 +445,20 @@ class PendidikanState extends State<Pendidikan> {
                 TextField(
                     controller: lembagaController,
                     decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                TextField(
-                    controller: tingkatController,
-                    decoration: InputDecoration(labelText: 'Tingkat')),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(labelText: 'Tingkat'),
+                  value: selectedTingkat,
+                  items: tingkatOptions
+                      .map((String value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                                value[0].toUpperCase() + value.substring(1)),
+                          ))
+                      .toList(),
+                  onChanged: (newValue) {
+                    selectedTingkat = newValue;
+                  },
+                ),
                 TextField(
                     controller: judulController,
                     decoration: InputDecoration(labelText: 'Judul Kerjasama')),
@@ -464,7 +488,7 @@ class PendidikanState extends State<Pendidikan> {
               onPressed: () {
                 _editData(id, {
                   'lembaga_mitra': lembagaController.text,
-                  'tingkat': tingkatController.text,
+                  'tingkat': selectedTingkat ?? '',
                   'judul_kegiatan': judulController.text,
                   'manfaat': manfaatController.text,
                   'waktu_durasi': waktuController.text,
