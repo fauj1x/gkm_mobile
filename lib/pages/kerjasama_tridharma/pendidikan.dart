@@ -207,14 +207,14 @@ class PendidikanState extends State<Pendidikan> {
                                 entry.value.id.toString(), // Nomor
                                 entry.value.lembagaMitra, // Lembaga Mitra
                                 entry.value.tingkat == "internasional"
-                                    ? "Internasional"
-                                    : "-", // Tingkat: Internasional
+                                    ? "✅"
+                                    : "", // Tingkat: Internasional
                                 entry.value.tingkat == "nasional"
-                                    ? "Nasional"
-                                    : "-", // Tingkat: Nasional
+                                    ? "✅"
+                                    : "", // Tingkat: Nasional
                                 entry.value.tingkat == "lokal"
-                                    ? "Lokal"
-                                    : "-", // Tingkat: Wilayah/Lokal
+                                    ? "✅"
+                                    : "", // Tingkat: Wilayah/Lokal
                                 entry.value.judulKegiatan, // Judul Kerjasama
                                 entry.value.manfaat, // Manfaat
                                 entry.value.waktuDurasi, // Waktu Durasi
