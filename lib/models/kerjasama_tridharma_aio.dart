@@ -1,4 +1,4 @@
-class KerjasamaTridharmaAIO {
+class KerjasamaTridharmaAioModel {
   final int id;
   final int userId;
   final int tahunAjaranId;
@@ -13,7 +13,7 @@ class KerjasamaTridharmaAIO {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  KerjasamaTridharmaAIO({
+  KerjasamaTridharmaAioModel({
     required this.id,
     required this.userId,
     required this.tahunAjaranId,
@@ -29,8 +29,8 @@ class KerjasamaTridharmaAIO {
     required this.updatedAt,
   });
 
-  factory KerjasamaTridharmaAIO.fromJson(Map<String, dynamic> json) {
-    return KerjasamaTridharmaAIO(
+  factory KerjasamaTridharmaAioModel.fromJson(Map<String, dynamic> json) {
+    return KerjasamaTridharmaAioModel(
       id: int.tryParse(json['id'].toString()) ?? 0,
       userId: int.tryParse(json['user_id'].toString()) ?? 0,
       tahunAjaranId: int.tryParse(json['tahun_ajaran_id'].toString()) ?? 0,

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/kerjasama_tridharma_aio.dart';
+import 'package:gkm_mobile/models/mahasiswa_asing.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Penelitian extends StatefulWidget {
+class MahasiswaAsing extends StatefulWidget {
   final int tahunAjaranId;
-  const Penelitian({Key? key, required this.tahunAjaranId}) : super(key: key);
+  const MahasiswaAsing({Key? key, required this.tahunAjaranId})
+      : super(key: key);
   @override
-  PenelitianState createState() => PenelitianState();
+  MahasiswaAsingState createState() => MahasiswaAsingState();
 }
 
-class PenelitianState extends State<Penelitian> {
-  final List<String> tingkatOptions = ['lokal', 'nasional', 'internasional'];
-  List<KerjasamaTridharmaAioModel> dataList = [];
+class MahasiswaAsingState extends State<MahasiswaAsing> {
+  List<MahasiswaAsingModel> dataList = [];
   ApiService apiService = ApiService();
-  String menuName = "Kerjasama Tridharma";
-  String subMenuName = "Penelitian";
-  String endPoint = "kstd-penelitian";
+  String menuName = "Mahasiswa Asing";
+  String subMenuName = "";
+  String endPoint = "mahasiswa-asing";
   int userId = 0;
 
   @override
@@ -36,7 +36,7 @@ class PenelitianState extends State<Penelitian> {
   Future<void> _fetchData() async {
     try {
       final data =
-          await apiService.getData(KerjasamaTridharmaAioModel.fromJson, endPoint);
+          await apiService.getData(MahasiswaAsingModel.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -48,7 +48,7 @@ class PenelitianState extends State<Penelitian> {
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(
-          KerjasamaTridharmaAioModel.fromJson, newData, endPoint);
+          MahasiswaAsingModel.fromJson, newData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error adding data: $e");
@@ -67,7 +67,7 @@ class PenelitianState extends State<Penelitian> {
   Future<void> _editData(int index, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(
-          KerjasamaTridharmaAioModel.fromJson, index, updatedData, endPoint);
+          MahasiswaAsingModel.fromJson, index, updatedData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error editing data: $e");
@@ -154,35 +154,15 @@ class PenelitianState extends State<Penelitian> {
                             color: Colors.teal,
                             child: Row(
                               children: [
-                                _headerCell("No", 50),
-                                _headerCell("Lembaga Mitra", 150),
-                                _headerCell("Tingkat", 270),
-                                _headerCell("Judul Kerjasama", 200),
-                                _headerCell("Manfaat bagi PS", 200),
-                                _headerCell("Waktu Durasi", 150),
-                                _headerCell("Bukti Kerjasama", 150),
-                                _headerCell("Tahun Berakhir", 150),
+                                _headerCell(
+                                    "Jumlah Mahasiswa Asing Aktif", 150),
+                                _headerCell(
+                                    "Jumlah Mahasiswa Asing Penuh Waktu (Full-time)",
+                                    200),
+                                _headerCell(
+                                    "Jumlah Mahasiswa Asing Paruh Waktu (Part-time)",
+                                    200),
                                 _headerCell("Aksi", 50),
-                              ],
-                            ),
-                          ),
-
-                          // Header Baris 2 (Tingkat)
-                          Container(
-                            color: const Color(0xFF009688),
-                            child: Row(
-                              children: [
-                                _emptyCell(50),
-                                _emptyCell(150),
-                                _headerCell("Internasional", 90),
-                                _headerCell("Nasional", 90),
-                                _headerCell("Wilayah/Lokal", 90),
-                                _emptyCell(200),
-                                _emptyCell(200),
-                                _emptyCell(150),
-                                _emptyCell(150),
-                                _emptyCell(150),
-                                _emptyCell(50),
                               ],
                             ),
                           ),
@@ -191,36 +171,16 @@ class PenelitianState extends State<Penelitian> {
                           Table(
                             border: TableBorder.all(color: Colors.black54),
                             columnWidths: const {
-                              0: FixedColumnWidth(50),
-                              1: FixedColumnWidth(150),
-                              2: FixedColumnWidth(90),
-                              3: FixedColumnWidth(90),
-                              4: FixedColumnWidth(90),
-                              5: FixedColumnWidth(200),
-                              6: FixedColumnWidth(200),
-                              7: FixedColumnWidth(150),
-                              8: FixedColumnWidth(150),
-                              9: FixedColumnWidth(150),
-                              10: FixedColumnWidth(50),
+                              0: FixedColumnWidth(150),
+                              1: FixedColumnWidth(200),
+                              2: FixedColumnWidth(200),
+                              3: FixedColumnWidth(50),
                             },
                             children: dataList.asMap().entries.map((entry) {
                               List<String> row = [
-                                entry.value.id.toString(), // Nomor
-                                entry.value.lembagaMitra, // Lembaga Mitra
-                                entry.value.tingkat == "internasional"
-                                    ? "✅"
-                                    : "", // Tingkat: Internasional
-                                entry.value.tingkat == "nasional"
-                                    ? "✅"
-                                    : "", // Tingkat: Nasional
-                                entry.value.tingkat == "lokal"
-                                    ? "✅"
-                                    : "", // Tingkat: Wilayah/Lokal
-                                entry.value.judulKegiatan, // Judul Kerjasama
-                                entry.value.manfaat, // Manfaat
-                                entry.value.waktuDurasi, // Waktu Durasi
-                                entry.value.buktiKerjasama, // Bukti Kerjasama
-                                entry.value.tahunBerakhir, // Tahun Berakhir
+                                entry.value.mhsAktif.toString(),
+                                entry.value.mhsAsingFulltime.toString(),
+                                entry.value.mhsAsingParttime.toString(),
                               ];
                               return TableRow(
                                 children: [
@@ -244,18 +204,11 @@ class PenelitianState extends State<Penelitian> {
                                         onSelected: (String choice) {
                                           if (choice == "Edit") {
                                             _showEditDialog(entry.value.id, {
-                                              'lembaga_mitra':
-                                                  entry.value.lembagaMitra,
-                                              'tingkat': entry.value.tingkat,
-                                              'judul_kegiatan':
-                                                  entry.value.judulKegiatan,
-                                              'manfaat': entry.value.manfaat,
-                                              'bukti_kerjasama':
-                                                  entry.value.buktiKerjasama,
-                                              'waktu_durasi':
-                                                  entry.value.waktuDurasi,
-                                              'tahun_berakhir':
-                                                  entry.value.tahunBerakhir,
+                                              'mhs_aktif': entry.value.mhsAktif,
+                                              'mhs_asing_fulltime':
+                                                  entry.value.mhsAsingFulltime,
+                                              'mhs_asing_parttime':
+                                                  entry.value.mhsAsingParttime,
                                             });
                                           } else if (choice == "Hapus") {
                                             _deleteData(entry.value.id);
@@ -331,19 +284,14 @@ class PenelitianState extends State<Penelitian> {
     );
   }
 
-  Widget _emptyCell(double width) {
-    return Container(width: width, height: 40);
-  }
+  // Widget _emptyCell(double width) {
+  //   return Container(width: width, height: 40);
+  // }
 
   void _showAddDialog() {
-    final TextEditingController lembagaController = TextEditingController();
-    final TextEditingController judulController = TextEditingController();
-    final TextEditingController manfaatController = TextEditingController();
-    final TextEditingController waktuController = TextEditingController();
-    final TextEditingController buktiController = TextEditingController();
-    final TextEditingController tahunController = TextEditingController();
-
-    String? selectedTingkat;
+    final TextEditingController controller1Controller = TextEditingController();
+    final TextEditingController controller2Controller = TextEditingController();
+    final TextEditingController controller3Controller = TextEditingController();
 
     showDialog(
       context: context,
@@ -354,37 +302,19 @@ class PenelitianState extends State<Penelitian> {
             child: Column(
               children: [
                 TextField(
-                    controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
-                  value: selectedTingkat,
-                  items: tingkatOptions
-                      .map((String value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                                value[0].toUpperCase() + value.substring(1)),
-                          ))
-                      .toList(),
-                  onChanged: (newValue) {
-                    selectedTingkat = newValue;
-                  },
-                ),
+                    controller: controller1Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
                 TextField(
-                    controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    controller: controller2Controller,
+                    decoration: InputDecoration(
+                        labelText:
+                            'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
                 TextField(
-                    controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
-                TextField(
-                    controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
-                TextField(
-                    controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
-                TextField(
-                    controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    controller: controller3Controller,
+                    decoration: InputDecoration(
+                        labelText:
+                            'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
               ],
             ),
           ),
@@ -398,15 +328,11 @@ class PenelitianState extends State<Penelitian> {
             TextButton(
               onPressed: () {
                 _addData({
-                  'user_id': userId,
+                  'mhs_aktif': int.parse(controller1Controller.text),
+                  'mhs_asing_fulltime': int.parse(controller2Controller.text),
+                  'mhs_asing_parttime': int.parse(controller3Controller.text),
                   'tahun_ajaran_id': widget.tahunAjaranId,
-                  'lembaga_mitra': lembagaController.text,
-                  'tingkat': selectedTingkat ?? '',
-                  'judul_kegiatan': judulController.text,
-                  'manfaat': manfaatController.text,
-                  'waktu_durasi': waktuController.text,
-                  'bukti_kerjasama': buktiController.text,
-                  'tahun_berakhir': tahunController.text,
+                  'user_id': userId,
                 });
                 Navigator.pop(context);
               },
@@ -419,20 +345,12 @@ class PenelitianState extends State<Penelitian> {
   }
 
   void _showEditDialog(int id, Map<String, dynamic> currentData) {
-    final TextEditingController lembagaController =
-        TextEditingController(text: currentData['lembaga_mitra']);
-    final TextEditingController judulController =
-        TextEditingController(text: currentData['judul_kegiatan']);
-    final TextEditingController manfaatController =
-        TextEditingController(text: currentData['manfaat']);
-    final TextEditingController waktuController =
-        TextEditingController(text: currentData['waktu_durasi']);
-    final TextEditingController buktiController =
-        TextEditingController(text: currentData['bukti_kerjasama']);
-    final TextEditingController tahunController =
-        TextEditingController(text: currentData['tahun_berakhir']);
-
-    String? selectedTingkat = currentData['tingkat'];
+    final TextEditingController controller1Controller =
+        TextEditingController(text: currentData['mhs_aktif'].toString());
+    final TextEditingController controller2Controller = TextEditingController(
+        text: currentData['mhs_asing_fulltime'].toString());
+    final TextEditingController controller3Controller = TextEditingController(
+        text: currentData['mhs_asing_parttime'].toString());
 
     showDialog(
       context: context,
@@ -443,37 +361,19 @@ class PenelitianState extends State<Penelitian> {
             child: Column(
               children: [
                 TextField(
-                    controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
-                  value: selectedTingkat,
-                  items: tingkatOptions
-                      .map((String value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                                value[0].toUpperCase() + value.substring(1)),
-                          ))
-                      .toList(),
-                  onChanged: (newValue) {
-                    selectedTingkat = newValue;
-                  },
-                ),
+                    controller: controller1Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
                 TextField(
-                    controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    controller: controller2Controller,
+                    decoration: InputDecoration(
+                        labelText:
+                            'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
                 TextField(
-                    controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
-                TextField(
-                    controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
-                TextField(
-                    controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
-                TextField(
-                    controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    controller: controller3Controller,
+                    decoration: InputDecoration(
+                        labelText:
+                            'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
               ],
             ),
           ),
@@ -487,14 +387,11 @@ class PenelitianState extends State<Penelitian> {
             TextButton(
               onPressed: () {
                 _editData(id, {
-                  'lembaga_mitra': lembagaController.text,
-                  'tingkat': selectedTingkat ?? '',
-                  'judul_kegiatan': judulController.text,
-                  'manfaat': manfaatController.text,
-                  'waktu_durasi': waktuController.text,
-                  'bukti_kerjasama': buktiController.text,
-                  'tahun_berakhir': tahunController.text,
+                  'mhs_aktif': int.parse(controller1Controller.text),
+                  'mhs_asing_fulltime': int.parse(controller2Controller.text),
+                  'mhs_asing_parttime': int.parse(controller3Controller.text),
                   'tahun_ajaran_id': widget.tahunAjaranId,
+                  'user_id': userId,
                 });
                 Navigator.pop(context);
               },

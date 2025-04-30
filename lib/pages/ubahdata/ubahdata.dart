@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
+import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
 import 'package:gkm_mobile/pages/diagram/diagram.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
@@ -38,10 +40,12 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         break;
       // Data Mahasiswa
       case "Seleksi Mahasiswa":
-        page = GrafikMahasiswa();
+        page = SeleksiMahasiswaBaru(
+          tahunAjaranId: widget.tahunAjaranId,
+        );
         break;
       case "Mahasiswa Asing":
-        page = Placeholder();
+        page = MahasiswaAsing(tahunAjaranId: widget.tahunAjaranId);
         break;
       case "Profil Dosen":
         page = Placeholder();

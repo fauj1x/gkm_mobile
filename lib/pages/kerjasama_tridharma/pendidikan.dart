@@ -12,7 +12,7 @@ class Pendidikan extends StatefulWidget {
 
 class PendidikanState extends State<Pendidikan> {
   final List<String> tingkatOptions = ['lokal', 'nasional', 'internasional'];
-  List<KerjasamaTridharmaAIO> dataList = [];
+  List<KerjasamaTridharmaAioModel> dataList = [];
   ApiService apiService = ApiService();
   String menuName = "Kerjasama Tridharma";
   String subMenuName = "Pendidikan";
@@ -36,7 +36,7 @@ class PendidikanState extends State<Pendidikan> {
   Future<void> _fetchData() async {
     try {
       final data =
-          await apiService.getData(KerjasamaTridharmaAIO.fromJson, endPoint);
+          await apiService.getData(KerjasamaTridharmaAioModel.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -48,7 +48,7 @@ class PendidikanState extends State<Pendidikan> {
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(
-          KerjasamaTridharmaAIO.fromJson, newData, endPoint);
+          KerjasamaTridharmaAioModel.fromJson, newData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error adding data: $e");
@@ -67,7 +67,7 @@ class PendidikanState extends State<Pendidikan> {
   Future<void> _editData(int index, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(
-          KerjasamaTridharmaAIO.fromJson, index, updatedData, endPoint);
+          KerjasamaTridharmaAioModel.fromJson, index, updatedData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error editing data: $e");

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/kerjasama_tridharma_aio.dart';
+import 'package:gkm_mobile/models/seleksi_mahasiswa_baru.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Penelitian extends StatefulWidget {
+class SeleksiMahasiswaBaru extends StatefulWidget {
   final int tahunAjaranId;
-  const Penelitian({Key? key, required this.tahunAjaranId}) : super(key: key);
+  const SeleksiMahasiswaBaru({Key? key, required this.tahunAjaranId})
+      : super(key: key);
   @override
-  PenelitianState createState() => PenelitianState();
+  SeleksiMahasiswaBaruState createState() => SeleksiMahasiswaBaruState();
 }
 
-class PenelitianState extends State<Penelitian> {
-  final List<String> tingkatOptions = ['lokal', 'nasional', 'internasional'];
-  List<KerjasamaTridharmaAioModel> dataList = [];
+class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
+  List<SeleksiMahasiswaBaruModel> dataList = [];
   ApiService apiService = ApiService();
-  String menuName = "Kerjasama Tridharma";
-  String subMenuName = "Penelitian";
-  String endPoint = "kstd-penelitian";
+  String menuName = "Seleksi Mahasiswa Baru";
+  String subMenuName = "";
+  String endPoint = "seleksi-maba";
   int userId = 0;
 
   @override
@@ -35,8 +35,8 @@ class PenelitianState extends State<Penelitian> {
 
   Future<void> _fetchData() async {
     try {
-      final data =
-          await apiService.getData(KerjasamaTridharmaAioModel.fromJson, endPoint);
+      final data = await apiService.getData(
+          SeleksiMahasiswaBaruModel.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -48,7 +48,7 @@ class PenelitianState extends State<Penelitian> {
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(
-          KerjasamaTridharmaAioModel.fromJson, newData, endPoint);
+          SeleksiMahasiswaBaruModel.fromJson, newData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error adding data: $e");
@@ -67,7 +67,7 @@ class PenelitianState extends State<Penelitian> {
   Future<void> _editData(int index, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(
-          KerjasamaTridharmaAioModel.fromJson, index, updatedData, endPoint);
+          SeleksiMahasiswaBaruModel.fromJson, index, updatedData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error editing data: $e");
@@ -154,14 +154,11 @@ class PenelitianState extends State<Penelitian> {
                             color: Colors.teal,
                             child: Row(
                               children: [
-                                _headerCell("No", 50),
-                                _headerCell("Lembaga Mitra", 150),
-                                _headerCell("Tingkat", 270),
-                                _headerCell("Judul Kerjasama", 200),
-                                _headerCell("Manfaat bagi PS", 200),
-                                _headerCell("Waktu Durasi", 150),
-                                _headerCell("Bukti Kerjasama", 150),
-                                _headerCell("Tahun Berakhir", 150),
+                                _headerCell("Tahun Akademik", 100),
+                                _headerCell("Daya Tampung", 100),
+                                _headerCell("Jumlah Calon Mahasiswa", 200),
+                                _headerCell("Jumlah Mahasiswa Baru", 200),
+                                _headerCell("Jumlah Mahasiswa Aktif", 200),
                                 _headerCell("Aksi", 50),
                               ],
                             ),
@@ -172,16 +169,14 @@ class PenelitianState extends State<Penelitian> {
                             color: const Color(0xFF009688),
                             child: Row(
                               children: [
-                                _emptyCell(50),
-                                _emptyCell(150),
-                                _headerCell("Internasional", 90),
-                                _headerCell("Nasional", 90),
-                                _headerCell("Wilayah/Lokal", 90),
-                                _emptyCell(200),
-                                _emptyCell(200),
-                                _emptyCell(150),
-                                _emptyCell(150),
-                                _emptyCell(150),
+                                _emptyCell(100),
+                                _emptyCell(100),
+                                _headerCell("Pendaftar", 100),
+                                _headerCell("Lulus Seleksi", 100),
+                                _headerCell("Reguler", 100),
+                                _headerCell("Transfer", 100),
+                                _headerCell("Reguler", 100),
+                                _headerCell("Transfer", 100),
                                 _emptyCell(50),
                               ],
                             ),
@@ -191,36 +186,26 @@ class PenelitianState extends State<Penelitian> {
                           Table(
                             border: TableBorder.all(color: Colors.black54),
                             columnWidths: const {
-                              0: FixedColumnWidth(50),
-                              1: FixedColumnWidth(150),
-                              2: FixedColumnWidth(90),
-                              3: FixedColumnWidth(90),
-                              4: FixedColumnWidth(90),
-                              5: FixedColumnWidth(200),
-                              6: FixedColumnWidth(200),
-                              7: FixedColumnWidth(150),
-                              8: FixedColumnWidth(150),
-                              9: FixedColumnWidth(150),
-                              10: FixedColumnWidth(50),
+                              0: FixedColumnWidth(100),
+                              1: FixedColumnWidth(100),
+                              2: FixedColumnWidth(100),
+                              3: FixedColumnWidth(100),
+                              4: FixedColumnWidth(100),
+                              5: FixedColumnWidth(100),
+                              6: FixedColumnWidth(100),
+                              7: FixedColumnWidth(100),
+                              8: FixedColumnWidth(50),
                             },
                             children: dataList.asMap().entries.map((entry) {
                               List<String> row = [
-                                entry.value.id.toString(), // Nomor
-                                entry.value.lembagaMitra, // Lembaga Mitra
-                                entry.value.tingkat == "internasional"
-                                    ? "✅"
-                                    : "", // Tingkat: Internasional
-                                entry.value.tingkat == "nasional"
-                                    ? "✅"
-                                    : "", // Tingkat: Nasional
-                                entry.value.tingkat == "lokal"
-                                    ? "✅"
-                                    : "", // Tingkat: Wilayah/Lokal
-                                entry.value.judulKegiatan, // Judul Kerjasama
-                                entry.value.manfaat, // Manfaat
-                                entry.value.waktuDurasi, // Waktu Durasi
-                                entry.value.buktiKerjasama, // Bukti Kerjasama
-                                entry.value.tahunBerakhir, // Tahun Berakhir
+                                entry.value.tahunAkademik,
+                                entry.value.dayaTampung.toString(),
+                                entry.value.pendaftar.toString(),
+                                entry.value.lulusSeleksi.toString(),
+                                entry.value.mabaReguler.toString(),
+                                entry.value.mabaTransfer.toString(),
+                                entry.value.mhsAktifReguler.toString(),
+                                entry.value.mhsAktifTransfer.toString(),
                               ];
                               return TableRow(
                                 children: [
@@ -244,18 +229,22 @@ class PenelitianState extends State<Penelitian> {
                                         onSelected: (String choice) {
                                           if (choice == "Edit") {
                                             _showEditDialog(entry.value.id, {
-                                              'lembaga_mitra':
-                                                  entry.value.lembagaMitra,
-                                              'tingkat': entry.value.tingkat,
-                                              'judul_kegiatan':
-                                                  entry.value.judulKegiatan,
-                                              'manfaat': entry.value.manfaat,
-                                              'bukti_kerjasama':
-                                                  entry.value.buktiKerjasama,
-                                              'waktu_durasi':
-                                                  entry.value.waktuDurasi,
-                                              'tahun_berakhir':
-                                                  entry.value.tahunBerakhir,
+                                              'tahun_akademik':
+                                                  entry.value.tahunAkademik,
+                                              'daya_tampung':
+                                                  entry.value.dayaTampung,
+                                              'pendaftar':
+                                                  entry.value.pendaftar,
+                                              'lulus_seleksi':
+                                                  entry.value.lulusSeleksi,
+                                              'maba_reguler':
+                                                  entry.value.mabaReguler,
+                                              'maba_transfer':
+                                                  entry.value.mabaTransfer,
+                                              'mhs_aktif_reguler':
+                                                  entry.value.mhsAktifReguler,
+                                              'mhs_aktif_transfer':
+                                                  entry.value.mhsAktifTransfer,
                                             });
                                           } else if (choice == "Hapus") {
                                             _deleteData(entry.value.id);
@@ -336,14 +325,14 @@ class PenelitianState extends State<Penelitian> {
   }
 
   void _showAddDialog() {
-    final TextEditingController lembagaController = TextEditingController();
-    final TextEditingController judulController = TextEditingController();
-    final TextEditingController manfaatController = TextEditingController();
-    final TextEditingController waktuController = TextEditingController();
-    final TextEditingController buktiController = TextEditingController();
-    final TextEditingController tahunController = TextEditingController();
-
-    String? selectedTingkat;
+    final TextEditingController controller1Controller = TextEditingController();
+    final TextEditingController controller2Controller = TextEditingController();
+    final TextEditingController controller3Controller = TextEditingController();
+    final TextEditingController controller4Controller = TextEditingController();
+    final TextEditingController controller5Controller = TextEditingController();
+    final TextEditingController controller6Controller = TextEditingController();
+    final TextEditingController controller7Controller = TextEditingController();
+    final TextEditingController controller8Controller = TextEditingController();
 
     showDialog(
       context: context,
@@ -354,37 +343,33 @@ class PenelitianState extends State<Penelitian> {
             child: Column(
               children: [
                 TextField(
-                    controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
-                  value: selectedTingkat,
-                  items: tingkatOptions
-                      .map((String value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                                value[0].toUpperCase() + value.substring(1)),
-                          ))
-                      .toList(),
-                  onChanged: (newValue) {
-                    selectedTingkat = newValue;
-                  },
-                ),
+                    controller: controller1Controller,
+                    decoration: InputDecoration(labelText: 'Tahun Akademik')),
                 TextField(
-                    controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    controller: controller2Controller,
+                    decoration: InputDecoration(labelText: 'Daya Tampung')),
                 TextField(
-                    controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
+                    controller: controller3Controller,
+                    decoration: InputDecoration(labelText: 'Pendaftar')),
                 TextField(
-                    controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                    controller: controller4Controller,
+                    decoration: InputDecoration(labelText: 'Lulus Seleksi')),
                 TextField(
-                    controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
+                    controller: controller5Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Baru Reguler')),
                 TextField(
-                    controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    controller: controller6Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Baru Transfer')),
+                TextField(
+                    controller: controller7Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Aktif Reguler')),
+                TextField(
+                    controller: controller8Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Aktif Transfer')),
               ],
             ),
           ),
@@ -398,15 +383,16 @@ class PenelitianState extends State<Penelitian> {
             TextButton(
               onPressed: () {
                 _addData({
-                  'user_id': userId,
+                  'tahun_akademik': controller1Controller.text,
+                  'daya_tampung': int.parse(controller2Controller.text),
+                  'pendaftar': int.parse(controller3Controller.text),
+                  'lulus_seleksi': int.parse(controller4Controller.text),
+                  'maba_reguler': int.parse(controller5Controller.text),
+                  'maba_transfer': int.parse(controller6Controller.text),
+                  'mhs_aktif_reguler': int.parse(controller7Controller.text),
+                  'mhs_aktif_transfer': int.parse(controller8Controller.text),
                   'tahun_ajaran_id': widget.tahunAjaranId,
-                  'lembaga_mitra': lembagaController.text,
-                  'tingkat': selectedTingkat ?? '',
-                  'judul_kegiatan': judulController.text,
-                  'manfaat': manfaatController.text,
-                  'waktu_durasi': waktuController.text,
-                  'bukti_kerjasama': buktiController.text,
-                  'tahun_berakhir': tahunController.text,
+                  'user_id': userId,
                 });
                 Navigator.pop(context);
               },
@@ -419,20 +405,22 @@ class PenelitianState extends State<Penelitian> {
   }
 
   void _showEditDialog(int id, Map<String, dynamic> currentData) {
-    final TextEditingController lembagaController =
-        TextEditingController(text: currentData['lembaga_mitra']);
-    final TextEditingController judulController =
-        TextEditingController(text: currentData['judul_kegiatan']);
-    final TextEditingController manfaatController =
-        TextEditingController(text: currentData['manfaat']);
-    final TextEditingController waktuController =
-        TextEditingController(text: currentData['waktu_durasi']);
-    final TextEditingController buktiController =
-        TextEditingController(text: currentData['bukti_kerjasama']);
-    final TextEditingController tahunController =
-        TextEditingController(text: currentData['tahun_berakhir']);
-
-    String? selectedTingkat = currentData['tingkat'];
+    final TextEditingController controller1Controller =
+        TextEditingController(text: currentData['tahun_akademik']);
+    final TextEditingController controller2Controller =
+        TextEditingController(text: currentData['daya_tampung'].toString());
+    final TextEditingController controller3Controller =
+        TextEditingController(text: currentData['pendaftar'].toString());
+    final TextEditingController controller4Controller =
+        TextEditingController(text: currentData['lulus_seleksi'].toString());
+    final TextEditingController controller5Controller =
+        TextEditingController(text: currentData['maba_reguler'].toString());
+    final TextEditingController controller6Controller =
+        TextEditingController(text: currentData['maba_transfer'].toString());
+    final TextEditingController controller7Controller = TextEditingController(
+        text: currentData['mhs_aktif_reguler'].toString());
+    final TextEditingController controller8Controller = TextEditingController(
+        text: currentData['mhs_aktif_transfer'].toString());
 
     showDialog(
       context: context,
@@ -443,37 +431,33 @@ class PenelitianState extends State<Penelitian> {
             child: Column(
               children: [
                 TextField(
-                    controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
-                  value: selectedTingkat,
-                  items: tingkatOptions
-                      .map((String value) => DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                                value[0].toUpperCase() + value.substring(1)),
-                          ))
-                      .toList(),
-                  onChanged: (newValue) {
-                    selectedTingkat = newValue;
-                  },
-                ),
+                    controller: controller1Controller,
+                    decoration: InputDecoration(labelText: 'Tahun Akademik')),
                 TextField(
-                    controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    controller: controller2Controller,
+                    decoration: InputDecoration(labelText: 'Daya Tampung')),
                 TextField(
-                    controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
+                    controller: controller3Controller,
+                    decoration: InputDecoration(labelText: 'Pendaftar')),
                 TextField(
-                    controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                    controller: controller4Controller,
+                    decoration: InputDecoration(labelText: 'Lulus Seleksi')),
                 TextField(
-                    controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
+                    controller: controller5Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Baru Reguler')),
                 TextField(
-                    controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    controller: controller6Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Baru Transfer')),
+                TextField(
+                    controller: controller7Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Aktif Reguler')),
+                TextField(
+                    controller: controller8Controller,
+                    decoration:
+                        InputDecoration(labelText: 'Mahasiswa Aktif Transfer')),
               ],
             ),
           ),
@@ -487,14 +471,16 @@ class PenelitianState extends State<Penelitian> {
             TextButton(
               onPressed: () {
                 _editData(id, {
-                  'lembaga_mitra': lembagaController.text,
-                  'tingkat': selectedTingkat ?? '',
-                  'judul_kegiatan': judulController.text,
-                  'manfaat': manfaatController.text,
-                  'waktu_durasi': waktuController.text,
-                  'bukti_kerjasama': buktiController.text,
-                  'tahun_berakhir': tahunController.text,
+                  'tahun_akademik': controller1Controller.text,
+                  'daya_tampung': int.parse(controller2Controller.text),
+                  'pendaftar': int.parse(controller3Controller.text),
+                  'lulus_seleksi': int.parse(controller4Controller.text),
+                  'maba_reguler': int.parse(controller5Controller.text),
+                  'maba_transfer': int.parse(controller6Controller.text),
+                  'mhs_aktif_reguler': int.parse(controller7Controller.text),
+                  'mhs_aktif_transfer': int.parse(controller8Controller.text),
                   'tahun_ajaran_id': widget.tahunAjaranId,
+                  'user_id': userId,
                 });
                 Navigator.pop(context);
               },
