@@ -5,6 +5,8 @@ import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UbahData extends StatefulWidget {
+  final int tahunAjaranId;
+  const UbahData({Key? key, required this.tahunAjaranId}) : super(key: key);
   @override
   _UbahDataPageState createState() => _UbahDataPageState();
 }
@@ -23,7 +25,7 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
 
     switch (submenu) {
       case "Pendidikan":
-        page = pendidikan();
+        page = pendidikan(tahunAjaranId: widget.tahunAjaranId);
         break;
       case "Penelitian":
         page = Placeholder(); // Ganti dengan halaman yang sesuai
@@ -105,7 +107,9 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                     ),
                   ),
                   Icon(
-                    isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                     color: Colors.white,
                   ),
                 ],
@@ -119,32 +123,32 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
             curve: Curves.easeInOut,
             child: isExpanded
                 ? Container(
-              decoration: BoxDecoration(
-                color: submenuColor,
-                borderRadius:
-                const BorderRadius.vertical(bottom: Radius.circular(16)),
-              ),
-              child: Column(
-                children: submenus.map((submenu) {
-                  return InkWell(
-                    onTap: () => navigateToPage(submenu),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        submenu,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black87,
-                        ),
-                      ),
+                    decoration: BoxDecoration(
+                      color: submenuColor,
+                      borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(16)),
                     ),
-                  );
-                }).toList(),
-              ),
-            )
+                    child: Column(
+                      children: submenus.map((submenu) {
+                        return InkWell(
+                          onTap: () => navigateToPage(submenu),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              submenu,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  )
                 : const SizedBox(),
           ),
         ],
@@ -213,24 +217,37 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       Colors.grey.shade300,
                       const Color(0xFF009688), // Warna submenu diperbaiki
                       ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
-                  buildMenu(
-                      "Data Dosen",
-                      "assets/images/ilustrasi3.png",
-                      Colors.teal,
-                      Colors.grey.shade300,
-                      ["Dosen Tetap PT", "Pembimbing TA", "EWMP Dosen", "Dosen Tidak Tetap", "Dosen Industri/Praktisi"]),
+                  buildMenu("Data Dosen", "assets/images/ilustrasi3.png",
+                      Colors.teal, Colors.grey.shade300, [
+                    "Dosen Tetap PT",
+                    "Pembimbing TA",
+                    "EWMP Dosen",
+                    "Dosen Tidak Tetap",
+                    "Dosen Industri/Praktisi"
+                  ]),
                   buildMenu(
                       "Kinerja Dosen",
                       "assets/images/ilustrasi4.png",
                       Colors.grey.shade300,
                       const Color(0xFF009688), // Warna submenu diperbaiki
-                      ["Pengakuan/Rekognisi Dosen", "Penelitian DTPS", "Pkm DTPS", "Publikasi & Pagelaran Ilmiah", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
+                      [
+                        "Pengakuan/Rekognisi Dosen",
+                        "Penelitian DTPS",
+                        "Pkm DTPS",
+                        "Publikasi & Pagelaran Ilmiah",
+                        "Sitasi Karya Ilmiah",
+                        "Produk/Jasa Teradopsi",
+                        "Luaran Penelitian Lain"
+                      ]),
                   buildMenu(
                       "Kualitas Pembelajaran",
                       "assets/images/ilustrasi2.png",
                       Colors.teal,
-                      Colors.grey.shade300,
-                      ["Kurikulum & Pembelajaran", "Integrasi Penelitian", "Kepuasan Mahasiswa"]),
+                      Colors.grey.shade300, [
+                    "Kurikulum & Pembelajaran",
+                    "Integrasi Penelitian",
+                    "Kepuasan Mahasiswa"
+                  ]),
                   buildMenu(
                       "Penelitian DTPS",
                       "assets/images/ilustrasi2.png",
@@ -241,20 +258,24 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       "PKM DTPS Mahasiswa",
                       "assets/images/ilustrasi2.png",
                       Colors.teal,
-                      Colors.grey.shade300,
-                    []),
+                      Colors.grey.shade300, []),
+                  buildMenu("Kinerja Lulusan", "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300, const Color(0xFF009688), [
+                    "IPK Lulusan",
+                    "Prestasi Mahasiswa",
+                    "Masa Studi Lulusan",
+                    "Evaluasi Lulusan"
+                  ]),
                   buildMenu(
-                      "Kinerja Lulusan",
+                      "Luaran Karya Mahasiswa",
                       "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688),
-                      ["IPK Lulusan", "Prestasi Mahasiswa", "Masa Studi Lulusan", "Evaluasi Lulusan"]),
-              buildMenu(
-                  "Luaran Karya Mahasiswa",
-                  "assets/images/ilustrasi2.png",
-                  Colors.teal,
-                  Colors.grey.shade300,
-                  ["Publikasi Mahasiswa", "Sitasi Karya Mahasiswa", "Produk/Jasa Mahasiswa", "Luaran Mahasiswa Lainnya"]),
+                      Colors.teal,
+                      Colors.grey.shade300, [
+                    "Publikasi Mahasiswa",
+                    "Sitasi Karya Mahasiswa",
+                    "Produk/Jasa Mahasiswa",
+                    "Luaran Mahasiswa Lainnya"
+                  ]),
                   buildMenu(
                       "Rekap Data",
                       "assets/images/ilustrasi2.png",

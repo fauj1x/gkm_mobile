@@ -1,5 +1,3 @@
-import "dart:io";
-
 import 'package:flutter/material.dart';
 import "package:gkm_mobile/pages/onboarding/onboarding.dart";
 import "package:gkm_mobile/pages/dashboard/dashboard.dart";

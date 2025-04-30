@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/pendidikan.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class pendidikan extends StatefulWidget {
+  final int tahunAjaranId;
+  const pendidikan({Key? key, required this.tahunAjaranId}) : super(key: key);
   @override
   _PendidikanState createState() => _PendidikanState();
 }
 
 class _PendidikanState extends State<pendidikan> {
   List<Pendidikan> dataList = [];
+  List<TahunAjaran> tahunAjaranList = [];
   ApiService apiService = ApiService();
   String menuName = "Kerjasama Tridharma";
   String subMenuName = "Pendidikan";
   String endPoint = "kstd-pendidikan";
+  int userId = 0;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
+    _fetchUserId();
+  }
+
+  Future<void> _fetchUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = int.parse(prefs.getString('id') ?? '0');
+    });
   }
 
   Future<void> _fetchData() async {
@@ -371,9 +385,8 @@ class _PendidikanState extends State<pendidikan> {
             TextButton(
               onPressed: () {
                 _addData({
-                  'user_id': 5, // Ganti dengan ID user yang sesuai
-                  'tahun_ajaran_id':
-                      8, // Ganti dengan ID tahun ajaran yang sesuai
+                  'user_id': userId,
+                  'tahun_ajaran_id': widget.tahunAjaranId,
                   'lembaga_mitra': lembagaController.text,
                   'tingkat': tingkatController.text,
                   'judul_kegiatan': judulController.text,
@@ -457,6 +470,7 @@ class _PendidikanState extends State<pendidikan> {
                   'waktu_durasi': waktuController.text,
                   'bukti_kerjasama': buktiController.text,
                   'tahun_berakhir': tahunController.text,
+                  'tahun_ajaran_id': widget.tahunAjaranId,
                 });
                 Navigator.pop(context);
               },
