@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/diagram/diagram.dart';
-import 'package:gkm_mobile/pages/submenukerjasamatridharma/pendidikan.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,10 +10,10 @@ class UbahData extends StatefulWidget {
   final int tahunAjaranId;
   const UbahData({Key? key, required this.tahunAjaranId}) : super(key: key);
   @override
-  _UbahDataPageState createState() => _UbahDataPageState();
+  UbahDataPageState createState() => UbahDataPageState();
 }
 
-class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
+class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
   String? expandedMenu;
 
   void toggleMenu(String title) {
@@ -24,15 +26,17 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
     Widget? page;
 
     switch (submenu) {
+      // Kerjasama Tridarma
       case "Pendidikan":
-        page = pendidikan(tahunAjaranId: widget.tahunAjaranId);
+        page = Pendidikan(tahunAjaranId: widget.tahunAjaranId);
         break;
       case "Penelitian":
-        page = Placeholder(); // Ganti dengan halaman yang sesuai
+        page = Penelitian(tahunAjaranId: widget.tahunAjaranId);
         break;
       case "Pengabdian Masyarakat":
-        page = Placeholder();
+        page = PengabdianMasyarakat(tahunAjaranId: widget.tahunAjaranId);
         break;
+      // Data Mahasiswa
       case "Seleksi Mahasiswa":
         page = GrafikMahasiswa();
         break;

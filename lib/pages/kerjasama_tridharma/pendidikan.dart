@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/pendidikan.dart';
-import 'package:gkm_mobile/models/tahun_ajaran.dart';
+import 'package:gkm_mobile/models/kerjasama_tridharma_aio.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class pendidikan extends StatefulWidget {
+class Pendidikan extends StatefulWidget {
   final int tahunAjaranId;
-  const pendidikan({Key? key, required this.tahunAjaranId}) : super(key: key);
+  const Pendidikan({Key? key, required this.tahunAjaranId}) : super(key: key);
   @override
-  _PendidikanState createState() => _PendidikanState();
+  PendidikanState createState() => PendidikanState();
 }
 
-class _PendidikanState extends State<pendidikan> {
-  List<Pendidikan> dataList = [];
-  List<TahunAjaran> tahunAjaranList = [];
+class PendidikanState extends State<Pendidikan> {
+  List<KerjasamaTridharmaAIO> dataList = [];
   ApiService apiService = ApiService();
   String menuName = "Kerjasama Tridharma";
   String subMenuName = "Pendidikan";
@@ -36,7 +34,8 @@ class _PendidikanState extends State<pendidikan> {
 
   Future<void> _fetchData() async {
     try {
-      final data = await apiService.getData(Pendidikan.fromJson, endPoint);
+      final data =
+          await apiService.getData(KerjasamaTridharmaAIO.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -47,7 +46,8 @@ class _PendidikanState extends State<pendidikan> {
 
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
-      await apiService.postData(Pendidikan.fromJson, newData, endPoint);
+      await apiService.postData(
+          KerjasamaTridharmaAIO.fromJson, newData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error adding data: $e");
@@ -66,7 +66,7 @@ class _PendidikanState extends State<pendidikan> {
   Future<void> _editData(int index, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(
-          Pendidikan.fromJson, index, updatedData, endPoint);
+          KerjasamaTridharmaAIO.fromJson, index, updatedData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error editing data: $e");

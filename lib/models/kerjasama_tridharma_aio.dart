@@ -1,4 +1,4 @@
-class Pendidikan {
+class KerjasamaTridharmaAIO {
   final int id;
   final int userId;
   final int tahunAjaranId;
@@ -13,7 +13,7 @@ class Pendidikan {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Pendidikan({
+  KerjasamaTridharmaAIO({
     required this.id,
     required this.userId,
     required this.tahunAjaranId,
@@ -29,8 +29,8 @@ class Pendidikan {
     required this.updatedAt,
   });
 
-  factory Pendidikan.fromJson(Map<String, dynamic> json) {
-    return Pendidikan(
+  factory KerjasamaTridharmaAIO.fromJson(Map<String, dynamic> json) {
+    return KerjasamaTridharmaAIO(
       id: int.tryParse(json['id'].toString()) ?? 0,
       userId: int.tryParse(json['user_id'].toString()) ?? 0,
       tahunAjaranId: int.tryParse(json['tahun_ajaran_id'].toString()) ?? 0,
@@ -41,7 +41,9 @@ class Pendidikan {
       waktuDurasi: json['waktu_durasi'] as String,
       buktiKerjasama: json['bukti_kerjasama'] as String,
       tahunBerakhir: json['tahun_berakhir'] as String,
-      deletedAt: json['deleted_at'] != null ? DateTime.tryParse(json['deleted_at']) : null,
+      deletedAt: json['deleted_at'] != null
+          ? DateTime.tryParse(json['deleted_at'])
+          : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
