@@ -273,8 +273,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => UbahData(
-                                          tahunAjaranId: tahunAjaran.id),
+                                      builder: (context) =>
+                                          UbahData(tahunAjaran: tahunAjaran),
                                     ),
                                   );
                                 },

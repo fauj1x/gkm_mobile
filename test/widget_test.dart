@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/dosen_praktisi.dart';
+import 'package:gkm_mobile/models/dosen_industri_praktisi.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 
 class TestApiPage extends StatefulWidget {

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
+import 'package:gkm_mobile/pages/datadosen/dosen_industri_praktisi.dart';
+import 'package:gkm_mobile/pages/datadosen/dosen_pembimbing_ta.dart';
+import 'package:gkm_mobile/pages/datadosen/dosen_tetap_pt.dart';
+import 'package:gkm_mobile/pages/datadosen/dosen_tidak_tetap.dart';
+import 'package:gkm_mobile/pages/datadosen/ewmp_dosen.dart';
 import 'package:gkm_mobile/pages/diagram/diagram.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
@@ -9,8 +15,8 @@ import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UbahData extends StatefulWidget {
-  final int tahunAjaranId;
-  const UbahData({Key? key, required this.tahunAjaranId}) : super(key: key);
+  final TahunAjaran tahunAjaran;
+  const UbahData({Key? key, required this.tahunAjaran}) : super(key: key);
   @override
   UbahDataPageState createState() => UbahDataPageState();
 }
@@ -30,22 +36,36 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
     switch (submenu) {
       // Kerjasama Tridarma
       case "Pendidikan":
-        page = Pendidikan(tahunAjaranId: widget.tahunAjaranId);
+        page = Pendidikan(tahunAjaran: widget.tahunAjaran);
         break;
       case "Penelitian":
-        page = Penelitian(tahunAjaranId: widget.tahunAjaranId);
+        page = Penelitian(tahunAjaran: widget.tahunAjaran);
         break;
       case "Pengabdian Masyarakat":
-        page = PengabdianMasyarakat(tahunAjaranId: widget.tahunAjaranId);
+        page = PengabdianMasyarakat(tahunAjaran: widget.tahunAjaran);
         break;
       // Data Mahasiswa
       case "Seleksi Mahasiswa":
-        page = SeleksiMahasiswaBaru(
-          tahunAjaranId: widget.tahunAjaranId,
-        );
+        page = SeleksiMahasiswaBaru(tahunAjaran: widget.tahunAjaran);
         break;
       case "Mahasiswa Asing":
-        page = MahasiswaAsing(tahunAjaranId: widget.tahunAjaranId);
+        page = MahasiswaAsing(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Data Dosen
+      case "Dosen Tetap PT":
+        page = DosenTetapPt(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Industri/Praktisi":
+        page = DosenIndustriPraktisi(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Pembimbing TA":
+        page = DosenPembimbingTa(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "EWMP Dosen":
+        page = EwmpDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Tidak Tetap":
+        page = DosenTidakTetap(tahunAjaran: widget.tahunAjaran);
         break;
       case "Profil Dosen":
         page = Placeholder();
@@ -186,7 +206,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ubah data",
+                      "Ubah Data",
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -194,7 +214,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      "Semester genap 2023 / 2024",
+                      "Semester ${(widget.tahunAjaran.semester == "ganjil" ? "Ganjil" : "Genap")} ${(widget.tahunAjaran.tahunAjaran)}",
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -228,7 +248,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                   buildMenu("Data Dosen", "assets/images/ilustrasi3.png",
                       Colors.teal, Colors.grey.shade300, [
                     "Dosen Tetap PT",
-                    "Pembimbing TA",
+                    "Dosen Pembimbing TA",
                     "EWMP Dosen",
                     "Dosen Tidak Tetap",
                     "Dosen Industri/Praktisi"

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/mahasiswa_asing.dart';
+import 'package:gkm_mobile/models/dosen_pembimbing_ta.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MahasiswaAsing extends StatefulWidget {
+class DosenPembimbingTa extends StatefulWidget {
   final TahunAjaran tahunAjaran;
-  const MahasiswaAsing({Key? key, required this.tahunAjaran}) : super(key: key);
+  const DosenPembimbingTa({Key? key, required this.tahunAjaran})
+      : super(key: key);
   @override
-  MahasiswaAsingState createState() => MahasiswaAsingState();
+  DosenPembimbingTaState createState() => DosenPembimbingTaState();
 }
 
-class MahasiswaAsingState extends State<MahasiswaAsing> {
-  List<MahasiswaAsingModel> dataList = [];
+class DosenPembimbingTaState extends State<DosenPembimbingTa> {
+  // final List<String> yesNoOptions = ['Tidak', 'Ya'];
+  List<DosenPembimbingTaModel> dataList = [];
   ApiService apiService = ApiService();
-  String menuName = "Mahasiswa Asing";
+  String menuName = "Dosen Pembimbing TA";
   String subMenuName = "";
-  String endPoint = "mahasiswa-asing";
+  String endPoint = "dosen-pembimbing-ta";
   int userId = 0;
 
   @override
@@ -36,7 +38,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
   Future<void> _fetchData() async {
     try {
       final data =
-          await apiService.getData(MahasiswaAsingModel.fromJson, endPoint);
+          await apiService.getData(DosenPembimbingTaModel.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -48,7 +50,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(
-          MahasiswaAsingModel.fromJson, newData, endPoint);
+          DosenPembimbingTaModel.fromJson, newData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error adding data: $e");
@@ -67,7 +69,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
   Future<void> _editData(int index, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(
-          MahasiswaAsingModel.fromJson, index, updatedData, endPoint);
+          DosenPembimbingTaModel.fromJson, index, updatedData, endPoint);
       _fetchData();
     } catch (e) {
       print("Error editing data: $e");
@@ -92,13 +94,13 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
           children: [
             Text(
               menuName,
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -117,13 +119,13 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -138,7 +140,8 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -154,15 +157,25 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                             color: Colors.teal,
                             child: Row(
                               children: [
+                                _headerCell("No.", 50),
+                                _headerCell("Nama Dosen", 100),
                                 _headerCell(
-                                    "Jumlah Mahasiswa Asing Aktif", 150),
-                                _headerCell(
-                                    "Jumlah Mahasiswa Asing Penuh Waktu (Full-time)",
-                                    200),
-                                _headerCell(
-                                    "Jumlah Mahasiswa Asing Paruh Waktu (Part-time)",
-                                    200),
+                                    "Jumlah Mahasiswa yang Dibimbing", 250),
                                 _headerCell("Aksi", 50),
+                              ],
+                            ),
+                          ),
+
+                          // Header Baris 2
+                          Container(
+                            color: const Color(0xFF009688),
+                            child: Row(
+                              children: [
+                                _emptyCell(50),
+                                _emptyCell(100),
+                                _headerCell("pada PS", 125),
+                                _headerCell("pada PS Lain", 125),
+                                _emptyCell(50),
                               ],
                             ),
                           ),
@@ -171,16 +184,19 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                           Table(
                             border: TableBorder.all(color: Colors.black54),
                             columnWidths: const {
-                              0: FixedColumnWidth(150),
-                              1: FixedColumnWidth(200),
-                              2: FixedColumnWidth(200),
-                              3: FixedColumnWidth(50),
+                              0: FixedColumnWidth(50),
+                              1: FixedColumnWidth(100),
+                              2: FixedColumnWidth(125),
+                              3: FixedColumnWidth(125),
+                              4: FixedColumnWidth(50),
                             },
                             children: dataList.asMap().entries.map((entry) {
                               List<String> row = [
-                                entry.value.mhsAktif.toString(),
-                                entry.value.mhsAsingFulltime.toString(),
-                                entry.value.mhsAsingParttime.toString(),
+                                (entry.key + 1).toString(),
+                                entry.value.namaDosen,
+                                entry.value.mhsBimbinganPs?.toString() ?? "-",
+                                entry.value.mhsBimbinganPsLain?.toString() ??
+                                    "-",
                               ];
                               return TableRow(
                                 children: [
@@ -204,11 +220,16 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                                         onSelected: (String choice) {
                                           if (choice == "Edit") {
                                             _showEditDialog(entry.value.id, {
-                                              'mhs_aktif': entry.value.mhsAktif,
-                                              'mhs_asing_fulltime':
-                                                  entry.value.mhsAsingFulltime,
-                                              'mhs_asing_parttime':
-                                                  entry.value.mhsAsingParttime,
+                                              'id': entry.value.id,
+                                              'nama_dosen':
+                                                  entry.value.namaDosen,
+                                              'mhs_bimbingan_ps':
+                                                  entry.value.mhsBimbinganPs,
+                                              'mhs_bimbingan_ps_lain': entry
+                                                  .value.mhsBimbinganPsLain,
+                                              'tahun_ajaran_id':
+                                                  widget.tahunAjaran.id,
+                                              'user_id': userId,
                                             });
                                           } else if (choice == "Hapus") {
                                             _deleteData(entry.value.id);
@@ -284,37 +305,39 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
     );
   }
 
-  // Widget _emptyCell(double width) {
-  //   return Container(width: width, height: 40);
-  // }
+  Widget _emptyCell(double width) {
+    return SizedBox(width: width);
+  }
 
   void _showAddDialog() {
-    final TextEditingController controller1Controller = TextEditingController();
-    final TextEditingController controller2Controller = TextEditingController();
-    final TextEditingController controller3Controller = TextEditingController();
+    final TextEditingController controller1 = TextEditingController();
+    final TextEditingController controller2 = TextEditingController();
+    final TextEditingController controller3 = TextEditingController();
+    // String? selectedKesesuaianDenganKompetensi;
+    // String? selectedKesesuaianBidangKeahlian;
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Data'),
+          title: const Text('Tambah Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
-                    controller: controller1Controller,
-                    decoration:
-                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
+                  controller: controller1,
+                  decoration: const InputDecoration(labelText: "Nama Dosen"),
+                ),
                 TextField(
-                    controller: controller2Controller,
-                    decoration: InputDecoration(
-                        labelText:
-                            'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
+                  controller: controller2,
+                  decoration: const InputDecoration(
+                      labelText: "Mahasiswa yang Dibimbing pada PS"),
+                ),
                 TextField(
-                    controller: controller3Controller,
-                    decoration: InputDecoration(
-                        labelText:
-                            'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
+                  controller: controller3,
+                  decoration: const InputDecoration(
+                      labelText: "Mahasiswa yang Dibimbing pada PS Lain"),
+                ),
               ],
             ),
           ),
@@ -323,20 +346,20 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                 _addData({
-                  'mhs_aktif': int.parse(controller1Controller.text),
-                  'mhs_asing_fulltime': int.parse(controller2Controller.text),
-                  'mhs_asing_parttime': int.parse(controller3Controller.text),
+                  'nama_dosen': controller1.text,
+                  'mhs_bimbingan_ps': int.tryParse(controller2.text) ?? 0,
+                  'mhs_bimbingan_ps_lain': int.tryParse(controller3.text) ?? 0,
                   'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
@@ -345,35 +368,40 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
   }
 
   void _showEditDialog(int id, Map<String, dynamic> currentData) {
-    final TextEditingController controller1Controller =
-        TextEditingController(text: currentData['mhs_aktif'].toString());
-    final TextEditingController controller2Controller = TextEditingController(
-        text: currentData['mhs_asing_fulltime'].toString());
-    final TextEditingController controller3Controller = TextEditingController(
-        text: currentData['mhs_asing_parttime'].toString());
+    final TextEditingController controller1 =
+        TextEditingController(text: currentData['nama_dosen']);
+    final TextEditingController controller2 = TextEditingController(
+        text: currentData['mhs_bimbingan_ps']?.toString());
+    final TextEditingController controller3 = TextEditingController(
+        text: currentData['mhs_bimbingan_ps_lain']?.toString());
+
+    // String? selectedKesesuaianDenganKompetensi =
+    //     currentData['kesesuaian_kompetensi'] == true ? "Ya" : "Tidak";
+    // String? selectedKesesuaianBidangKeahlian =
+    //     currentData['kesesuaian_keahlian_mk'] == true ? "Ya" : "Tidak";
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Data'),
+          title: const Text('Edit Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
-                    controller: controller1Controller,
-                    decoration:
-                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
+                  controller: controller1,
+                  decoration: const InputDecoration(labelText: "Nama Dosen"),
+                ),
                 TextField(
-                    controller: controller2Controller,
-                    decoration: InputDecoration(
-                        labelText:
-                            'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
+                  controller: controller2,
+                  decoration: const InputDecoration(
+                      labelText: "Mahasiswa yang Dibimbing pada PS"),
+                ),
                 TextField(
-                    controller: controller3Controller,
-                    decoration: InputDecoration(
-                        labelText:
-                            'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
+                  controller: controller3,
+                  decoration: const InputDecoration(
+                      labelText: "Mahasiswa yang Dibimbing pada PS Lain"),
+                ),
               ],
             ),
           ),
@@ -382,20 +410,21 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                 _editData(id, {
-                  'mhs_aktif': int.parse(controller1Controller.text),
-                  'mhs_asing_fulltime': int.parse(controller2Controller.text),
-                  'mhs_asing_parttime': int.parse(controller3Controller.text),
+                  'id': id,
+                  'nama_dosen': controller1.text,
+                  'mhs_bimbingan_ps': int.tryParse(controller2.text) ?? 0,
+                  'mhs_bimbingan_ps_lain': int.tryParse(controller3.text) ?? 0,
                   'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
