@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/user_profiles.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,15 +47,16 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> checkAuth() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    if (token!.isEmpty) {
+    if (token == null || token.isEmpty) {
       return false;
     }
     try {
-      await ApiService().getData<UserProfile>(
-        UserProfile.fromJson,
-        'user-profiles',
+      await ApiService().getData<TahunAjaran>(
+        TahunAjaran.fromJson,
+        'tahun-ajaran',
       );
     } catch (e) {
+      print('Error fetching user profile: $e');
       return false;
     }
     return true;

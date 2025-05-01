@@ -7,11 +7,13 @@ import "package:provider/provider.dart";
 void main() {
   runApp(ChangeNotifierProvider(
     create: (BuildContext context) => AuthProvider(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'GKM POLIJE',
             theme: ThemeData(primarySwatch: Colors.blue),
-            home: Scaffold(
+            home: const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
           );
