@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/kerjasama_tridharma_aio.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PengabdianMasyarakat extends StatefulWidget {
-  final int tahunAjaranId;
-  const PengabdianMasyarakat({Key? key, required this.tahunAjaranId})
+  final TahunAjaran tahunAjaran;
+  const PengabdianMasyarakat({Key? key, required this.tahunAjaran})
       : super(key: key);
   @override
   PengabdianMasyarakatState createState() => PengabdianMasyarakatState();
@@ -36,8 +37,8 @@ class PengabdianMasyarakatState extends State<PengabdianMasyarakat> {
 
   Future<void> _fetchData() async {
     try {
-      final data =
-          await apiService.getData(KerjasamaTridharmaAioModel.fromJson, endPoint);
+      final data = await apiService.getData(
+          KerjasamaTridharmaAioModel.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
@@ -399,7 +400,7 @@ class PengabdianMasyarakatState extends State<PengabdianMasyarakat> {
               onPressed: () {
                 _addData({
                   'user_id': userId,
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                   'lembaga_mitra': lembagaController.text,
                   'tingkat': selectedTingkat ?? '',
                   'judul_kegiatan': judulController.text,
@@ -494,7 +495,7 @@ class PengabdianMasyarakatState extends State<PengabdianMasyarakat> {
                   'waktu_durasi': waktuController.text,
                   'bukti_kerjasama': buktiController.text,
                   'tahun_berakhir': tahunController.text,
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                 });
                 Navigator.pop(context);
               },

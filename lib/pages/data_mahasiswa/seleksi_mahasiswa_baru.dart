@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/seleksi_mahasiswa_baru.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SeleksiMahasiswaBaru extends StatefulWidget {
-  final int tahunAjaranId;
-  const SeleksiMahasiswaBaru({Key? key, required this.tahunAjaranId})
+  final TahunAjaran tahunAjaran;
+  const SeleksiMahasiswaBaru({Key? key, required this.tahunAjaran})
       : super(key: key);
   @override
   SeleksiMahasiswaBaruState createState() => SeleksiMahasiswaBaruState();
@@ -391,7 +392,7 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
                   'maba_transfer': int.parse(controller6Controller.text),
                   'mhs_aktif_reguler': int.parse(controller7Controller.text),
                   'mhs_aktif_transfer': int.parse(controller8Controller.text),
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);
@@ -479,7 +480,7 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
                   'maba_transfer': int.parse(controller6Controller.text),
                   'mhs_aktif_reguler': int.parse(controller7Controller.text),
                   'mhs_aktif_transfer': int.parse(controller8Controller.text),
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);

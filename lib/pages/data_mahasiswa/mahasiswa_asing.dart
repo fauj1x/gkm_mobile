@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/mahasiswa_asing.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MahasiswaAsing extends StatefulWidget {
-  final int tahunAjaranId;
-  const MahasiswaAsing({Key? key, required this.tahunAjaranId})
-      : super(key: key);
+  final TahunAjaran tahunAjaran;
+  const MahasiswaAsing({Key? key, required this.tahunAjaran}) : super(key: key);
   @override
   MahasiswaAsingState createState() => MahasiswaAsingState();
 }
@@ -331,7 +331,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                   'mhs_aktif': int.parse(controller1Controller.text),
                   'mhs_asing_fulltime': int.parse(controller2Controller.text),
                   'mhs_asing_parttime': int.parse(controller3Controller.text),
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);
@@ -390,7 +390,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                   'mhs_aktif': int.parse(controller1Controller.text),
                   'mhs_asing_fulltime': int.parse(controller2Controller.text),
                   'mhs_asing_parttime': int.parse(controller3Controller.text),
-                  'tahun_ajaran_id': widget.tahunAjaranId,
+                  'tahun_ajaran_id': widget.tahunAjaran.id,
                   'user_id': userId,
                 });
                 Navigator.pop(context);
