@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/user_profiles.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,8 @@ class AuthProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       final decodedResponse = jsonDecode(response.body);
-      await setTokenId(decodedResponse['token'], decodedResponse['id'].toString());
+      await setTokenId(
+          decodedResponse['token'], decodedResponse['id'].toString());
       notifyListeners();
       return true;
     }
@@ -45,6 +47,17 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> checkAuth() async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    return token != null;
+    if (token!.isEmpty) {
+      return false;
+    }
+    try {
+      await ApiService().getData<UserProfile>(
+        UserProfile.fromJson,
+        'user-profiles',
+      );
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }
