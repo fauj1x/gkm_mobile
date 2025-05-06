@@ -11,6 +11,8 @@ import 'package:gkm_mobile/pages/diagram/diagram.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
+import 'package:gkm_mobile/pages/penelitian_dtps/dtps_penelitian_mahasiswa.dart';
+import 'package:gkm_mobile/pages/penelitian_dtps/dtps_rujukan_tesis.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -66,6 +68,13 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         break;
       case "Dosen Tidak Tetap":
         page = DosenTidakTetap(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Penelitian DTPS
+      case "Penelitian Mahasiswa":
+        page = DtpsPenelitianMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Rujukan Tesis/Disertasi":
+        page = DtpsRujukanTesis(tahunAjaran: widget.tahunAjaran);
         break;
       case "Profil Dosen":
         page = Placeholder();
