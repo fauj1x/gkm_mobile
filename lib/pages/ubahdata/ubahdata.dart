@@ -25,26 +25,14 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       case "Pendidikan":
         page = pendidikan();
         break;
-      case "Penelitian":
-        page = Placeholder(); // Ganti dengan halaman yang sesuai
-        break;
-      case "Pengabdian Masyarakat":
-        page = Placeholder();
-        break;
       case "Seleksi Mahasiswa":
         page = GrafikMahasiswa();
         break;
-      case "Mahasiswa Asing":
-        page = Placeholder();
+      case "Akademik":
+        page = Placeholder(); // Ganti dengan halaman yang sesuai
         break;
-      case "Profil Dosen":
-        page = Placeholder();
-        break;
-      case "Publikasi":
-        page = Placeholder();
-        break;
-      case "Sertifikasi":
-        page = Placeholder();
+      case "Non-Akademik":
+        page = Placeholder(); // Ganti dengan halaman yang sesuai
         break;
       case "Rekap Semua Data":
         page = tabelevaluasi();
@@ -65,6 +53,10 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       Color submenuColor, List<String> submenus) {
     bool isExpanded = expandedMenu == title;
 
+    Color textColor = (menuColor.value == const Color(0xFF009688).value)
+        ? Colors.white
+        : const Color(0xFF009688);
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
       decoration: BoxDecoration(
@@ -79,7 +71,6 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       ),
       child: Column(
         children: [
-          // MENU UTAMA
           GestureDetector(
             onTap: () => toggleMenu(title),
             child: Container(
@@ -100,20 +91,18 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: textColor,
                       ),
                     ),
                   ),
                   Icon(
                     isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: Colors.white,
+                    color: textColor,
                   ),
                 ],
               ),
             ),
           ),
-
-          // SUB MENU
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -121,27 +110,70 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                 ? Container(
               decoration: BoxDecoration(
                 color: submenuColor,
-                borderRadius:
-                const BorderRadius.vertical(bottom: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
               ),
               child: Column(
                 children: submenus.map((submenu) {
-                  return InkWell(
-                    onTap: () => navigateToPage(submenu),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        submenu,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black87,
+                  // Warna teks submenu berdasarkan submenuColor
+                  Color submenuTextColor = (submenuColor == const Color(0xFF009688))
+                      ? Colors.white
+                      : const Color(0xFF009688);
+
+                  if (submenu == "Prestasi Mahasiswa") {
+                    return Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        title: Text(
+                          submenu,
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                            color: submenuTextColor,
+                          ),
+                        ),
+                        children: [
+                          ListTile(
+                            title: Text(
+                              "Akademik",
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w200,
+                                color: submenuTextColor,
+                              ),
+                            ),
+                            onTap: () => navigateToPage("Akademik"),
+                          ),
+                          ListTile(
+                            title: Text(
+                              "Non-Akademik",
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w200,
+                                color: submenuTextColor,
+                              ),
+                            ),
+                            onTap: () => navigateToPage("Non-Akademik"),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return InkWell(
+                      onTap: () => navigateToPage(submenu),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          submenu,
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                            color: submenuTextColor,
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 }).toList(),
               ),
             )
@@ -159,7 +191,6 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // CUSTOM APP BAR
           Container(
             padding: const EdgeInsets.fromLTRB(16, 40, 16, 10),
             color: Colors.white,
@@ -194,73 +225,26 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
               ],
             ),
           ),
-
-          // BODY MENU
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 10),
-                  buildMenu(
-                      "Kerjasama Tridarma",
-                      "assets/images/ilustrasi1.png",
-                      Colors.teal,
-                      Colors.grey.shade300,
-                      ["Pendidikan", "Penelitian", "Pengabdian Masyarakat"]),
-                  buildMenu(
-                      "Data Mahasiswa",
-                      "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688), // Warna submenu diperbaiki
-                      ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
-                  buildMenu(
-                      "Data Dosen",
-                      "assets/images/ilustrasi3.png",
-                      Colors.teal,
-                      Colors.grey.shade300,
-                      ["Dosen Tetap PT", "Pembimbing TA", "EWMP Dosen", "Dosen Tidak Tetap", "Dosen Industri/Praktisi"]),
-                  buildMenu(
-                      "Kinerja Dosen",
-                      "assets/images/ilustrasi4.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688), // Warna submenu diperbaiki
-                      ["Pengakuan/Rekognisi Dosen", "Penelitian DTPS", "Pkm DTPS", "Publikasi & Pagelaran Ilmiah", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
-                  buildMenu(
-                      "Kualitas Pembelajaran",
-                      "assets/images/ilustrasi2.png",
-                      Colors.teal,
-                      Colors.grey.shade300,
-                      ["Kurikulum & Pembelajaran", "Integrasi Penelitian", "Kepuasan Mahasiswa"]),
-                  buildMenu(
-                      "Penelitian DTPS",
-                      "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688),
-                      ["Penelitian Mahasiswa", "Rujukan Tesis/Disertasi"]),
-                  buildMenu(
-                      "PKM DTPS Mahasiswa",
-                      "assets/images/ilustrasi2.png",
-                      Colors.teal,
-                      Colors.grey.shade300,
-                    []),
-                  buildMenu(
-                      "Kinerja Lulusan",
-                      "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688),
-                      ["IPK Lulusan", "Prestasi Mahasiswa", "Masa Studi Lulusan", "Evaluasi Lulusan"]),
-              buildMenu(
-                  "Luaran Karya Mahasiswa",
-                  "assets/images/ilustrasi2.png",
-                  Colors.teal,
-                  Colors.grey.shade300,
-                  ["Publikasi Mahasiswa", "Sitasi Karya Mahasiswa", "Produk/Jasa Mahasiswa", "Luaran Mahasiswa Lainnya"]),
-                  buildMenu(
-                      "Rekap Data",
-                      "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688),
-                      ["Rekap Semua Data"]),
+                  buildMenu("Kerjasama Tridharma", "assets/images/ilustrasi1.png",
+                      Colors.teal, Colors.grey.shade300, ["Pendidikan", "Penelitian", "Pengabdian Masyarakat"]),
+                  buildMenu("Data Mahasiswa", "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300, const Color(0xFF009688), ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
+                  buildMenu("Data Dosen", "assets/images/ilustrasi3.png",
+                      Colors.teal, Colors.grey.shade300, ["Dosen Tetap PT", "Pembimbing TA", "EWMP Dosen", "Dosen Tidak Tetap", "Dosen Industri/Praktisi"]),
+                  buildMenu("Kinerja Dosen", "assets/images/ilustrasi4.png",
+                      Colors.grey.shade300, const Color(0xFF009688), ["Pengakuan/Rekognisi Dosen", "Penelitian DTPS", "Pkm DTPS", "Publikasi & Pagelaran Ilmiah", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
+                  buildMenu("Kualitas Pembelajaran", "assets/images/ilustrasi3.png",
+                      Colors.teal, Colors.grey.shade300, ["Kurikulum & Pembelajaran", "Integrasi Penelitian", "Kepuasan Mahasiswa"]),
+                  buildMenu("Kinerja Lulusan", "assets/images/ilustrasi4.png",
+                      Colors.grey.shade300, const Color(0xFF009688), ["IPK Lulusan", "Prestasi Mahasiswa", "Masa Studi Lulusan", "Evaluasi Lulusan", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
+                  buildMenu("Luaran Karya Mahasiswa", "assets/images/ilustrasi3.png",
+                      Colors.teal, Colors.grey.shade300, ["Publikasi Mahasiswa", "Sitasi Karya Mahasiswa", "Produk/Jasa Mahasiswa", "Luaran Mahasiswa Lainnya"]),
+                  buildMenu("Rekap Data", "assets/images/ilustrasi4.png",
+                      Colors.grey.shade300, const Color(0xFF009688), ["Rekap Semua Data"]),
                 ],
               ),
             ),
