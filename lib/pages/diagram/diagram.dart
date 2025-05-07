@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:gkm_mobile/pages/datamahasiswa/seleksimahasiswa.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GrafikMahasiswa extends StatefulWidget {
@@ -151,18 +152,27 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
               const SizedBox(height: 20),
 
               // Button lebih turun tanpa overflow
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF009688),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: () {},
-                  child: Text("Lihat Detail Tabel",
-                      style: GoogleFonts.poppins(fontSize: 14, color: Colors.white)),
-                ),
-              ),
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF009688),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+    ),
+    onPressed: () {
+      // Navigasi ke halaman MahasiswaStatistikPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SeleksiMahasiswaBaruScreen(), // Halaman tujuan
+        ),
+      );
+    },
+    child: Text('Lihat Detail Table'),
+  ),
+)
+
+
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/kinerja_pkmdtps.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
@@ -11,8 +12,15 @@ import 'package:gkm_mobile/pages/diagram/diagram.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
+import 'package:gkm_mobile/pages/kinerjadosen/pengakuan.dart';
+import 'package:gkm_mobile/pages/kinerjadosen/pkm_dtps.dart';
+import 'package:gkm_mobile/pages/kinerjadosen/publikasi_pagelaran.dart';
+import 'package:gkm_mobile/pages/kinerjadosen/sitasi.dart';
+import 'package:gkm_mobile/pages/kualitas_pembelajaran/kepuasan_mahasiswa.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gkm_mobile/pages/kinerjadosen/penelitian.dart';
+
 
 class UbahData extends StatefulWidget {
   final TahunAjaran tahunAjaran;
@@ -78,6 +86,23 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         break;
       case "Rekap Semua Data":
         page = tabelevaluasi();
+        break;
+        case "Penelitian DTPS":
+        page = PenelitianDtpsPage(tahunAjaran: widget.tahunAjaran,);
+        break;
+        case "Pkm DTPS":
+        page = PkmDTPS(tahunAjaran: widget.tahunAjaran,);
+        case "Pengakuan/Rekogrisi Dosen":
+        page = Pengakuan_kinerja(tahunAjaran: widget.tahunAjaran,);
+        break;
+        case "Publikasi & Pagelaran Ilmiah":
+        page = KinerjaPagelaranPage(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Sitasi Karya Ilmiah":
+        page = KinerjaSitasiScreen(tahunAjaran: widget.tahunAjaran,);
+        break;
+        case "Kepuasan Mahasiswa":
+        page = KinerjaKepuasanScreen(tahunAjaran: widget.tahunAjaran);
         break;
       default:
         return;
