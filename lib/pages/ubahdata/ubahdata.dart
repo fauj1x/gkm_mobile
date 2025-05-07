@@ -252,7 +252,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       "Data Mahasiswa",
                       "assets/images/ilustrasi2.png",
                       Colors.grey.shade300,
-                      const Color(0xFF009688), // Warna submenu diperbaiki
+                      Colors.teal, // Warna submenu diperbaiki
                       ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
                   buildMenu("Data Dosen", "assets/images/ilustrasi3.png",
                       Colors.teal, Colors.grey.shade300, [
@@ -266,11 +266,11 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       "Kinerja Dosen",
                       "assets/images/ilustrasi4.png",
                       Colors.grey.shade300,
-                      const Color(0xFF009688), // Warna submenu diperbaiki
+                      Colors.teal, // Warna submenu diperbaiki
                       [
                         "Pengakuan/Rekognisi Dosen",
                         "Penelitian DTPS",
-                        "Pkm DTPS",
+                        "PkM DTPS",
                         "Publikasi & Pagelaran Ilmiah",
                         "Sitasi Karya Ilmiah",
                         "Produk/Jasa Teradopsi",
@@ -289,15 +289,17 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       "Penelitian DTPS",
                       "assets/images/ilustrasi2.png",
                       Colors.grey.shade300,
-                      const Color(0xFF009688),
+                      Colors.teal,
                       ["Penelitian Mahasiswa", "Rujukan Tesis/Disertasi"]),
                   buildMenu(
-                      "PKM DTPS Mahasiswa",
+                      "PkM DTPS Mahasiswa",
                       "assets/images/ilustrasi2.png",
                       Colors.teal,
-                      Colors.grey.shade300, []),
+                      Colors.grey.shade300, [
+                    "PkM DTPS Mahasiswa"
+                  ]),
                   buildMenu("Kinerja Lulusan", "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300, const Color(0xFF009688), [
+                      Colors.grey.shade300, Colors.teal, [
                     "IPK Lulusan",
                     "Prestasi Mahasiswa",
                     "Masa Studi Lulusan",
@@ -313,12 +315,8 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                     "Produk/Jasa Mahasiswa",
                     "Luaran Mahasiswa Lainnya"
                   ]),
-                  buildMenu(
-                      "Rekap Data",
-                      "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300,
-                      const Color(0xFF009688),
-                      ["Rekap Semua Data"]),
+                  buildMenu("Rekap Data", "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300, Colors.teal, ["Rekap Semua Data"]),
                 ],
               ),
             ),

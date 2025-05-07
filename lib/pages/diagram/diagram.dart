@@ -155,7 +155,7 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF009688),
+                    backgroundColor: Colors.teal,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   onPressed: () {},
@@ -184,10 +184,10 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
   // Fungsi untuk mendapatkan bar chart dengan animasi naik
   List<BarChartGroupData> _getAnimatedBars(double animationValue) {
     return [
-      BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 40 * animationValue, color: const Color(0xFF009688), width: 25)]),
-      BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 200 * animationValue, color: const Color(0xFF009688), width: 25)]),
-      BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 150 * animationValue, color: const Color(0xFF009688), width: 25)]),
-      BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: 80 * animationValue, color: const Color(0xFF009688), width: 25)]),
+      BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 40 * animationValue, color: Colors.teal, width: 25)]),
+      BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 200 * animationValue, color: Colors.teal, width: 25)]),
+      BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 150 * animationValue, color: Colors.teal, width: 25)]),
+      BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: 80 * animationValue, color: Colors.teal, width: 25)]),
     ];
   }
 

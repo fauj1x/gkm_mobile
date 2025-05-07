@@ -171,7 +171,7 @@ class EwmpDosenState extends State<EwmpDosen> {
 
                           // Header Baris 2 (Tingkat)
                           Container(
-                            color: const Color(0xFF009688),
+                            color: Colors.teal,
                             child: Row(
                               children: [
                                 _emptyCell(250),
@@ -189,7 +189,7 @@ class EwmpDosenState extends State<EwmpDosen> {
 
                           // Header Baris 3 (Tingkat)
                           Container(
-                            color: const Color(0xFF009688),
+                            color: Colors.teal,
                             child: Row(
                               children: [
                                 _emptyCell(250),

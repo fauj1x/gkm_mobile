@@ -175,7 +175,7 @@ class DosenIndustriPraktisiState extends State<DosenIndustriPraktisi> {
 
                           // Header Baris 2 (Unused)
                           // Container(
-                          //   color: const Color(0xFF009688),
+                          //   color: Colors.teal,
                           //   child: Row(
                           //     children: [
                           //       _emptyCell(50),
