@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:gkm_mobile/pages/datamahasiswa/seleksimahasiswa.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GrafikMahasiswa extends StatefulWidget {
@@ -9,7 +10,8 @@ class GrafikMahasiswa extends StatefulWidget {
   _GrafikMahasiswaState createState() => _GrafikMahasiswaState();
 }
 
-class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProviderStateMixin {
+class _GrafikMahasiswaState extends State<GrafikMahasiswa>
+    with SingleTickerProviderStateMixin {
   String selectedCategory = "Daya Tampung";
   late AnimationController _animationController;
 
@@ -42,7 +44,10 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Grafik Data Mahasiswa",
-                style: GoogleFonts.poppins(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
             Text("Semester Genap 2023/2024",
                 style: GoogleFonts.poppins(color: Colors.grey, fontSize: 14)),
           ],
@@ -59,7 +64,8 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
               SizedBox(
                 height: 280,
                 child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: 360), // Putaran dari 0 ke 360 derajat
+                  tween: Tween(
+                      begin: 0, end: 360), // Putaran dari 0 ke 360 derajat
                   duration: const Duration(seconds: 1),
                   builder: (context, value, child) {
                     return Transform.rotate(
@@ -98,13 +104,21 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
                   padding: const EdgeInsets.only(left: 16.0), // Geser ke kanan
                   child: DropdownButton<String>(
                     value: selectedCategory,
-                    items: ["Daya Tampung", "Pendaftar", "Lulus Seleksi", "Maba Reguler", "Mahasiswa Aktif"]
+                    items: [
+                      "Daya Tampung",
+                      "Pendaftar",
+                      "Lulus Seleksi",
+                      "Maba Reguler",
+                      "Mahasiswa Aktif"
+                    ]
                         .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e, style: GoogleFonts.poppins(fontSize: 14)),
-                    ))
+                              value: e,
+                              child: Text(e,
+                                  style: GoogleFonts.poppins(fontSize: 14)),
+                            ))
                         .toList(),
-                    onChanged: (value) => setState(() => selectedCategory = value!),
+                    onChanged: (value) =>
+                        setState(() => selectedCategory = value!),
                   ),
                 ),
               ),
@@ -118,24 +132,37 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
                   builder: (context, child) {
                     return BarChart(
                       BarChartData(
-                        gridData: FlGridData(show: false), // Hilangkan garis grid
-                        borderData: FlBorderData(show: false), // Hilangkan border hitam
-                        barGroups: _getAnimatedBars(_animationController.value), // Animasi naik
+                        gridData:
+                            FlGridData(show: false), // Hilangkan garis grid
+                        borderData:
+                            FlBorderData(show: false), // Hilangkan border hitam
+                        barGroups: _getAnimatedBars(
+                            _animationController.value), // Animasi naik
                         titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)), // Hilangkan angka kiri
+                          leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                  showTitles: false)), // Hilangkan angka kiri
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
                                 switch (value.toInt()) {
                                   case 1:
-                                    return Text('TS 1', style: GoogleFonts.poppins(fontSize: 12));
+                                    return Text('TS 1',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 12));
                                   case 2:
-                                    return Text('TS 2', style: GoogleFonts.poppins(fontSize: 12));
+                                    return Text('TS 2',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 12));
                                   case 3:
-                                    return Text('TS 3', style: GoogleFonts.poppins(fontSize: 12));
+                                    return Text('TS 3',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 12));
                                   case 4:
-                                    return Text('TS 4', style: GoogleFonts.poppins(fontSize: 12));
+                                    return Text('TS 4',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 12));
                                   default:
                                     return const Text('');
                                 }
@@ -160,7 +187,8 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
                   ),
                   onPressed: () {},
                   child: Text("Lihat Detail Tabel",
-                      style: GoogleFonts.poppins(fontSize: 14, color: Colors.white)),
+                      style: GoogleFonts.poppins(
+                          fontSize: 14, color: Colors.white)),
                 ),
               ),
             ],
@@ -173,33 +201,67 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
   // Fungsi untuk mendapatkan bagian dari Pie Chart
   List<PieChartSectionData> _getPieSections() {
     return [
-      PieChartSectionData(color: const Color(0xFFAFF4C6), value: 25, title: "25%", titleStyle: _textStyle()),
-      PieChartSectionData(color: const Color(0xFFFFE188), value: 20, title: "20%", titleStyle: _textStyle()),
-      PieChartSectionData(color: const Color(0xFF01C99C), value: 15, title: "15%", titleStyle: _textStyle()),
-      PieChartSectionData(color: const Color(0xFFFF9696), value: 20, title: "20%", titleStyle: _textStyle()),
-      PieChartSectionData(color: const Color(0xFF34A1E6), value: 20, title: "20%", titleStyle: _textStyle()),
+      PieChartSectionData(
+          color: const Color(0xFFAFF4C6),
+          value: 25,
+          title: "25%",
+          titleStyle: _textStyle()),
+      PieChartSectionData(
+          color: const Color(0xFFFFE188),
+          value: 20,
+          title: "20%",
+          titleStyle: _textStyle()),
+      PieChartSectionData(
+          color: const Color(0xFF01C99C),
+          value: 15,
+          title: "15%",
+          titleStyle: _textStyle()),
+      PieChartSectionData(
+          color: const Color(0xFFFF9696),
+          value: 20,
+          title: "20%",
+          titleStyle: _textStyle()),
+      PieChartSectionData(
+          color: const Color(0xFF34A1E6),
+          value: 20,
+          title: "20%",
+          titleStyle: _textStyle()),
     ];
   }
 
   // Fungsi untuk mendapatkan bar chart dengan animasi naik
   List<BarChartGroupData> _getAnimatedBars(double animationValue) {
     return [
-      BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 40 * animationValue, color: Colors.teal, width: 25)]),
-      BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 200 * animationValue, color: Colors.teal, width: 25)]),
-      BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 150 * animationValue, color: Colors.teal, width: 25)]),
-      BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: 80 * animationValue, color: Colors.teal, width: 25)]),
+      BarChartGroupData(x: 1, barRods: [
+        BarChartRodData(toY: 40 * animationValue, color: Colors.teal, width: 25)
+      ]),
+      BarChartGroupData(x: 2, barRods: [
+        BarChartRodData(
+            toY: 200 * animationValue, color: Colors.teal, width: 25)
+      ]),
+      BarChartGroupData(x: 3, barRods: [
+        BarChartRodData(
+            toY: 150 * animationValue, color: Colors.teal, width: 25)
+      ]),
+      BarChartGroupData(x: 4, barRods: [
+        BarChartRodData(toY: 80 * animationValue, color: Colors.teal, width: 25)
+      ]),
     ];
   }
 
   TextStyle _textStyle() {
-    return GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white);
+    return GoogleFonts.poppins(
+        fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white);
   }
 
   Widget _buildLegend(String title, Color color) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 16, height: 16, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 4),
         Text(title, style: GoogleFonts.poppins(fontSize: 14)),
       ],
