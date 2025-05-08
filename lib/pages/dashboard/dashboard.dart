@@ -219,7 +219,7 @@ class DashboardScreen extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => UbahData()),
+                                            MaterialPageRoute(builder: (context) => const UbahData()),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -310,14 +310,30 @@ class DashboardScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Tambahkan proses parsing / kirim ke backend di sini
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+
+                // Tampilkan alert sukses
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    title: Text(
+                      'Import Berhasil',
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                    ),
                     content: Text(
-                      'File "$fileName" berhasil diimpor.',
+                      'File berhasil diimpor ke sistem.',
                       style: GoogleFonts.poppins(),
                     ),
-                    backgroundColor: Colors.green,
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal[700],
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
+                      ),
+                    ],
                   ),
                 );
               },

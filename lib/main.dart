@@ -10,10 +10,12 @@ import 'package:gkm_mobile/pages/diagram/diagram.dart';
 
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,14 +24,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: "/",  // Menentukan halaman awal
       routes: {
-        "/": (context) => onboarding(),// Halaman pertama saat aplikasi dibuka
-        "/login": (context) => login(),
-        "/dashboard": (context) => DashboardScreen(),
-        "/register": (context) => register(),
-        "/ubahdata": (context) => UbahData(),
-        "/diagram": (context) => GrafikMahasiswa(),
-        "/rekapdata": (context) => rekapdata(),
-        "/tabelevaluasi": (context) => tabelevaluasi(),
+        "/": (context) => const onboarding(),// Halaman pertama saat aplikasi dibuka
+        "/login": (context) => const login(),
+        "/dashboard": (context) => const DashboardScreen(),
+        "/register": (context) => const register(),
+        "/ubahdata": (context) => const UbahData(),
+        "/diagram": (context) => const GrafikMahasiswa(),
+        "/rekapdata": (context) => const rekapdata(),
+        "/tabelevaluasi": (context) =>  tabelevaluasi(),
       },
     );
   }

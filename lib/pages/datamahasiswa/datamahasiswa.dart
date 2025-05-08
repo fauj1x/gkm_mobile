@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class datamahasiswa extends StatefulWidget {
+  const datamahasiswa({super.key});
+
   @override
   _KerjasamaTridarmaPageState createState() => _KerjasamaTridarmaPageState();
 }
@@ -69,7 +71,7 @@ class _KerjasamaTridarmaPageState extends State<datamahasiswa> {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 headingRowColor:
-                    MaterialStateProperty.all(Colors.teal), // Header hijau
+                    WidgetStateProperty.all(Colors.teal), // Header hijau
                 columns: const [
                   DataColumn(
                     label: Text("No", style: TextStyle(color: Colors.white)),

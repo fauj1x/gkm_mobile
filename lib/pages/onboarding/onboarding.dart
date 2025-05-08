@@ -3,9 +3,11 @@ import 'package:gkm_mobile/pages/login/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class onboarding extends StatelessWidget {
+  const onboarding({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: OnboardingScreen(),
     );
@@ -13,6 +15,8 @@ class onboarding extends StatelessWidget {
 }
 
 class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,17 +34,17 @@ class OnboardingScreen extends StatelessWidget {
                     'assets/images/logoGKM.png',
                     height: 50,
                     errorBuilder: (context, error, stackTrace) {
-                      return Text('Gambar tidak ditemukan!');
+                      return const Text('Gambar tidak ditemukan!');
                     },
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
                   // Ilustrasi atau Gambar
                   Image.asset(
                     'assets/images/onboarding.png',
                     height: 200,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Judul
                   RichText(
@@ -51,19 +55,19 @@ class OnboardingScreen extends StatelessWidget {
                         color: Colors.black,
                       ),
                       children: [
-                        TextSpan(text: 'Selamat datang di '),
+                        const TextSpan(text: 'Selamat datang di '),
                         TextSpan(
                           text: 'GKM POLIJE',
                           style: GoogleFonts.poppins(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF00B98F),
+                            color: const Color(0xFF00B98F),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Deskripsi
                   RichText(
@@ -74,28 +78,28 @@ class OnboardingScreen extends StatelessWidget {
                         color: Colors.grey[700],
                       ),
                       children: [
-                        TextSpan(text: 'Si '),
+                        const TextSpan(text: 'Si '),
                         TextSpan(
                           text: 'GKM',
                           style: GoogleFonts.poppins(
                             fontSize: 10,
-                            color: Color(0xFF00B98F),
+                            color: const Color(0xFF00B98F),
                           ),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text:
                           ' di Prodi Teknik Informatika PSDKU Sidoarjo adalah Sistem Informasi yang digunakan untuk mengelola dan memantau kegiatan penjaminan mutu guna meningkatkan kualitas pendidikan di program studi.',
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   // Tombol Masuk
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF003C2E),
-                      minimumSize: Size(double.infinity, 50),
+                      backgroundColor: const Color(0xFF003C2E),
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
@@ -103,7 +107,7 @@ class OnboardingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => login()),
+                        MaterialPageRoute(builder: (context) => const login()),
                       );
                     },
                     child: Text(
@@ -116,7 +120,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
             ),
             // Spacer untuk mendorong footer ke bawah
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Footer
             Align(
@@ -137,7 +141,7 @@ class OnboardingScreen extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
-                          color: Color(0xFF00B98F), // Warna hijau
+                          color: const Color(0xFF00B98F), // Warna hijau
                         ),
                       ),
                       TextSpan(
@@ -153,7 +157,7 @@ class OnboardingScreen extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
-                          color: Color(0xFF00B98F), // Warna hijau
+                          color: const Color(0xFF00B98F), // Warna hijau
                         ),
                       ),
                       TextSpan(
@@ -169,7 +173,7 @@ class OnboardingScreen extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
-                          color: Color(0xFF00B98F), // Warna hijau
+                          color: const Color(0xFF00B98F), // Warna hijau
                         ),
                       ),
                     ],

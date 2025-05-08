@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
-import '../main.dart';
+import 'package:gkm_mobile/main.dart';
 
 
 class kerjasamatridharma extends StatefulWidget {
+  const kerjasamatridharma({super.key});
+
   @override
   _PendidikanState createState() => _PendidikanState();
 }
@@ -47,9 +49,9 @@ class _PendidikanState extends State<kerjasamatridharma> {
             Navigator.pop(context);
           },
         ),
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               "Kerjasama Tridharma",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
@@ -75,13 +77,13 @@ class _PendidikanState extends State<kerjasamatridharma> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Icon(Icons.search, color: Color(0xFF009688)),
+                  Icon(Icons.search, color: Color(0xFF009688)),
                   Expanded(
                     child: TextField(
-                      style: const TextStyle(color: Color(0xFF009688)),
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: Color(0xFF009688)),
+                      decoration: InputDecoration(
                         hintText: "Cari data...",
                         hintStyle: TextStyle(color: Color(0xFF009688)),
                         border: InputBorder.none,
@@ -220,6 +222,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
   }
 
   Widget _emptyCell(double width) {
-    return Container(width: width, height: 40);
+    return SizedBox(width: width, height: 40);
   }
 }

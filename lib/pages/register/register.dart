@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 class register extends StatefulWidget {
+  const register({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -18,17 +20,17 @@ class _RegisterPageState extends State<register> {
   void showSuccessNotification(BuildContext context) {
     Flushbar(
       message: "Registrasi berhasil! 🎉",
-      icon: Icon(Icons.check_circle, color: Colors.white, size: 28),
-      duration: Duration(seconds: 3),
+      icon: const Icon(Icons.check_circle, color: Colors.white, size: 28),
+      duration: const Duration(seconds: 3),
       flushbarPosition: FlushbarPosition.TOP,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       borderRadius: BorderRadius.circular(8),
-      backgroundGradient: LinearGradient(colors: [Color(0xFF00B98F), Colors.teal]),
-      boxShadows: [
+      backgroundGradient: const LinearGradient(colors: [Color(0xFF00B98F), Colors.teal]),
+      boxShadows: const [
         BoxShadow(color: Colors.black45, offset: Offset(2, 2), blurRadius: 4)
       ],
       isDismissible: true,
-    )..show(context);
+    ).show(context);
   }
 
   void register() {
@@ -50,10 +52,10 @@ class _RegisterPageState extends State<register> {
     showSuccessNotification(context);
 
     // Pindah ke Dashboard setelah 2.5 detik
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     });
   }
@@ -69,8 +71,8 @@ class _RegisterPageState extends State<register> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
-                SizedBox(height: 10),
+                const Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
+                const SizedBox(height: 10),
                 Text(
                   "Pemberitahuan",
                   style: GoogleFonts.poppins(
@@ -79,7 +81,7 @@ class _RegisterPageState extends State<register> {
                     color: Colors.red,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   message,
                   textAlign: TextAlign.center,
@@ -89,15 +91,15 @@ class _RegisterPageState extends State<register> {
                     color: Colors.black54,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00B98F),
+                    backgroundColor: const Color(0xFF00B98F),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    minimumSize: Size(120, 40),
+                    minimumSize: const Size(120, 40),
                   ),
                   child: Text(
                     "OK",
@@ -135,24 +137,24 @@ class _RegisterPageState extends State<register> {
                       style: GoogleFonts.poppins(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF00B98F),
+                        color: const Color(0xFF00B98F),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       "Silahkan buat akunmu untuk memulai petualangan bersama GKM!",
                       style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildInputField("Email", "Masukkan emailmu di sini", emailController, false),
                     _buildInputField("Kata Sandi", "Masukkan passwordmu di sini", passwordController, true),
                     _buildInputField("Konfirmasi Kata Sandi", "Ketik ulang kata sandimu", confirmPasswordController, false),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal[900],
-                        minimumSize: Size(double.infinity, 50),
+                        minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -176,7 +178,7 @@ class _RegisterPageState extends State<register> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => login()),
+                      MaterialPageRoute(builder: (context) => const login()),
                     );
                   },
                   child: Text.rich(
@@ -191,7 +193,7 @@ class _RegisterPageState extends State<register> {
                           text: "Masuk",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF00B98F),
+                            color: const Color(0xFF00B98F),
                           ),
                         ),
                       ],
@@ -210,12 +212,12 @@ class _RegisterPageState extends State<register> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           label,
           style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         TextField(
           controller: controller,
           obscureText: isPassword && controller != confirmPasswordController ? _obscurePassword : false,
@@ -225,16 +227,16 @@ class _RegisterPageState extends State<register> {
             hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF00B98F), width: 2), // Hover warna 0xFF00B98F
+              borderSide: const BorderSide(color: Color(0xFF00B98F), width: 2), // Hover warna 0xFF00B98F
               borderRadius: BorderRadius.circular(10),
             ),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             suffixIcon: isPassword && controller != confirmPasswordController
                 ? IconButton(
               icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),

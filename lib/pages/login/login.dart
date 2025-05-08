@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class login extends StatefulWidget {
+  const login({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -21,7 +23,7 @@ class _LoginScreenState extends State<login> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -43,10 +45,10 @@ class _LoginScreenState extends State<login> {
                       style: GoogleFonts.poppins(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF00B98F),
+                        color: const Color(0xFF00B98F),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text.rich(
                       TextSpan(
                         text: "Silahkan masukkan akunmu dan mulai petualangan\n",
@@ -56,20 +58,20 @@ class _LoginScreenState extends State<login> {
                           color: Colors.black,
                         ),
                         children: [
-                          TextSpan(text: "bersama "),
+                          const TextSpan(text: "bersama "),
                           TextSpan(
                             text: "GKM",
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF00B98F),
+                              color: const Color(0xFF00B98F),
                             ),
                           ),
-                          TextSpan(text: "!"),
+                          const TextSpan(text: "!"),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildInputField("Email", "Masukkan emailmu di sini", emailController, false),
                     _buildInputField("Kata Sandi", "Masukkan kata sandimu di sini", passwordController, true),
                     Align(
@@ -86,12 +88,12 @@ class _LoginScreenState extends State<login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () => login(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal[900],
-                        minimumSize: Size(double.infinity, 50),
+                        minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                       ),
                       child: Text(
@@ -113,7 +115,7 @@ class _LoginScreenState extends State<login> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => register()),
+                      MaterialPageRoute(builder: (context) => const register()),
                     );
                   },
                   child: Text.rich(
@@ -128,7 +130,7 @@ class _LoginScreenState extends State<login> {
                           text: "Buat akun",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF00B98F),
+                            color: const Color(0xFF00B98F),
                           ),
                         ),
                       ],
@@ -147,12 +149,12 @@ class _LoginScreenState extends State<login> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           label,
           style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         TextField(
           controller: controller,
           obscureText: isPassword ? _obscurePassword : false,
@@ -162,16 +164,16 @@ class _LoginScreenState extends State<login> {
             hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             enabledBorder: OutlineInputBorder( // Default border tetap sama
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder( // Border berubah saat ditekan
-              borderSide: BorderSide(color: Color(0xFF00B98F), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF00B98F), width: 2),
               borderRadius: BorderRadius.circular(10),
             ),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             suffixIcon: isPassword
                 ? IconButton(
               icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
@@ -208,16 +210,16 @@ class _LoginScreenState extends State<login> {
               color: Colors.white.withOpacity(0.9),
               borderRadius: BorderRadius.circular(15),
             ),
-            padding: EdgeInsets.all(25),
+            padding: const EdgeInsets.all(25),
             width: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SpinKitThreeBounce(
+                const SpinKitThreeBounce(
                   color: Color(0xFF00B98F),
                   size: 40,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   "Loading...",
                   style: GoogleFonts.poppins(
@@ -234,14 +236,14 @@ class _LoginScreenState extends State<login> {
     );
 
     // Simulasi delay sebelum berpindah halaman
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return; // Pastikan widget masih ada sebelum pop
       Navigator.of(context, rootNavigator: true).pop(); // Tutup dialog loading
 
       if (!mounted) return; // Pastikan widget masih ada sebelum navigasi
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     });
   }
@@ -258,8 +260,8 @@ class _LoginScreenState extends State<login> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
-                SizedBox(height: 10),
+                const Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
+                const SizedBox(height: 10),
                 Text(
                   "Pemberitahuan",
                   style: GoogleFonts.poppins(
@@ -268,7 +270,7 @@ class _LoginScreenState extends State<login> {
                     color: Colors.red,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   message,
                   textAlign: TextAlign.center,
@@ -278,15 +280,15 @@ class _LoginScreenState extends State<login> {
                     color: Colors.black54,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00B98F),
+                    backgroundColor: const Color(0xFF00B98F),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    minimumSize: Size(120, 40),
+                    minimumSize: const Size(120, 40),
                   ),
                   child: Text(
                     "OK",

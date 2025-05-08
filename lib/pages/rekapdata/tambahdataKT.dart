@@ -5,6 +5,8 @@ class FormKerjasamaTridharma extends StatelessWidget {
   final TextEditingController totalController = TextEditingController();
   final TextEditingController keteranganController = TextEditingController();
 
+  FormKerjasamaTridharma({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +19,9 @@ class FormKerjasamaTridharma extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               "Tambah Data",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
@@ -42,49 +44,49 @@ class FormKerjasamaTridharma extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF009688),
+                color: const Color(0xFF009688),
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               "Silakan tambahkan catatan barumu\ndimana GKM !",
               style: GoogleFonts.poppins(fontSize: 12, color: Colors.black87),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             Text(
               "Total",
               style: GoogleFonts.poppins(fontSize: 14),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: totalController,
               decoration: InputDecoration(
                 hintText: "Buat Catatan Jumlah Total",
-                hintStyle: TextStyle(color: Colors.teal),
+                hintStyle: const TextStyle(color: Colors.teal),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             Text(
               "Keterangan",
               style: GoogleFonts.poppins(fontSize: 14),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             TextField(
               controller: keteranganController,
               decoration: InputDecoration(
                 hintText: "Buat Catatan Keterangan",
-                hintStyle: TextStyle(color: Colors.teal),
+                hintStyle: const TextStyle(color: Colors.teal),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -93,7 +95,7 @@ class FormKerjasamaTridharma extends StatelessWidget {
                   Navigator.pop(context); // contoh: kembali ke halaman sebelumnya
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF00B98F),
+                  backgroundColor: const Color(0xFF00B98F),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

@@ -67,6 +67,8 @@ class tabelevaluasi extends StatelessWidget {
     "Luaran Karya Mahasiswa": () => kerjasamatridharma(),
   };
 
+  tabelevaluasi({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

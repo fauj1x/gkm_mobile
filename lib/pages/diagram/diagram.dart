@@ -118,11 +118,11 @@ class _GrafikMahasiswaState extends State<GrafikMahasiswa> with SingleTickerProv
                   builder: (context, child) {
                     return BarChart(
                       BarChartData(
-                        gridData: FlGridData(show: false), // Hilangkan garis grid
+                        gridData: const FlGridData(show: false), // Hilangkan garis grid
                         borderData: FlBorderData(show: false), // Hilangkan border hitam
                         barGroups: _getAnimatedBars(_animationController.value), // Animasi naik
                         titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)), // Hilangkan angka kiri
+                          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)), // Hilangkan angka kiri
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,

@@ -5,6 +5,8 @@ import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UbahData extends StatefulWidget {
+  const UbahData({super.key});
+
   @override
   _UbahDataPageState createState() => _UbahDataPageState();
 }
@@ -23,31 +25,29 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
 
     switch (submenu) {
       case "Pendidikan":
-        page = pendidikan();
+        page = const pendidikan();
         break;
       case "Seleksi Mahasiswa":
-        page = GrafikMahasiswa();
+        page = const GrafikMahasiswa();
         break;
       case "Akademik":
-        page = Placeholder(); // Ganti dengan halaman yang sesuai
+        page = const Placeholder(); // Ganti dengan halaman yang sesuai
         break;
       case "Non-Akademik":
-        page = Placeholder(); // Ganti dengan halaman yang sesuai
+        page = const Placeholder(); // Ganti dengan halaman yang sesuai
         break;
       case "Rekap Semua Data":
-        page = tabelevaluasi();
+        page =  tabelevaluasi();
         break;
       default:
         return;
     }
 
-    if (page != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page!),
-      );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page!),
+    );
     }
-  }
 
   Widget buildMenu(String title, String imagePath, Color menuColor,
       Color submenuColor, List<String> submenus) {
