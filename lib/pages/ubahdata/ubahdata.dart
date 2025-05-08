@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/kinerja_pkmdtps.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
-import 'package:gkm_mobile/pages/datadosen/dosen_industri_praktisi.dart';
-import 'package:gkm_mobile/pages/datadosen/dosen_pembimbing_ta.dart';
-import 'package:gkm_mobile/pages/datadosen/dosen_tetap_pt.dart';
-import 'package:gkm_mobile/pages/datadosen/dosen_tidak_tetap.dart';
-import 'package:gkm_mobile/pages/datadosen/ewmp_dosen.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_industri_praktisi.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_pembimbing_ta.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_tetap_pt.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_tidak_tetap.dart';
+import 'package:gkm_mobile/pages/data_dosen/ewmp_dosen.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/buku_chapter_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_hak_cipta.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_paten.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/teknologi_karya.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/produk_teradopsi_dosen.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/integrasi_penelitian.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_penelitian_mahasiswa.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_rujukan_tesis.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/pengakuan.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/pkm_dtps.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/publikasi_pagelaran.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/sitasi.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/pengakuan_rekognisi_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/publikasi_ilmiah_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/sitasi_karya_dosen.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/kepuasan_mahasiswa.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/penelitian.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/penelitian_dtps.dart';
 
 class UbahData extends StatefulWidget {
   final TahunAjaran tahunAjaran;
@@ -99,28 +103,45 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       case "Rekap Semua Data":
         page = tabelevaluasi();
         break;
+      // Kinerja Dosen Start
+      case "Pengakuan/Rekognisi Dosen":
+        page = PengakuanRekognisiDosen(
+          tahunAjaran: widget.tahunAjaran,
+        );
+        break;
       case "Penelitian DTPS":
-        page = PenelitianDtpsPage(
+        page = PenelitianDtps(
           tahunAjaran: widget.tahunAjaran,
         );
         break;
-      case "Pkm DTPS":
-        page = PkmDTPS(
+      case "PkM DTPS":
+        page = PkmDtps(
           tahunAjaran: widget.tahunAjaran,
         );
-      case "Pengakuan/Rekogrisi Dosen":
-        page = Pengakuan_kinerja(
-          tahunAjaran: widget.tahunAjaran,
-        );
-        break;
       case "Publikasi & Pagelaran Ilmiah":
-        page = KinerjaPagelaranPage(tahunAjaran: widget.tahunAjaran);
+        page = PublikasiIlmiahDosen(tahunAjaran: widget.tahunAjaran);
         break;
       case "Sitasi Karya Ilmiah":
-        page = KinerjaSitasiScreen(
+        page = SitasiKaryaDosen(
           tahunAjaran: widget.tahunAjaran,
         );
         break;
+      case "Produk/Jasa Teradopsi":
+        page = ProdukTeradopsiDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - HKI (Paten)":
+        page = HkiPaten(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - HKI (Hak Cipta)":
+        page = HkiHakCipta(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - Teknologi & Karya":
+        page = TeknologiKarya(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - Buku & Chapter":
+        page = BukuChapterDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Kinerja Dosen End
       case "Kepuasan Mahasiswa":
         page = KinerjaKepuasanScreen(tahunAjaran: widget.tahunAjaran);
         break;
@@ -310,7 +331,10 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                         "Publikasi & Pagelaran Ilmiah",
                         "Sitasi Karya Ilmiah",
                         "Produk/Jasa Teradopsi",
-                        "Luaran Penelitian Lain"
+                        "Luaran Penelitian Lain - HKI (Paten)",
+                        "Luaran Penelitian Lain - HKI (Hak Cipta)",
+                        "Luaran Penelitian Lain - Teknologi & Karya",
+                        "Luaran Penelitian Lain - Buku & Chapter",
                       ]),
                   buildMenu(
                       "Kualitas Pembelajaran",
