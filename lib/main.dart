@@ -1,37 +1,42 @@
 import 'package:flutter/material.dart';
 import "package:gkm_mobile/pages/onboarding/onboarding.dart";
-import "package:gkm_mobile/pages/rekapdata/rekapdata.dart";
-import "package:gkm_mobile/pages/login/login.dart";
-import "package:gkm_mobile/pages/register/register.dart";
 import "package:gkm_mobile/pages/dashboard/dashboard.dart";
-import "package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart";
-import "package:gkm_mobile/pages/ubahdata/ubahdata.dart";
-import 'package:gkm_mobile/pages/diagram/diagram.dart';
-
+import "package:gkm_mobile/services/auth.dart";
+import "package:provider/provider.dart";
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (BuildContext context) => AuthProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Aplikasi Flutter',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: "/",  // Menentukan halaman awal
-      routes: {
-        "/": (context) => const onboarding(),// Halaman pertama saat aplikasi dibuka
-        "/login": (context) => const login(),
-        "/dashboard": (context) => const DashboardScreen(),
-        "/register": (context) => const register(),
-        "/ubahdata": (context) => const UbahData(),
-        "/diagram": (context) => const GrafikMahasiswa(),
-        "/rekapdata": (context) => const rekapdata(),
-        "/tabelevaluasi": (context) =>  tabelevaluasi(),
+    return FutureBuilder<bool>(
+      future: Provider.of<AuthProvider>(context, listen: false).checkAuth(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GKM POLIJE',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home: const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        } else {
+          bool isAuthenticated = snapshot.data ?? false;
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GKM POLIJE',
+            theme: ThemeData(primarySwatch: Colors.blue),
+            home: isAuthenticated ? dashboard() : onboarding(),
+          );
+        }
       },
     );
   }

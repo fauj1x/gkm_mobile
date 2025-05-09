@@ -1,2 +1,0 @@
-D:/gkm_mobile/android/app/.cxx/Debug/3n5r3s4i/arm64-v8a/CMakeFiles/edit_cache.dir
-D:/gkm_mobile/android/app/.cxx/Debug/3n5r3s4i/arm64-v8a/CMakeFiles/rebuild_cache.dir

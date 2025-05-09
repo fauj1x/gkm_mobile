@@ -1,10 +1,34 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
+import 'package:gkm_mobile/services/api_services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  ApiService apiService = ApiService();
+  List<TahunAjaran> tahunAjaranList = [];
+
+  Future<void> _fetchTahunAjaran() async {
+    var data = await apiService.getData(TahunAjaran.fromJson, "tahun-ajaran");
+    data = data.reversed.toList();
+    setState(() {
+      tahunAjaranList = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTahunAjaran();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +77,19 @@ class DashboardScreen extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Image.asset('assets/icons/notification.png', width: 24, height: 24),
+                        icon: Image.asset(
+                          'assets/icons/notification.png',
+                          width: 24,
+                          height: 24,
+                        ),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Image.asset('assets/icons/pusatbantuan.png', width: 24, height: 24),
+                        icon: Image.asset(
+                          'assets/icons/pusatbantuan.png',
+                          width: 24,
+                          height: 24,
+                        ),
                       ),
                     ],
                   ),
@@ -219,7 +251,7 @@ class DashboardScreen extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => const UbahData()),
+                                            MaterialPageRoute(builder: (context) => UbahData(tahunAjaran: tahunAjaranList[i])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -351,39 +383,41 @@ class DashboardScreen extends StatelessWidget {
 
   Future<bool> _showExitPopup(BuildContext context) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        title: Text(
-          'Konfirmasi Keluar',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          'Apakah Anda yakin ingin keluar?',
-          style: GoogleFonts.poppins(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(
-              'Batal',
-              style: GoogleFonts.poppins(color: Colors.black),
+          context: context,
+          builder: (context) => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              'Konfirmasi Keluar',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
+            content: Text(
+              'Apakah Anda yakin ingin keluar?',
+              style: GoogleFonts.poppins(),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  'Batal',
+                  style: GoogleFonts.poppins(color: Colors.black),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF00B98F),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                child: Text(
+                  'Keluar',
+                  style: GoogleFonts.poppins(color: Colors.white),
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00B98F),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: Text(
-              'Keluar',
-              style: GoogleFonts.poppins(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 }

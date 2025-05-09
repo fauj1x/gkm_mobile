@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/pages/diagram/diagram.dart';
-import 'package:gkm_mobile/pages/submenukerjasamatridharma/pendidikan.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
+import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
+import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_industri_praktisi.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_pembimbing_ta.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_tetap_pt.dart';
+import 'package:gkm_mobile/pages/data_dosen/dosen_tidak_tetap.dart';
+import 'package:gkm_mobile/pages/data_dosen/ewmp_dosen.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/buku_chapter_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_hak_cipta.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_paten.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/teknologi_karya.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/produk_teradopsi_dosen.dart';
+import 'package:gkm_mobile/pages/kualitas_pembelajaran/integrasi_penelitian.dart';
+import 'package:gkm_mobile/pages/penelitian_dtps/dtps_penelitian_mahasiswa.dart';
+import 'package:gkm_mobile/pages/penelitian_dtps/dtps_rujukan_tesis.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/pengakuan_rekognisi_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/publikasi_ilmiah_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/sitasi_karya_dosen.dart';
+import 'package:gkm_mobile/pages/kualitas_pembelajaran/kepuasan_mahasiswa.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gkm_mobile/pages/kinerja_dosen/penelitian_dtps.dart';
 
 class UbahData extends StatefulWidget {
-  const UbahData({super.key});
-
+  final TahunAjaran tahunAjaran;
+  const UbahData({Key? key, required this.tahunAjaran}) : super(key: key);
   @override
-  _UbahDataPageState createState() => _UbahDataPageState();
+  UbahDataPageState createState() => UbahDataPageState();
 }
 
-class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
+class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
   String? expandedMenu;
 
   void toggleMenu(String title) {
@@ -24,38 +47,119 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
     Widget? page;
 
     switch (submenu) {
+      // Kerjasama Tridarma
       case "Pendidikan":
-        page = const pendidikan();
+        page = Pendidikan(tahunAjaran: widget.tahunAjaran);
         break;
+      case "Penelitian":
+        page = Penelitian(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Pengabdian Masyarakat":
+        page = PengabdianMasyarakat(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Data Mahasiswa
       case "Seleksi Mahasiswa":
-        page = const GrafikMahasiswa();
+        page = SeleksiMahasiswaBaru(tahunAjaran: widget.tahunAjaran);
         break;
-      case "Akademik":
-        page = const Placeholder(); // Ganti dengan halaman yang sesuai
+      case "Mahasiswa Asing":
+        page = MahasiswaAsing(tahunAjaran: widget.tahunAjaran);
         break;
-      case "Non-Akademik":
-        page = const Placeholder(); // Ganti dengan halaman yang sesuai
+      // Data Dosen
+      case "Dosen Tetap PT":
+        page = DosenTetapPt(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Industri/Praktisi":
+        page = DosenIndustriPraktisi(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Pembimbing TA":
+        page = DosenPembimbingTa(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "EWMP Dosen":
+        page = EwmpDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Dosen Tidak Tetap":
+        page = DosenTidakTetap(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Penelitian DTPS
+      case "Penelitian Mahasiswa":
+        page = DtpsPenelitianMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Rujukan Tesis/Disertasi":
+        page = DtpsRujukanTesis(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Kualitas Pembelajaran
+      case "Integrasi Penelitian":
+        page = IntegrasiPenelitian(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Profil Dosen":
+        page = Placeholder();
+        break;
+      case "Publikasi":
+        page = Placeholder();
+        break;
+      case "Sertifikasi":
+        page = Placeholder();
         break;
       case "Rekap Semua Data":
-        page =  tabelevaluasi();
+        page = tabelevaluasi();
+        break;
+      // Kinerja Dosen Start
+      case "Pengakuan/Rekognisi Dosen":
+        page = PengakuanRekognisiDosen(
+          tahunAjaran: widget.tahunAjaran,
+        );
+        break;
+      case "Penelitian DTPS":
+        page = PenelitianDtps(
+          tahunAjaran: widget.tahunAjaran,
+        );
+        break;
+      case "PkM DTPS":
+        page = PkmDtps(
+          tahunAjaran: widget.tahunAjaran,
+        );
+      case "Publikasi & Pagelaran Ilmiah":
+        page = PublikasiIlmiahDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Sitasi Karya Ilmiah":
+        page = SitasiKaryaDosen(
+          tahunAjaran: widget.tahunAjaran,
+        );
+        break;
+      case "Produk/Jasa Teradopsi":
+        page = ProdukTeradopsiDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - HKI (Paten)":
+        page = HkiPaten(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - HKI (Hak Cipta)":
+        page = HkiHakCipta(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - Teknologi & Karya":
+        page = TeknologiKarya(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "Luaran Penelitian Lain - Buku & Chapter":
+        page = BukuChapterDosen(tahunAjaran: widget.tahunAjaran);
+        break;
+      // Kinerja Dosen End
+      case "Kepuasan Mahasiswa":
+        page = KinerjaKepuasanScreen(tahunAjaran: widget.tahunAjaran);
         break;
       default:
         return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page!),
-    );
+    if (page != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => page!),
+      );
     }
+  }
 
   Widget buildMenu(String title, String imagePath, Color menuColor,
       Color submenuColor, List<String> submenus) {
     bool isExpanded = expandedMenu == title;
-
-    Color textColor = (menuColor.value == const Color(0xFF009688).value)
-        ? Colors.white
-        : const Color(0xFF009688);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
@@ -71,6 +175,7 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       ),
       child: Column(
         children: [
+          // MENU UTAMA
           GestureDetector(
             onTap: () => toggleMenu(title),
             child: Container(
@@ -91,92 +196,53 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: textColor,
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   Icon(
-                    isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: textColor,
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: Colors.white,
                   ),
                 ],
               ),
             ),
           ),
+
+          // SUB MENU
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             child: isExpanded
                 ? Container(
-              decoration: BoxDecoration(
-                color: submenuColor,
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
-              ),
-              child: Column(
-                children: submenus.map((submenu) {
-                  // Warna teks submenu berdasarkan submenuColor
-                  Color submenuTextColor = (submenuColor == const Color(0xFF009688))
-                      ? Colors.white
-                      : const Color(0xFF009688);
-
-                  if (submenu == "Prestasi Mahasiswa") {
-                    return Theme(
-                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                      child: ExpansionTile(
-                        title: Text(
-                          submenu,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300,
-                            color: submenuTextColor,
-                          ),
-                        ),
-                        children: [
-                          ListTile(
-                            title: Text(
-                              "Akademik",
+                    decoration: BoxDecoration(
+                      color: submenuColor,
+                      borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(16)),
+                    ),
+                    child: Column(
+                      children: submenus.map((submenu) {
+                        return InkWell(
+                          onTap: () => navigateToPage(submenu),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              submenu,
                               style: GoogleFonts.poppins(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w200,
-                                color: submenuTextColor,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black87,
                               ),
                             ),
-                            onTap: () => navigateToPage("Akademik"),
                           ),
-                          ListTile(
-                            title: Text(
-                              "Non-Akademik",
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w200,
-                                color: submenuTextColor,
-                              ),
-                            ),
-                            onTap: () => navigateToPage("Non-Akademik"),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return InkWell(
-                      onTap: () => navigateToPage(submenu),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          submenu,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w300,
-                            color: submenuTextColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                }).toList(),
-              ),
-            )
+                        );
+                      }).toList(),
+                    ),
+                  )
                 : const SizedBox(),
           ),
         ],
@@ -191,6 +257,7 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // CUSTOM APP BAR
           Container(
             padding: const EdgeInsets.fromLTRB(16, 40, 16, 10),
             color: Colors.white,
@@ -205,7 +272,7 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ubah data",
+                      "Ubah Data",
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -213,7 +280,7 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      "Semester genap 2023 / 2024",
+                      "Semester ${(widget.tahunAjaran.semester == "ganjil" ? "Ganjil" : "Genap")} ${(widget.tahunAjaran.tahunAjaran)}",
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -225,26 +292,90 @@ class _UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
               ],
             ),
           ),
+
+          // BODY MENU
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  buildMenu("Kerjasama Tridharma", "assets/images/ilustrasi1.png",
-                      Colors.teal, Colors.grey.shade300, ["Pendidikan", "Penelitian", "Pengabdian Masyarakat"]),
-                  buildMenu("Data Mahasiswa", "assets/images/ilustrasi2.png",
-                      Colors.grey.shade300, const Color(0xFF009688), ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
+                  const SizedBox(height: 10),
+                  buildMenu(
+                      "Kerjasama Tridarma",
+                      "assets/images/ilustrasi1.png",
+                      Colors.teal,
+                      Colors.grey.shade300,
+                      ["Pendidikan", "Penelitian", "Pengabdian Masyarakat"]),
+                  buildMenu(
+                      "Data Mahasiswa",
+                      "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300,
+                      Colors.teal, // Warna submenu diperbaiki
+                      ["Seleksi Mahasiswa", "Mahasiswa Asing"]),
                   buildMenu("Data Dosen", "assets/images/ilustrasi3.png",
-                      Colors.teal, Colors.grey.shade300, ["Dosen Tetap PT", "Pembimbing TA", "EWMP Dosen", "Dosen Tidak Tetap", "Dosen Industri/Praktisi"]),
-                  buildMenu("Kinerja Dosen", "assets/images/ilustrasi4.png",
-                      Colors.grey.shade300, const Color(0xFF009688), ["Pengakuan/Rekognisi Dosen", "Penelitian DTPS", "Pkm DTPS", "Publikasi & Pagelaran Ilmiah", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
-                  buildMenu("Kualitas Pembelajaran", "assets/images/ilustrasi3.png",
-                      Colors.teal, Colors.grey.shade300, ["Kurikulum & Pembelajaran", "Integrasi Penelitian", "Kepuasan Mahasiswa"]),
-                  buildMenu("Kinerja Lulusan", "assets/images/ilustrasi4.png",
-                      Colors.grey.shade300, const Color(0xFF009688), ["IPK Lulusan", "Prestasi Mahasiswa", "Masa Studi Lulusan", "Evaluasi Lulusan", "Sitasi Karya Ilmiah", "Produk/Jasa Teradopsi", "Luaran Penelitian Lain"]),
-                  buildMenu("Luaran Karya Mahasiswa", "assets/images/ilustrasi3.png",
-                      Colors.teal, Colors.grey.shade300, ["Publikasi Mahasiswa", "Sitasi Karya Mahasiswa", "Produk/Jasa Mahasiswa", "Luaran Mahasiswa Lainnya"]),
-                  buildMenu("Rekap Data", "assets/images/ilustrasi4.png",
-                      Colors.grey.shade300, const Color(0xFF009688), ["Rekap Semua Data"]),
+                      Colors.teal, Colors.grey.shade300, [
+                    "Dosen Tetap PT",
+                    "Dosen Pembimbing TA",
+                    "EWMP Dosen",
+                    "Dosen Tidak Tetap",
+                    "Dosen Industri/Praktisi"
+                  ]),
+                  buildMenu(
+                      "Kinerja Dosen",
+                      "assets/images/ilustrasi4.png",
+                      Colors.grey.shade300,
+                      Colors.teal, // Warna submenu diperbaiki
+                      [
+                        "Pengakuan/Rekognisi Dosen",
+                        "Penelitian DTPS",
+                        "PkM DTPS",
+                        "Publikasi & Pagelaran Ilmiah",
+                        "Sitasi Karya Ilmiah",
+                        "Produk/Jasa Teradopsi",
+                        "Luaran Penelitian Lain - HKI (Paten)",
+                        "Luaran Penelitian Lain - HKI (Hak Cipta)",
+                        "Luaran Penelitian Lain - Teknologi & Karya",
+                        "Luaran Penelitian Lain - Buku & Chapter",
+                      ]),
+                  buildMenu(
+                      "Kualitas Pembelajaran",
+                      "assets/images/ilustrasi2.png",
+                      Colors.teal,
+                      Colors.grey.shade300, [
+                    "Kurikulum & Pembelajaran",
+                    "Integrasi Penelitian",
+                    "Kepuasan Mahasiswa"
+                  ]),
+                  buildMenu(
+                      "Penelitian DTPS",
+                      "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300,
+                      Colors.teal,
+                      ["Penelitian Mahasiswa", "Rujukan Tesis/Disertasi"]),
+                  buildMenu(
+                      "PkM DTPS Mahasiswa",
+                      "assets/images/ilustrasi2.png",
+                      Colors.teal,
+                      Colors.grey.shade300,
+                      ["PkM DTPS Mahasiswa"]),
+                  buildMenu("Kinerja Lulusan", "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300, Colors.teal, [
+                    "IPK Lulusan",
+                    "Prestasi Mahasiswa",
+                    "Masa Studi Lulusan",
+                    "Evaluasi Lulusan"
+                  ]),
+                  buildMenu(
+                      "Luaran Karya Mahasiswa",
+                      "assets/images/ilustrasi2.png",
+                      Colors.teal,
+                      Colors.grey.shade300, [
+                    "Publikasi Mahasiswa",
+                    "Sitasi Karya Mahasiswa",
+                    "Produk/Jasa Mahasiswa",
+                    "Luaran Mahasiswa Lainnya"
+                  ]),
+                  buildMenu("Rekap Data", "assets/images/ilustrasi2.png",
+                      Colors.grey.shade300, Colors.teal, ["Rekap Semua Data"]),
                 ],
               ),
             ),
