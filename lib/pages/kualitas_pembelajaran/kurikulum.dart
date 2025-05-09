@@ -65,7 +65,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
          kualitas_kurikulum.fromJson, newData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
       _fetchData(); // Refresh data setelah berhasil menambah
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil ditambahkan!')),
+        const SnackBar(content: Text('Data berhasil ditambahkan!')),
       );
     } catch (e) {
       print("Error adding data: $e");
@@ -80,7 +80,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
       await apiService.deleteData(id, endPoint);
       _fetchData(); // Refresh data setelah berhasil menghapus
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil dihapus!')),
+        const SnackBar(content: Text('Data berhasil dihapus!')),
       );
     } catch (e) {
       print("Error deleting data: $e");
@@ -97,7 +97,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
           kualitas_kurikulum.fromJson, id, updatedData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
       _fetchData(); // Refresh data setelah berhasil mengedit
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil diupdate!')),
+        const SnackBar(content: Text('Data berhasil diupdate!')),
       );
     } catch (e) {
       print("Error editing data: $e");
@@ -126,12 +126,12 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
             Text(
               menuName,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -150,14 +150,14 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
                           // Implement search logic here
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -172,7 +172,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -388,7 +388,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                                               });
                                             } else {
                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text('ID data tidak ditemukan untuk diedit.')),
+                                                const SnackBar(content: Text('ID data tidak ditemukan untuk diedit.')),
                                               );
                                             }
                                           } else if (choice == "Hapus") {
@@ -397,7 +397,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                                                 _deleteData(data.id!);
                                              } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text('ID data tidak ditemukan untuk dihapus.')),
+                                                const SnackBar(content: Text('ID data tidak ditemukan untuk dihapus.')),
                                               );
                                              }
                                           }
@@ -497,64 +497,64 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Data Mata Kuliah'), // Judul disesuaikan
+          title: const Text('Tambah Data Mata Kuliah'), // Judul disesuaikan
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min, // Agar dialog menyesuaikan konten
               children: [
                 TextField(
                     controller: namaMataKuliahController,
-                    decoration: InputDecoration(labelText: 'Nama Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Nama Mata Kuliah')),
                 TextField(
                     controller: kodeMataKuliahController,
-                    decoration: InputDecoration(labelText: 'Kode Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Kode Mata Kuliah')),
                  TextField(
                     controller: mataKuliahKompetensiController,
-                    decoration: InputDecoration(labelText: 'Kompetensi Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Kompetensi Mata Kuliah')),
                  TextField(
                     controller: sksKuliahController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Kuliah')),
+                    decoration: const InputDecoration(labelText: 'SKS Kuliah')),
                  TextField(
                     controller: sksSeminarController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Seminar')),
+                    decoration: const InputDecoration(labelText: 'SKS Seminar')),
                  TextField(
                     controller: sksPraktikumController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Praktikum')),
+                    decoration: const InputDecoration(labelText: 'SKS Praktikum')),
                  TextField(
                     controller: konversiSksController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Konversi SKS')),
+                    decoration: const InputDecoration(labelText: 'Konversi SKS')),
                  TextField(
                     controller: semesterController,
-                    decoration: InputDecoration(labelText: 'Semester')),
+                    decoration: const InputDecoration(labelText: 'Semester')),
                  TextField(
                     controller: metodePembelajaranController,
-                    decoration: InputDecoration(labelText: 'Metode Pembelajaran')),
+                    decoration: const InputDecoration(labelText: 'Metode Pembelajaran')),
                  TextField(
                     controller: dokumenController,
-                    decoration: InputDecoration(labelText: 'Dokumen (Link/Deskripsi)')),
+                    decoration: const InputDecoration(labelText: 'Dokumen (Link/Deskripsi)')),
                  TextField(
                     controller: unitPenyelenggaraController,
-                    decoration: InputDecoration(labelText: 'Unit Penyelenggara')),
+                    decoration: const InputDecoration(labelText: 'Unit Penyelenggara')),
                  TextField(
                     controller: capaianKuliahSikapController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Sikap')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Sikap')),
                  TextField(
                     controller: capaianKuliahPengetahuanController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Pengetahuan')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Pengetahuan')),
                  TextField(
                     controller: capaianKuliahKeterampilanUmumController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Keterampilan Umum')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Keterampilan Umum')),
                  TextField(
                     controller: capaianKuliahKeterampilanKhususController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Keterampilan Khusus')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Keterampilan Khusus')),
                  TextField(
                     controller: tahunController,
                      keyboardType: TextInputType.number, // Input angka untuk tahun
-                    decoration: InputDecoration(labelText: 'Tahun')),
+                    decoration: const InputDecoration(labelText: 'Tahun')),
               ],
             ),
           ),
@@ -563,14 +563,14 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                 // Validasi sederhana sebelum mengirim
                 if (namaMataKuliahController.text.isEmpty || kodeMataKuliahController.text.isEmpty || mataKuliahKompetensiController.text.isEmpty || sksKuliahController.text.isEmpty || sksSeminarController.text.isEmpty || sksPraktikumController.text.isEmpty || konversiSksController.text.isEmpty || semesterController.text.isEmpty || metodePembelajaranController.text.isEmpty || dokumenController.text.isEmpty || unitPenyelenggaraController.text.isEmpty || capaianKuliahSikapController.text.isEmpty || capaianKuliahPengetahuanController.text.isEmpty || capaianKuliahKeterampilanUmumController.text.isEmpty || capaianKuliahKeterampilanKhususController.text.isEmpty || tahunController.text.isEmpty) {
                    ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text('Semua field harus diisi.')),
+                     const SnackBar(content: Text('Semua field harus diisi.')),
                    );
                    return; // Jangan lanjutkan jika ada field yang kosong
                 }
@@ -585,7 +585,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
 
                  if (sksKuliah == null || sksSeminar == null || sksPraktikum == null || konversiSks == null) {
                      ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(content: Text('Field SKS dan Konversi SKS harus berupa angka.')),
+                       const SnackBar(content: Text('Field SKS dan Konversi SKS harus berupa angka.')),
                      );
                      return;
                  }
@@ -612,7 +612,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
@@ -660,64 +660,64 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Data Mata Kuliah'), // Judul disesuaikan
+          title: const Text('Edit Data Mata Kuliah'), // Judul disesuaikan
           content: SingleChildScrollView(
             child: Column(
                mainAxisSize: MainAxisSize.min, // Agar dialog menyesuaikan konten
               children: [
                  TextField(
                     controller: namaMataKuliahController,
-                    decoration: InputDecoration(labelText: 'Nama Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Nama Mata Kuliah')),
                 TextField(
                     controller: kodeMataKuliahController,
-                    decoration: InputDecoration(labelText: 'Kode Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Kode Mata Kuliah')),
                  TextField(
                     controller: mataKuliahKompetensiController,
-                    decoration: InputDecoration(labelText: 'Kompetensi Mata Kuliah')),
+                    decoration: const InputDecoration(labelText: 'Kompetensi Mata Kuliah')),
                  TextField(
                     controller: sksKuliahController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Kuliah')),
+                    decoration: const InputDecoration(labelText: 'SKS Kuliah')),
                  TextField(
                     controller: sksSeminarController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Seminar')),
+                    decoration: const InputDecoration(labelText: 'SKS Seminar')),
                  TextField(
                     controller: sksPraktikumController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'SKS Praktikum')),
+                    decoration: const InputDecoration(labelText: 'SKS Praktikum')),
                  TextField(
                     controller: konversiSksController,
                      keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Konversi SKS')),
+                    decoration: const InputDecoration(labelText: 'Konversi SKS')),
                  TextField(
                     controller: semesterController,
-                    decoration: InputDecoration(labelText: 'Semester')),
+                    decoration: const InputDecoration(labelText: 'Semester')),
                  TextField(
                     controller: metodePembelajaranController,
-                    decoration: InputDecoration(labelText: 'Metode Pembelajaran')),
+                    decoration: const InputDecoration(labelText: 'Metode Pembelajaran')),
                  TextField(
                     controller: dokumenController,
-                    decoration: InputDecoration(labelText: 'Dokumen (Link/Deskripsi)')),
+                    decoration: const InputDecoration(labelText: 'Dokumen (Link/Deskripsi)')),
                  TextField(
                     controller: unitPenyelenggaraController,
-                    decoration: InputDecoration(labelText: 'Unit Penyelenggara')),
+                    decoration: const InputDecoration(labelText: 'Unit Penyelenggara')),
                  TextField(
                     controller: capaianKuliahSikapController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Sikap')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Sikap')),
                  TextField(
                     controller: capaianKuliahPengetahuanController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Pengetahuan')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Pengetahuan')),
                  TextField(
                     controller: capaianKuliahKeterampilanUmumController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Keterampilan Umum')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Keterampilan Umum')),
                  TextField(
                     controller: capaianKuliahKeterampilanKhususController,
-                    decoration: InputDecoration(labelText: 'Capaian Kuliah Keterampilan Khusus')),
+                    decoration: const InputDecoration(labelText: 'Capaian Kuliah Keterampilan Khusus')),
                  TextField(
                     controller: tahunController,
                      keyboardType: TextInputType.number, // Input angka untuk tahun
-                    decoration: InputDecoration(labelText: 'Tahun')),
+                    decoration: const InputDecoration(labelText: 'Tahun')),
               ],
             ),
           ),
@@ -726,14 +726,14 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                  // Validasi sederhana sebelum mengirim
                  if (namaMataKuliahController.text.isEmpty || kodeMataKuliahController.text.isEmpty || mataKuliahKompetensiController.text.isEmpty || sksKuliahController.text.isEmpty || sksSeminarController.text.isEmpty || sksPraktikumController.text.isEmpty || konversiSksController.text.isEmpty || semesterController.text.isEmpty || metodePembelajaranController.text.isEmpty || dokumenController.text.isEmpty || unitPenyelenggaraController.text.isEmpty || capaianKuliahSikapController.text.isEmpty || capaianKuliahPengetahuanController.text.isEmpty || capaianKuliahKeterampilanUmumController.text.isEmpty || capaianKuliahKeterampilanKhususController.text.isEmpty || tahunController.text.isEmpty) {
                    ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text('Semua field harus diisi.')),
+                     const SnackBar(content: Text('Semua field harus diisi.')),
                    );
                    return; // Jangan lanjutkan jika ada field yang kosong
                 }
@@ -748,7 +748,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
 
                  if (sksKuliah == null || sksSeminar == null || sksPraktikum == null || konversiSks == null) {
                      ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(content: Text('Field SKS dan Konversi SKS harus berupa angka.')),
+                       const SnackBar(content: Text('Field SKS dan Konversi SKS harus berupa angka.')),
                      );
                      return;
                  }
@@ -775,7 +775,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );

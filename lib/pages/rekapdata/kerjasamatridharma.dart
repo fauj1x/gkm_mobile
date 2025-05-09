@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
-import 'package:gkm_mobile/main.dart';
 
 
 class kerjasamatridharma extends StatefulWidget {

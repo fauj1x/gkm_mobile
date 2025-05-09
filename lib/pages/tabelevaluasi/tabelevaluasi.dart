@@ -58,13 +58,13 @@ class tabelevaluasi extends StatelessWidget {
 
   // Map judul ke halaman tujuan
   final Map<String, Widget Function()> formRoutes = {
-    "Kerjasama Tridharma": () => kerjasamatridharma(),
-    "Data Mahasiswa": () => kerjasamatridharma(),
-    "Data Dosen": () => kerjasamatridharma(),
-    "Kinerja Dosen": () => kerjasamatridharma(),
-    "Kualitas Pembelajaran": () => kerjasamatridharma(),
-    "Kinerja Lulusan": () => kerjasamatridharma(),
-    "Luaran Karya Mahasiswa": () => kerjasamatridharma(),
+    "Kerjasama Tridharma": () => const kerjasamatridharma(),
+    "Data Mahasiswa": () => const kerjasamatridharma(),
+    "Data Dosen": () => const kerjasamatridharma(),
+    "Kinerja Dosen": () => const kerjasamatridharma(),
+    "Kualitas Pembelajaran": () => const kerjasamatridharma(),
+    "Kinerja Lulusan": () => const kerjasamatridharma(),
+    "Luaran Karya Mahasiswa": () => const kerjasamatridharma(),
   };
 
   tabelevaluasi({super.key});
@@ -172,20 +172,6 @@ class tabelevaluasi extends StatelessWidget {
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF009688),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Full-Rounded
-                  ),
-                ),
-                child: Text(
-                  "Lihat Detail Semua Tabel",
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
               ),
             ),
           ],

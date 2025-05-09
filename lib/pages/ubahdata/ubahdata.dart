@@ -92,13 +92,13 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         page = IntegrasiPenelitian(tahunAjaran: widget.tahunAjaran);
         break;
       case "Profil Dosen":
-        page = Placeholder();
+        page = const Placeholder();
         break;
       case "Publikasi":
-        page = Placeholder();
+        page = const Placeholder();
         break;
       case "Sertifikasi":
-        page = Placeholder();
+        page = const Placeholder();
         break;
       case "Rekap Semua Data":
         page = tabelevaluasi();
@@ -149,13 +149,11 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         return;
     }
 
-    if (page != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page!),
-      );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page!),
+    );
     }
-  }
 
   Widget buildMenu(String title, String imagePath, Color menuColor,
       Color submenuColor, List<String> submenus) {

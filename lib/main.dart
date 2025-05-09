@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "package:gkm_mobile/pages/onboarding/onboarding.dart";
 import "package:gkm_mobile/pages/dashboard/dashboard.dart";
+import "package:gkm_mobile/pages/onboarding/onboarding.dart";
 import "package:gkm_mobile/services/auth.dart";
 import "package:provider/provider.dart";
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'GKM POLIJE',
             theme: ThemeData(primarySwatch: Colors.blue),
-            home: isAuthenticated ? dashboard() : onboarding(),
+            home: isAuthenticated ? const DashboardScreen() : const onboarding(),
           );
         }
       },

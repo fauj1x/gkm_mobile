@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'model.dart';
-import 'package:gkm_mobile/pages/datamahasiswa/model.dart';
 
 class SeleksiMahasiswaBaruScreen extends StatefulWidget {
+  const SeleksiMahasiswaBaruScreen({super.key});
+
   @override
   _SeleksiMahasiswaBaruScreenState createState() => _SeleksiMahasiswaBaruScreenState();
 }
@@ -49,21 +50,21 @@ class _SeleksiMahasiswaBaruScreenState extends State<SeleksiMahasiswaBaruScreen>
             children: [
               TextField(
                 controller: tahunAkademikController,
-                decoration: InputDecoration(labelText: 'Tahun Akademik'),
+                decoration: const InputDecoration(labelText: 'Tahun Akademik'),
               ),
               TextField(
                 controller: dayaTampungController,
-                decoration: InputDecoration(labelText: 'Daya Tampung'),
+                decoration: const InputDecoration(labelText: 'Daya Tampung'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: pendaftarController,
-                decoration: InputDecoration(labelText: 'Pendaftar'),
+                decoration: const InputDecoration(labelText: 'Pendaftar'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: lulusSeleksiController,
-                decoration: InputDecoration(labelText: 'Lulus Seleksi'),
+                decoration: const InputDecoration(labelText: 'Lulus Seleksi'),
                 keyboardType: TextInputType.number,
               ),
             ],
@@ -71,11 +72,11 @@ class _SeleksiMahasiswaBaruScreenState extends State<SeleksiMahasiswaBaruScreen>
         ),
         actions: [
           TextButton(
-            child: Text('Batal'),
+            child: const Text('Batal'),
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            child: Text('Simpan'),
+            child: const Text('Simpan'),
             onPressed: () async {
               final newData = SeleksiMahasiswaBaru(
                 userId: 1,
@@ -130,14 +131,14 @@ class _SeleksiMahasiswaBaruScreenState extends State<SeleksiMahasiswaBaruScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seleksi Mahasiswa Baru'),
+        title: const Text('Seleksi Mahasiswa Baru'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text('ID')),
                   DataColumn(label: Text('Tahun Akademik')),
                   DataColumn(label: Text('Daya Tampung')),
@@ -155,11 +156,11 @@ class _SeleksiMahasiswaBaruScreenState extends State<SeleksiMahasiswaBaruScreen>
                     DataCell(Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () => _showForm(item: item),
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () => _deleteItem(item.id!),
                         ),
                       ],
@@ -169,7 +170,7 @@ class _SeleksiMahasiswaBaruScreenState extends State<SeleksiMahasiswaBaruScreen>
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => _showForm(),
       ),
     );
