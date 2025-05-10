@@ -1,20 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 
-
 class kerjasamatridharma extends StatefulWidget {
-  const kerjasamatridharma({super.key});
+  final TahunAjaran tahunAjaran;
+  const kerjasamatridharma({Key? key, required this.tahunAjaran}) : super(key: key);
 
   @override
   _PendidikanState createState() => _PendidikanState();
 }
 
 class _PendidikanState extends State<kerjasamatridharma> {
-  List<List<String>> dataList = [
-    ["1", "Kerjasama Tridharma - Pendidikan", "", ""],
-    ["2", "Kerjasama Tridharma - Penelitian", "", ""],
-    ["3", "Kerjasama Tridharma - Pengabdian Kepada Masyarakat", "", ""],
-  ];
+  int userId = 0;
+  List<List<String>> dataList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserIdAndRekap();
+  }
+
+  Future<void> _fetchUserIdAndRekap() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = int.parse(prefs.getString('id') ?? '0');
+    await fetchRekapData();
+  }
+
+  Future<void> fetchRekapData() async {
+    try {
+      final apiService = ApiService();
+      final data = await apiService.getRekapData(widget.tahunAjaran.id, userId);
+
+      setState(() {
+        dataList = [
+          [
+            "1",
+            "Kerjasama Tridharma - Pendidikan",
+            data["Tabel 1.1 Kerjasama Tridharma - Pendidikan"]["count"].toString(),
+            data["Tabel 1.1 Kerjasama Tridharma - Pendidikan"]["status"]
+          ],
+          [
+            "2",
+            "Kerjasama Tridharma - Penelitian",
+            data["Tabel 1.2 Kerjasama Tridharma - Penelitian"]["count"].toString(),
+            data["Tabel 1.2 Kerjasama Tridharma - Penelitian"]["status"]
+          ],
+          [
+            "3",
+            "Kerjasama Tridharma - Pengabdian Kepada Masyarakat",
+            data["Tabel 1.3 Kerjasama Tridharma - Pengabdian kepada Masyarakat"]["count"].toString(),
+            data["Tabel 1.3 Kerjasama Tridharma - Pengabdian kepada Masyarakat"]["status"]
+          ],
+        ];
+      });
+    } catch (e) {
+      print("Error saat mengambil rekap: $e");
+    }
+  }
 
   void _tambahData(BuildContext context) {
     Navigator.push(
@@ -22,7 +66,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
       MaterialPageRoute(builder: (context) => FormKerjasamaTridharma()),
     );
   }
-
 
   void _hapusData(int index) {
     setState(() {
@@ -69,7 +112,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Input Search
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
@@ -94,20 +136,16 @@ class _PendidikanState extends State<kerjasamatridharma> {
               ),
             ),
             const SizedBox(height: 10),
-
             const Text(
               "Tabel Rekap Kerjasama Tridharma",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
-
-            // Tabel Scrollable
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Column(
                   children: [
-                    // Header Baris 1
                     Container(
                       color: Colors.teal,
                       child: Row(
@@ -120,8 +158,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
                         ],
                       ),
                     ),
-
-                    // Isi Data
                     Table(
                       border: TableBorder.all(color: Colors.black54),
                       columnWidths: const {
@@ -144,8 +180,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
                                 ),
                               );
                             }).toList(),
-
-                            // Aksi Button
                             TableCell(
                               child: Center(
                                 child: PopupMenuButton<String>(
@@ -157,7 +191,8 @@ class _PendidikanState extends State<kerjasamatridharma> {
                                       _hapusData(index);
                                     }
                                   },
-                                  itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                  itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
                                     const PopupMenuItem<String>(
                                       value: "Edit",
                                       child: ListTile(
@@ -184,10 +219,7 @@ class _PendidikanState extends State<kerjasamatridharma> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
-            // Tombol Tambah Data di Bawah Tabel
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -218,9 +250,5 @@ class _PendidikanState extends State<kerjasamatridharma> {
         textAlign: TextAlign.center,
       ),
     );
-  }
-
-  Widget _emptyCell(double width) {
-    return SizedBox(width: width, height: 40);
   }
 }

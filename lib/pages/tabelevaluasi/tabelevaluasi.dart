@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-// Import semua form yang dituju
 import 'package:gkm_mobile/pages/rekapdata/kerjasamatridharma.dart';
-// import 'package:gkm_mobile/pages/form/form_data_mahasiswa.dart';
-// import 'package:gkm_mobile/pages/form/form_data_dosen.dart';
-// import 'package:gkm_mobile/pages/form/form_kinerja_dosen.dart';
-// import 'package:gkm_mobile/pages/form/form_kualitas_pembelajaran.dart';
-// import 'package:gkm_mobile/pages/form/form_kinerja_lulusan.dart';
-// import 'package:gkm_mobile/pages/form/form_luaran_karya_mahasiswa.dart';
 
-class tabelevaluasi extends StatelessWidget {
+class tabelevaluasi extends StatefulWidget {
+  const tabelevaluasi({super.key});
+
+  @override
+  State<tabelevaluasi> createState() => _tabelevaluasiState();
+}
+
+class _tabelevaluasiState extends State<tabelevaluasi> {
+  // ✅ Default tahun ajaran dengan id = 2
+  TahunAjaran selectedTahunAjaran = TahunAjaran(id: 2,tahunAjaran: '2023/2024', semester: 'ganjil', slug: '2023-2024-ganjil', createdAt: DateTime.now(), updatedAt: DateTime.now());
+
   final List<Map<String, dynamic>> rekapData = [
     {
       "judul": "Kerjasama Tridharma",
@@ -56,18 +59,11 @@ class tabelevaluasi extends StatelessWidget {
     }
   ];
 
-  // Map judul ke halaman tujuan
-  final Map<String, Widget Function()> formRoutes = {
-    "Kerjasama Tridharma": () => const kerjasamatridharma(),
-    "Data Mahasiswa": () => const kerjasamatridharma(),
-    "Data Dosen": () => const kerjasamatridharma(),
-    "Kinerja Dosen": () => const kerjasamatridharma(),
-    "Kualitas Pembelajaran": () => const kerjasamatridharma(),
-    "Kinerja Lulusan": () => const kerjasamatridharma(),
-    "Luaran Karya Mahasiswa": () => const kerjasamatridharma(),
+  final Map<String, Widget Function(TahunAjaran)> formRoutes = {
+    "Kerjasama Tridharma": (tahunAjaran) =>
+        kerjasamatridharma(tahunAjaran: tahunAjaran),
+    // Tambahkan lainnya di sini nanti
   };
-
-  tabelevaluasi({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +98,9 @@ class tabelevaluasi extends StatelessWidget {
                       if (builder != null) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => builder()),
+                          MaterialPageRoute(
+                            builder: (context) => builder(selectedTahunAjaran),
+                          ),
                         );
                       }
                     },
