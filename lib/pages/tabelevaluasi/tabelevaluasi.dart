@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
+import 'package:gkm_mobile/pages/rekapdata/kualitas_pembelajaran.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/pages/rekapdata/kerjasamatridharma.dart';
+import 'package:gkm_mobile/pages/rekapdata/mahasiswa.dart';
 
 class tabelevaluasi extends StatefulWidget {
   const tabelevaluasi({super.key});
@@ -60,8 +62,9 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
   ];
 
   final Map<String, Widget Function(TahunAjaran)> formRoutes = {
-    "Kerjasama Tridharma": (tahunAjaran) =>
-        kerjasamatridharma(tahunAjaran: tahunAjaran),
+    "Kerjasama Tridharma": (tahunAjaran) => kerjasamatridharma(tahunAjaran: tahunAjaran),
+    "Data Mahasiswa": (tahunAjaran) => MahasiswaPage(tahunAjaran: tahunAjaran),
+    "Kualitas Pembelajaran": (tahunAjaran) => KualitasPembelajaran(tahunAjaran: tahunAjaran),
     // Tambahkan lainnya di sini nanti
   };
 
