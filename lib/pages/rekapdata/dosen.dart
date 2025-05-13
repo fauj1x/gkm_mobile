@@ -4,15 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 
-class MahasiswaPage extends StatefulWidget {
+class dosen extends StatefulWidget {
   final TahunAjaran tahunAjaran;
-  const MahasiswaPage({Key? key, required this.tahunAjaran}) : super(key: key);
+  const dosen({Key? key, required this.tahunAjaran}) : super(key: key);
 
   @override
-  _MahasiswaPageState createState() => _MahasiswaPageState();
+  _DosenState createState() => _DosenState();
 }
 
-class _MahasiswaPageState extends State<MahasiswaPage> {
+class _DosenState extends State<dosen> {
   int userId = 0;
   List<List<String>> dataList = [];
 
@@ -37,17 +37,34 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
         dataList = [
           [
             "1",
-            "Mahasiswa aktif",
-            data["Tabel 2.a Seleksi Mahasiswa"]["count"].toString(),
-            data["Tabel 2.a Seleksi Mahasiswa"]["status"]
+            "Dosen Tetap Perguruan Tinggi",
+            data["Tabel 3.a.1) Dosen Tetap Perguruan Tinggi"]["count"].toString(),
+            data["Tabel 3.a.1) Dosen Tetap Perguruan Tinggi"]["status"]
           ],
           [
             "2",
-            "Mahasiswa Asing",
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["count"].toString(),
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["status"]
+            "Dosen Pembimbing Utama Tugas Akhir",
+            data["Tabel 3.a.2) Dosen Pembimbing Utama Tugas Akhir"]["count"].toString(),
+            data["Tabel 3.a.2) Dosen Pembimbing Utama Tugas Akhir"]["status"]
           ],
-
+          [
+            "3",
+            "Ekuivalen Waktu Mengajar Penuh (EWMP) Dosen Tetap Perguruan Tinggi",
+            data["Tabel 3.a.3) Ekuivalen Waktu Mengajar Penuh (EWMP) Dosen Tetap Perguruan Tinggi"]["count"].toString(),
+            data["Tabel 3.a.3) Ekuivalen Waktu Mengajar Penuh (EWMP) Dosen Tetap Perguruan Tinggi"]["status"]
+          ],
+          [
+            "4",
+            "Dosen Tidak Tetap",
+            data["Tabel 3.a.4) Dosen Tidak Tetap"]["count"].toString(),
+            data["Tabel 3.a.4) Dosen Tidak Tetap"]["status"]
+          ],
+          [
+            "5",
+            "Dosen Industri/Praktisi",
+            data["Tabel 3.a.5) Dosen Industri/Praktisi"]["count"].toString(),
+            data["Tabel 3.a.5) Dosen Industri/Praktisi"]["status"]
+          ],
         ];
       });
     } catch (e) {
@@ -90,7 +107,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Data Mahasiswa",
+              "Data Dosen",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 2),
@@ -116,7 +133,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
             ),
             const SizedBox(height: 10),
             const Text(
-              "Tabel Rekap Mahasiswa",
+              "Tabel Data Dosen",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
@@ -165,7 +182,6 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

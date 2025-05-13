@@ -118,22 +118,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Row(
-                children: [
-                  Icon(Icons.search, color: Color(0xFF009688)),
-                  Expanded(
-                    child: TextField(
-                      style: TextStyle(color: Color(0xFF009688)),
-                      decoration: InputDecoration(
-                        hintText: "Cari data...",
-                        hintStyle: TextStyle(color: Color(0xFF009688)),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
             const SizedBox(height: 10),
             const Text(
@@ -154,7 +138,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
                           _headerCell("Komponen", 150),
                           _headerCell("Total", 270),
                           _headerCell("Keterangan", 200),
-                          _headerCell("Aksi", 50),
                         ],
                       ),
                     ),
@@ -165,7 +148,6 @@ class _PendidikanState extends State<kerjasamatridharma> {
                         1: FixedColumnWidth(150),
                         2: FixedColumnWidth(270),
                         3: FixedColumnWidth(200),
-                        4: FixedColumnWidth(50),
                       },
                       children: dataList.asMap().entries.map((entry) {
                         int index = entry.key;
@@ -180,56 +162,11 @@ class _PendidikanState extends State<kerjasamatridharma> {
                                 ),
                               );
                             }).toList(),
-                            TableCell(
-                              child: Center(
-                                child: PopupMenuButton<String>(
-                                  icon: const Icon(Icons.more_vert, color: Colors.black87),
-                                  onSelected: (String choice) {
-                                    if (choice == "Edit") {
-                                      _editData(index);
-                                    } else if (choice == "Hapus") {
-                                      _hapusData(index);
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<String>>[
-                                    const PopupMenuItem<String>(
-                                      value: "Edit",
-                                      child: ListTile(
-                                        leading: Icon(Icons.edit, color: Colors.blue),
-                                        title: Text("Edit"),
-                                      ),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: "Hapus",
-                                      child: ListTile(
-                                        leading: Icon(Icons.delete, color: Colors.red),
-                                        title: Text("Hapus"),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                           ],
                         );
                       }).toList(),
                     ),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _tambahData(context),
-                icon: const Icon(Icons.add, color: Colors.white),
-                label: const Text("Tambah Data", style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
               ),
             ),

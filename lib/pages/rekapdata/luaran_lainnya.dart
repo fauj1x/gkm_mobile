@@ -4,15 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 
-class MahasiswaPage extends StatefulWidget {
+class luaranlainnya extends StatefulWidget {
   final TahunAjaran tahunAjaran;
-  const MahasiswaPage({Key? key, required this.tahunAjaran}) : super(key: key);
+  const luaranlainnya({Key? key, required this.tahunAjaran}) : super(key: key);
 
   @override
-  _MahasiswaPageState createState() => _MahasiswaPageState();
+  _LuaranlainnyaState createState() => _LuaranlainnyaState();
 }
 
-class _MahasiswaPageState extends State<MahasiswaPage> {
+class _LuaranlainnyaState extends State<luaranlainnya> {
   int userId = 0;
   List<List<String>> dataList = [];
 
@@ -37,17 +37,28 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
         dataList = [
           [
             "1",
-            "Mahasiswa aktif",
-            data["Tabel 2.a Seleksi Mahasiswa"]["count"].toString(),
-            data["Tabel 2.a Seleksi Mahasiswa"]["status"]
+            "Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)",
+            data["Tabel 3.b.7) Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)"]["count"].toString(),
+            data["Tabel 3.b.7) Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)"]["status"]
           ],
           [
             "2",
-            "Mahasiswa Asing",
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["count"].toString(),
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["status"]
+            "Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)",
+            data["Tabel 3.b.8) Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["count"].toString(),
+            data["Tabel 3.b.8) Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["status"]
           ],
-
+          [
+            "3",
+            "Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial",
+            data["Tabel 3.b.9) Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["count"].toString(),
+            data["Tabel 3.b.9) Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["status"]
+          ],
+          [
+            "4",
+            "Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter",
+            data["Tabel 3.b.10) Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter"]["count"].toString(),
+            data["Tabel 3.b.10) Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter"]["status"]
+          ],
         ];
       });
     } catch (e) {
@@ -90,7 +101,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Data Mahasiswa",
+              "Luaran Lainnya",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 2),
@@ -116,7 +127,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
             ),
             const SizedBox(height: 10),
             const Text(
-              "Tabel Rekap Mahasiswa",
+              "Tabel Luaran Lainnya",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
@@ -165,7 +176,6 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

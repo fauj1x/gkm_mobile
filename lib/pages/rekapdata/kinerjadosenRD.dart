@@ -4,15 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 
-class MahasiswaPage extends StatefulWidget {
+class kinerjadosenRD extends StatefulWidget {
   final TahunAjaran tahunAjaran;
-  const MahasiswaPage({Key? key, required this.tahunAjaran}) : super(key: key);
+  const kinerjadosenRD({Key? key, required this.tahunAjaran}) : super(key: key);
 
   @override
-  _MahasiswaPageState createState() => _MahasiswaPageState();
+  _KinerjaDosenState createState() => _KinerjaDosenState();
 }
 
-class _MahasiswaPageState extends State<MahasiswaPage> {
+class _KinerjaDosenState extends State<kinerjadosenRD> {
   int userId = 0;
   List<List<String>> dataList = [];
 
@@ -37,17 +37,40 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
         dataList = [
           [
             "1",
-            "Mahasiswa aktif",
-            data["Tabel 2.a Seleksi Mahasiswa"]["count"].toString(),
-            data["Tabel 2.a Seleksi Mahasiswa"]["status"]
+            "Pengakuan/Rekognisi Dosen",
+            data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]["count"].toString(),
+            data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]["status"]
           ],
           [
             "2",
-            "Mahasiswa Asing",
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["count"].toString(),
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["status"]
+            "Penelitian DTPS",
+            data["Tabel 3.b.2) Penelitian DTPS"]["count"].toString(),
+            data["Tabel 3.b.2) Penelitian DTPS"]["status"]
           ],
-
+          [
+            "3",
+            "PKM DTPS",
+            data["Tabel 3.b.3) PkM DTPS"]["count"].toString(),
+            data["Tabel 3.b.3) PkM DTPS"]["status"]
+          ],
+          [
+            "4",
+            "Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS",
+            data["Tabel 3.b.4) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS"]["count"].toString(),
+            data["Tabel 3.b.4) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS"]["status"]
+          ],
+          [
+            "5",
+            "Karya Ilmiah DTPS yang Disitasi",
+            data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]["count"].toString(),
+            data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]["status"]
+          ],
+          [
+            "6",
+            "Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat",
+            data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat"]["count"].toString(),
+            data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat"]["status"]
+          ],
         ];
       });
     } catch (e) {
@@ -90,7 +113,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Data Mahasiswa",
+              "Kinerja Dosen",
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 2),
@@ -102,26 +125,26 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(20),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Tabel Rekap Mahasiswa",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
-            Expanded(
-              child: SingleChildScrollView(
+              const SizedBox(height: 10),
+              const Text(
+                "Tabel Kinerja Dosen",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Column(
                   children: [
@@ -164,9 +187,8 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-          ],
+            ],
+          ),
         ),
       ),
     );
