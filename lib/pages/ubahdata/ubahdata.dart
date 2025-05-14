@@ -196,7 +196,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: const Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ),
