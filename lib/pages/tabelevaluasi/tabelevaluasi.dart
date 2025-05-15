@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
+import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/utils/kategori_tabel.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
 import 'package:gkm_mobile/pages/kinerjadosen/kinerjadosen.dart';
 import 'package:gkm_mobile/pages/rekapdata/dosen.dart';
@@ -12,10 +17,9 @@ import 'package:gkm_mobile/pages/rekapdata/masa_studi_lulusan.dart';
 import 'package:gkm_mobile/pages/rekapdata/penelitian_dpts.dart';
 import 'package:gkm_mobile/pages/rekapdata/pkm_dtps.dart';
 import 'package:gkm_mobile/pages/rekapdata/prestasi_mahasiswa.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/pages/rekapdata/kerjasamatridharma.dart';
 import 'package:gkm_mobile/pages/rekapdata/mahasiswa.dart';
-
+import '../../services/api_services.dart';
 import '../rekapdata/kinerjadosenRD.dart';
 
 class tabelevaluasi extends StatefulWidget {
@@ -26,128 +30,117 @@ class tabelevaluasi extends StatefulWidget {
 }
 
 class _tabelevaluasiState extends State<tabelevaluasi> {
-  // ✅ Default tahun ajaran dengan id = 2
-  TahunAjaran selectedTahunAjaran = TahunAjaran(id: 2,tahunAjaran: '2023/2024', semester: 'ganjil', slug: '2023-2024-ganjil', createdAt: DateTime.now(), updatedAt: DateTime.now());
+  TahunAjaran selectedTahunAjaran = TahunAjaran(
+    id: 2,
+    tahunAjaran: '2023/2024',
+    semester: 'ganjil',
+    slug: '2023-2024-ganjil',
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
 
   final List<Map<String, dynamic>> rekapData = [
-    {
-      "judul": "Kerjasama Tridharma",
-      "progress": 0.0,
-      "status": "Belum ada kemajuan",
-      "score": 0
-    },
-    {
-      "judul": "Data Mahasiswa",
-      "progress": 0.3,
-      "status": "Kurang peningkatan",
-      "score": 30
-    },
-    {
-      "judul": "Data Dosen",
-      "progress": 0.5,
-      "status": "Cukup baik",
-      "score": 65
-    },
-    {
-      "judul": "Kinerja Dosen",
-      "progress": 0.7,
-      "status": "Perlu peningkatan",
-      "score": 70
-    },
-    {
-      "judul": "Luaran Lainnya",
-      "progress": 0.7,
-      "status": "Perlu peningkatan",
-      "score": 70
-    },
-    {
-      "judul": "Kualitas Pembelajaran",
-      "progress": 0.8,
-      "status": "Perlu peningkatan",
-      "score": 80
-    },
-    {
-      "judul": "Penelitian DTPS",
-      "progress": 0.6,
-      "status": "Perlu peningkatan",
-      "score": 60
-    },
-    {
-      "judul": "PKM DTPS",
-      "progress": 0.5,
-      "status": "Perlu peningkatan",
-      "score": 50
-    },
-    {
-      "judul": "IPK Lulusan",
-      "progress": 0.3,
-      "status": "Perlu peningkatan",
-      "score": 30
-    },
-    {
-      "judul": "Prestasi Mahasiswa",
-      "progress": 0.7,
-      "status": "Perlu peningkatan",
-      "score": 70
-    },
-    {
-      "judul": "Masa Studi Lulusan",
-      "progress": 0.4,
-      "status": "Perlu peningkatan",
-      "score": 40
-    },
-    {
-      "judul": "Evaluasi Lulusan",
-      "progress": 0.9,
-      "status": "Hampir lengkap",
-      "score": 90
-    },
-    {
-      "judul": "Luaran Karya Mahasiswa",
-      "progress": 1.0,
-      "status": "Lengkap",
-      "score": 100
-    }
+    {"judul": "Kerjasama Tridharma", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Data Mahasiswa", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Data Dosen", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Kinerja Dosen", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Luaran Lainnya", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Kualitas Pembelajaran", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Penelitian DTPS", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "PKM DTPS", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "IPK Lulusan", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Prestasi Mahasiswa", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Masa Studi Lulusan", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Evaluasi Lulusan", "progress": 0.0, "status": "", "score": 0},
+    {"judul": "Luaran Karya Mahasiswa", "progress": 0.0, "status": "", "score": 0},
   ];
 
   final Map<String, Widget Function(TahunAjaran)> formRoutes = {
-    "Kerjasama Tridharma": (tahunAjaran) => kerjasamatridharma(tahunAjaran: tahunAjaran),
-    "Data Mahasiswa": (tahunAjaran) => MahasiswaPage(tahunAjaran: tahunAjaran),
-    "Data Dosen": (tahunAjaran) => dosen(tahunAjaran: tahunAjaran),
-    "Kinerja Dosen": (tahunAjaran) => kinerjadosenRD(tahunAjaran: tahunAjaran),
-    "Luaran Lainnya": (tahunAjaran) => luaranlainnya(tahunAjaran: tahunAjaran),
-    "Kualitas Pembelajaran": (tahunAjaran) => KualitasPembelajaran(tahunAjaran: tahunAjaran),
-    "Penelitian DTPS": (tahunAjaran) => PenelitianDtps(tahunAjaran: tahunAjaran),
-    "PKM DTPS": (tahunAjaran) => Pkm_Dtps(tahunAjaran: tahunAjaran),
-    "IPK Lulusan": (tahunAjaran) => IpkLulusan(tahunAjaran: tahunAjaran),
-    "Prestasi Mahasiswa": (tahunAjaran) => PrestasiMahasiswa(tahunAjaran: tahunAjaran),
-    "Masa Studi Lulusan": (tahunAjaran) => MasaStudiLulusan(tahunAjaran: tahunAjaran),
-    "Evaluasi Lulusan": (tahunAjaran) => EvaluasiLulusan(tahunAjaran: tahunAjaran),
-    "Luaran Karya Mahasiswa": (tahunAjaran) => luaranmahasiswa(tahunAjaran: tahunAjaran),
-    // Tambahkan lainnya di sini nanti
+    "Kerjasama Tridharma": (ta) => kerjasamatridharma(tahunAjaran: ta),
+    "Data Mahasiswa": (ta) => MahasiswaPage(tahunAjaran: ta),
+    "Data Dosen": (ta) => dosen(tahunAjaran: ta),
+    "Kinerja Dosen": (ta) => kinerjadosenRD(tahunAjaran: ta),
+    "Luaran Lainnya": (ta) => luaranlainnya(tahunAjaran: ta),
+    "Kualitas Pembelajaran": (ta) => KualitasPembelajaran(tahunAjaran: ta),
+    "Penelitian DTPS": (ta) => PenelitianDtps(tahunAjaran: ta),
+    "PKM DTPS": (ta) => Pkm_Dtps(tahunAjaran: ta),
+    "IPK Lulusan": (ta) => IpkLulusan(tahunAjaran: ta),
+    "Prestasi Mahasiswa": (ta) => PrestasiMahasiswa(tahunAjaran: ta),
+    "Masa Studi Lulusan": (ta) => MasaStudiLulusan(tahunAjaran: ta),
+    "Evaluasi Lulusan": (ta) => EvaluasiLulusan(tahunAjaran: ta),
+    "Luaran Karya Mahasiswa": (ta) => luaranmahasiswa(tahunAjaran: ta),
   };
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAndMapDataFromAPI();
+  }
+
+  Future<void> fetchAndMapDataFromAPI() async {
+    try {
+      final userIdStr = await AuthProvider().getId();
+      final userId = int.parse(userIdStr);
+      final apiService = ApiService();
+
+      final data = await apiService.getRekapData(
+        selectedTahunAjaran.id!,
+        userId,
+      );
+
+      setState(() {
+        for (var item in rekapData) {
+          final kategori = item["judul"];
+          final tabelKeys = kategoriTabel[kategori] ?? [];
+
+          final statusList = tabelKeys
+              .map((k) => data[k]?["status"]?.toString().toLowerCase() ?? "")
+              .toList();
+
+          double progress = 0.0;
+          int complete = statusList.where((s) => s == "memenuhi").length;
+          if (statusList.isNotEmpty) {
+            progress = complete / statusList.length;
+          }
+
+          String statusText = "Belum ada kemajuan";
+          if (progress == 1.0) {
+            statusText = "Lengkap";
+          } else if (progress >= 0.7) {
+            statusText = "Hampir lengkap";
+          } else if (progress >= 0.5) {
+            statusText = "Perlu peningkatan";
+          } else if (progress >= 0.3) {
+            statusText = "Kurang peningkatan";
+          }
+
+          item["progress"] = progress;
+          item["status"] = statusText;
+          item["score"] = (progress * 100).round();
+        }
+      });
+    } catch (e) {
+      debugPrint("❌ Gagal mengambil rekap data: $e");
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Rekap Data & Evaluasi",
-          style: GoogleFonts.poppins(),
-        ),
+        title: Text("Rekap Data & Evaluasi", style: GoogleFonts.poppins()),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Tabel Evaluasi",
-              style: GoogleFonts.poppins(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text("Tabel Evaluasi",
+                style: GoogleFonts.poppins(
+                    fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
@@ -161,7 +154,8 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => builder(selectedTahunAjaran),
+                            builder: (context) =>
+                                builder(selectedTahunAjaran),
                           ),
                         );
                       }
@@ -178,16 +172,14 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    item["judul"],
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                                  child: Text(item["judul"],
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500)),
                                 ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -196,14 +188,11 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                                     color: Colors.blueAccent,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Text(
-                                    "Skor: ${item["score"]}",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                  child: Text("Skor: ${item["score"]}",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -218,14 +207,11 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            Text(
-                              item["status"],
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 12,
-                                color: Colors.black87,
-                              ),
-                            ),
+                            Text(item["status"],
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 12,
+                                    color: Colors.black87)),
                           ],
                         ),
                       ),
