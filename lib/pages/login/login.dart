@@ -5,6 +5,7 @@ import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:gkm_mobile/services/simpan.dart';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -207,58 +208,61 @@ class _LoginScreenState extends State<login> {
   }
 
   void login(BuildContext context) async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+  String email = emailController.text.trim();
+  String password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      _showDialog(context, "Harap isi email dan kata sandi!");
-      return;
-    }
+  if (email.isEmpty || password.isEmpty) {
+    _showDialog(context, "Harap isi email dan kata sandi!");
+    return;
+  }
 
-    var loginSuccess = await Provider.of<AuthProvider>(context, listen: false)
-        .login(email, password);
+  var loginSuccess = await Provider.of<AuthProvider>(context, listen: false)
+      .login(email, password);
 
-    if (!loginSuccess) {
-      _showDialog(context, "Email atau kata sandi salah!");
-      return;
-    }
+  if (!loginSuccess) {
+    _showDialog(context, "Email atau kata sandi salah!");
+    await saveUserEmail(email);
+    return;
+  }
 
-    // TODO: sudah masuk ke dashboard tapi animasi loading masih ada
-    // Menampilkan loading dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            padding: const EdgeInsets.all(25),
-            width: 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SpinKitThreeBounce(
-                  color: Color(0xFF00B98F),
-                  size: 40,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Loading...",
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
+  // Simpan email setelah login sukses
+  await saveUserEmail(email);
+
+  // Tampilkan loading
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(15),
           ),
-        );
-      },
-    );
+          padding: const EdgeInsets.all(25),
+          width: 150,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SpinKitThreeBounce(
+                color: Color(0xFF00B98F),
+                size: 40,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Loading...",
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
     // Simulasi delay sebelum berpindah halaman
     Future.delayed(const Duration(seconds: 2), () {
@@ -273,7 +277,7 @@ class _LoginScreenState extends State<login> {
     });
   }
 
-  void _showDialog(BuildContext context, String message) {
+  Future<void> _showDialog(BuildContext context, String message) async {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -329,5 +333,17 @@ class _LoginScreenState extends State<login> {
             ),
           );
         });
-  }
+        // Delay agar loading terlihat
+  await Future.delayed(const Duration(seconds: 2));
+
+  // Tutup dialog loading
+  Navigator.of(context, rootNavigator: true).pop();
+
+  // Navigasi ke Dashboard
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => DashboardScreen()),
+  );
 }
+  }
+

@@ -101,6 +101,7 @@ class PendidikanState extends State<Pendidikan> {
               subMenuName,
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
+            
           ],
         ),
       ),
@@ -141,6 +142,25 @@ class PendidikanState extends State<Pendidikan> {
                   "Tabel $menuName $subMenuName",
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
+                
+ ElevatedButton.icon(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Color(0xFF009688),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+  ),
+  onPressed: () {
+    // Aksi import file
+  },
+  icon: Icon(Icons.upload_file, color: Colors.white),
+  label: Text(
+    'Impor File Excel',
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  ),
+),
+
                 const SizedBox(height: 10),
 
                 Expanded(
