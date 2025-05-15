@@ -94,12 +94,12 @@ class PendidikanState extends State<Pendidikan> {
             Text(
               menuName,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -118,13 +118,13 @@ class PendidikanState extends State<Pendidikan> {
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -139,7 +139,7 @@ class PendidikanState extends State<Pendidikan> {
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -333,7 +333,7 @@ class PendidikanState extends State<Pendidikan> {
   }
 
   Widget _emptyCell(double width) {
-    return Container(width: width, height: 40);
+    return SizedBox(width: width, height: 40);
   }
 
   void _showAddDialog() {
@@ -350,15 +350,15 @@ class PendidikanState extends State<Pendidikan> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Data'),
+          title: const Text('Tambah Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                     controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
+                    decoration: const InputDecoration(labelText: 'Lembaga Mitra')),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
+                  decoration: const InputDecoration(labelText: 'Tingkat'),
                   value: selectedTingkat,
                   items: tingkatOptions
                       .map((String value) => DropdownMenuItem<String>(
@@ -373,19 +373,19 @@ class PendidikanState extends State<Pendidikan> {
                 ),
                 TextField(
                     controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    decoration: const InputDecoration(labelText: 'Judul Kerjasama')),
                 TextField(
                     controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
+                    decoration: const InputDecoration(labelText: 'Manfaat')),
                 TextField(
                     controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                    decoration: const InputDecoration(labelText: 'Waktu Durasi')),
                 TextField(
                     controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
+                    decoration: const InputDecoration(labelText: 'Bukti Kerjasama')),
                 TextField(
                     controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    decoration: const InputDecoration(labelText: 'Tahun Berakhir')),
               ],
             ),
           ),
@@ -394,7 +394,7 @@ class PendidikanState extends State<Pendidikan> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
@@ -411,7 +411,7 @@ class PendidikanState extends State<Pendidikan> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
@@ -439,15 +439,15 @@ class PendidikanState extends State<Pendidikan> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Data'),
+          title: const Text('Edit Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                     controller: lembagaController,
-                    decoration: InputDecoration(labelText: 'Lembaga Mitra')),
+                    decoration: const InputDecoration(labelText: 'Lembaga Mitra')),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Tingkat'),
+                  decoration: const InputDecoration(labelText: 'Tingkat'),
                   value: selectedTingkat,
                   items: tingkatOptions
                       .map((String value) => DropdownMenuItem<String>(
@@ -462,19 +462,19 @@ class PendidikanState extends State<Pendidikan> {
                 ),
                 TextField(
                     controller: judulController,
-                    decoration: InputDecoration(labelText: 'Judul Kerjasama')),
+                    decoration: const InputDecoration(labelText: 'Judul Kerjasama')),
                 TextField(
                     controller: manfaatController,
-                    decoration: InputDecoration(labelText: 'Manfaat')),
+                    decoration: const InputDecoration(labelText: 'Manfaat')),
                 TextField(
                     controller: waktuController,
-                    decoration: InputDecoration(labelText: 'Waktu Durasi')),
+                    decoration: const InputDecoration(labelText: 'Waktu Durasi')),
                 TextField(
                     controller: buktiController,
-                    decoration: InputDecoration(labelText: 'Bukti Kerjasama')),
+                    decoration: const InputDecoration(labelText: 'Bukti Kerjasama')),
                 TextField(
                     controller: tahunController,
-                    decoration: InputDecoration(labelText: 'Tahun Berakhir')),
+                    decoration: const InputDecoration(labelText: 'Tahun Berakhir')),
               ],
             ),
           ),
@@ -483,7 +483,7 @@ class PendidikanState extends State<Pendidikan> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
@@ -499,7 +499,7 @@ class PendidikanState extends State<Pendidikan> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class rekapdata extends StatefulWidget {
-  const rekapdata({super.key});
+class kinerjadosen extends StatefulWidget {
+  const kinerjadosen({super.key});
 
   @override
   _KerjasamaTridarmaPageState createState() => _KerjasamaTridarmaPageState();
 }
 
-class _KerjasamaTridarmaPageState extends State<rekapdata> {
+class _KerjasamaTridarmaPageState extends State<kinerjadosen> {
   List<List<String>> dataList = [
     ["1", "", ""],
     ["2", "", ""],
@@ -24,7 +24,7 @@ class _KerjasamaTridarmaPageState extends State<rekapdata> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Rekap Data",
+          "Kinerja dosen",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         backgroundColor: Colors.white,

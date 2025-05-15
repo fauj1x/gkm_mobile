@@ -99,4 +99,21 @@ class ApiService {
       throw Exception("Gagal menghapus data dari $endpoint: ${response.body}");
     }
   }
+  Future<Map<String, dynamic>> getRekapData(int tahunAjaranId, int userId) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/rekap?tahun_ajaran_id=$tahunAjaranId&user_id=$userId"),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return jsonResponse['data'];
+    } else {
+      throw Exception("Gagal mengambil data rekap: ${response.body}");
+    }
+  }
+
 }

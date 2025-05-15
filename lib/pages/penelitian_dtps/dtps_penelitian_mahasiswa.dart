@@ -93,12 +93,12 @@ class DtpsPenelitianMahasiswaState extends State<DtpsPenelitianMahasiswa> {
             Text(
               menuName,
               style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -122,8 +122,8 @@ class DtpsPenelitianMahasiswaState extends State<DtpsPenelitianMahasiswa> {
                       Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -319,7 +319,7 @@ class DtpsPenelitianMahasiswaState extends State<DtpsPenelitianMahasiswa> {
   }
 
   Widget _emptyCell(double width) {
-    return Container(width: width, height: 40);
+    return SizedBox(width: width, height: 40);
   }
 
   void _showAddDialog() {

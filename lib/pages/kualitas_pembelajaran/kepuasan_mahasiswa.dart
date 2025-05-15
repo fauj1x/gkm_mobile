@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // Import model yang sudah diperbarui
 import 'package:gkm_mobile/models/kualitas_kepuasan.dart'; // Pastikan nama file ini sesuai
-import 'package:gkm_mobile/models/kualitas_kepuasan.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +66,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
         kualitas_kepuasan.fromJson, newData, endPoint); // Menggunakan Kinerja_Kepuasan.fromJson
       _fetchData(); // Refresh data setelah berhasil menambah
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil ditambahkan!')),
+        const SnackBar(content: Text('Data berhasil ditambahkan!')),
       );
     } catch (e) {
       print("Error adding data: $e");
@@ -82,7 +81,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
       await apiService.deleteData(id, endPoint);
       _fetchData(); // Refresh data setelah berhasil menghapus
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil dihapus!')),
+        const SnackBar(content: Text('Data berhasil dihapus!')),
       );
     } catch (e) {
       print("Error deleting data: $e");
@@ -99,7 +98,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
           kualitas_kepuasan.fromJson, id, updatedData, endPoint); // Menggunakan Kinerja_Kepuasan.fromJson
       _fetchData(); // Refresh data setelah berhasil mengedit
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil diupdate!')),
+        const SnackBar(content: Text('Data berhasil diupdate!')),
       );
     } catch (e) {
       print("Error editing data: $e");
@@ -128,12 +127,12 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
             Text(
               menuName,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -152,14 +151,14 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
                           // Implement search logic here
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -174,7 +173,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -299,7 +298,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                                               });
                                             } else {
                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text('ID data tidak ditemukan untuk diedit.')),
+                                                const SnackBar(content: Text('ID data tidak ditemukan untuk diedit.')),
                                               );
                                             }
                                           } else if (choice == "Hapus") {
@@ -308,7 +307,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                                                 _deleteData(data.id!);
                                              } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text('ID data tidak ditemukan untuk dihapus.')),
+                                                const SnackBar(content: Text('ID data tidak ditemukan untuk dihapus.')),
                                               );
                                              }
                                           }
@@ -399,37 +398,37 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Data Kepuasan'), // Judul disesuaikan
+          title: const Text('Tambah Data Kepuasan'), // Judul disesuaikan
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min, // Agar dialog menyesuaikan konten
               children: [
                 TextField(
                     controller: aspekPenilaianController,
-                    decoration: InputDecoration(labelText: 'Aspek Penilaian')),
+                    decoration: const InputDecoration(labelText: 'Aspek Penilaian')),
                  TextField(
                     controller: tingkatKepuasanSangatBaikController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Sangat Baik (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Sangat Baik (%)')),
                  TextField(
                     controller: tingkatKepuasanBaikController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Baik (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Baik (%)')),
                  TextField(
                     controller: tingkatKepuasanCukupController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Cukup (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Cukup (%)')),
                  TextField(
                     controller: tingkatKepuasanKurangController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Kurang (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Kurang (%)')),
                  TextField(
                     controller: rencanaTindakanController,
-                    decoration: InputDecoration(labelText: 'Rencana Tindakan')),
+                    decoration: const InputDecoration(labelText: 'Rencana Tindakan')),
                  TextField(
                     controller: tahunController,
                      keyboardType: TextInputType.number, // Input angka untuk tahun
-                    decoration: InputDecoration(labelText: 'Tahun')),
+                    decoration: const InputDecoration(labelText: 'Tahun')),
               ],
             ),
           ),
@@ -438,14 +437,14 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                 // Validasi sederhana sebelum mengirim
                 if (aspekPenilaianController.text.isEmpty || tingkatKepuasanSangatBaikController.text.isEmpty || tingkatKepuasanBaikController.text.isEmpty || tingkatKepuasanCukupController.text.isEmpty || tingkatKepuasanKurangController.text.isEmpty || rencanaTindakanController.text.isEmpty || tahunController.text.isEmpty) {
                    ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text('Semua field harus diisi.')),
+                     const SnackBar(content: Text('Semua field harus diisi.')),
                    );
                    return; // Jangan lanjutkan jika ada field yang kosong
                 }
@@ -471,7 +470,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
@@ -501,37 +500,37 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Data Kepuasan'), // Judul disesuaikan
+          title: const Text('Edit Data Kepuasan'), // Judul disesuaikan
           content: SingleChildScrollView(
             child: Column(
                mainAxisSize: MainAxisSize.min, // Agar dialog menyesuaikan konten
               children: [
                  TextField(
                     controller: aspekPenilaianController,
-                    decoration: InputDecoration(labelText: 'Aspek Penilaian')),
+                    decoration: const InputDecoration(labelText: 'Aspek Penilaian')),
                  TextField(
                     controller: tingkatKepuasanSangatBaikController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Sangat Baik (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Sangat Baik (%)')),
                  TextField(
                     controller: tingkatKepuasanBaikController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Baik (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Baik (%)')),
                  TextField(
                     controller: tingkatKepuasanCukupController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Cukup (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Cukup (%)')),
                  TextField(
                     controller: tingkatKepuasanKurangController,
                      keyboardType: TextInputType.number, // Asumsi input angka/persentase
-                    decoration: InputDecoration(labelText: 'Tingkat Kepuasan Kurang (%)')),
+                    decoration: const InputDecoration(labelText: 'Tingkat Kepuasan Kurang (%)')),
                  TextField(
                     controller: rencanaTindakanController,
-                    decoration: InputDecoration(labelText: 'Rencana Tindakan')),
+                    decoration: const InputDecoration(labelText: 'Rencana Tindakan')),
                  TextField(
                     controller: tahunController,
                      keyboardType: TextInputType.number, // Input angka untuk tahun
-                    decoration: InputDecoration(labelText: 'Tahun')),
+                    decoration: const InputDecoration(labelText: 'Tahun')),
               ],
             ),
           ),
@@ -540,14 +539,14 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
                  // Validasi sederhana sebelum mengirim
                  if (aspekPenilaianController.text.isEmpty || tingkatKepuasanSangatBaikController.text.isEmpty || tingkatKepuasanBaikController.text.isEmpty || tingkatKepuasanCukupController.text.isEmpty || tingkatKepuasanKurangController.text.isEmpty || rencanaTindakanController.text.isEmpty || tahunController.text.isEmpty) {
                    ScaffoldMessenger.of(context).showSnackBar(
-                     SnackBar(content: Text('Semua field harus diisi.')),
+                     const SnackBar(content: Text('Semua field harus diisi.')),
                    );
                    return; // Jangan lanjutkan jika ada field yang kosong
                 }
@@ -571,7 +570,7 @@ class KinerjaKepuasanState extends State<KinerjaKepuasanScreen> { // Nama state 
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );

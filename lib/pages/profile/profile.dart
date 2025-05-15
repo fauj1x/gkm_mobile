@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          CircleAvatar(
+          const CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/profile.jpg'), // Ganti dengan gambar profil pengguna
           ),
