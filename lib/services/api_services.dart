@@ -11,7 +11,7 @@ String _camelToSnake(String input) {
 }
 
 class ApiService {
-  String baseUrl = "http://127.0.0.1:8000/api";
+  String baseUrl = "";
   // String baseUrl = "http://localhost:9000/api";
 
   // Fungsi umum untuk GET semua data
