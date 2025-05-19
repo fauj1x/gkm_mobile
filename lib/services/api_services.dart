@@ -99,9 +99,20 @@ class ApiService {
       throw Exception("Gagal menghapus data dari $endpoint: ${response.body}");
     }
   }
-  Future<Map<String, dynamic>> getRekapData(String slug, int userId) async {
+  Future<Map<String, dynamic>> getRekapData({
+    required String tahun,
+    required String semester,
+    required int userId,
+  }) async {
+    final uri = Uri.parse("$baseUrl/rekap")
+        .replace(queryParameters: {
+      "user_id": userId.toString(),
+      "tahun": tahun,
+      "semester": semester,
+    });
+
     final response = await http.get(
-      Uri.parse("$baseUrl/rekap?slug=$slug&user_id=$userId"),
+      uri,
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer ${await AuthProvider().getToken()}",
@@ -115,6 +126,7 @@ class ApiService {
       throw Exception("Gagal mengambil data rekap: ${response.body}");
     }
   }
+
 
 
 }

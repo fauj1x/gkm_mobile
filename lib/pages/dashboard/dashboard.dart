@@ -190,6 +190,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   child: Column(
                     children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            _openExcelImportDialog(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(color: Colors.teal.shade700, width: 1.5),
+                            ),
+                          ),
+                          icon: Icon(Icons.upload_file, color: Colors.teal[700]),
+                          label: Text(
+                            'Import Data Menggunakan Excel',
+                            style: GoogleFonts.poppins(
+                              color: Colors.teal[700],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
@@ -272,27 +298,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  // Tombol Icon Import Excel
-                                  SizedBox(
-                                    height: 40,
-                                    width: 40,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        _openExcelImportDialog(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        padding: EdgeInsets.zero,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          side: BorderSide(color: Colors.teal.shade700, width: 1.5),
-                                        ),
-                                        elevation: 2,
-                                      ),
-                                      child: Icon(Icons.upload_file, size: 20, color: Colors.teal[700]),
                                     ),
                                   ),
                                 ],

@@ -90,9 +90,11 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
       final apiService = ApiService();
 
       final data = await apiService.getRekapData(
-        selectedTahunAjaran.slug!,
-        userId,
+        tahun: selectedTahunAjaran.tahunAjaran,
+        semester: selectedTahunAjaran.semester,
+        userId: userId,
       );
+
 
       setState(() {
         for (var item in rekapData) {

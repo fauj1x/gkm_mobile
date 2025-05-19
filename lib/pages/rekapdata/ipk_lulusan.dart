@@ -31,7 +31,11 @@ class _IpkLulusanState extends State<IpkLulusan> {
   Future<void> fetchRekapData() async {
     try {
       final apiService = ApiService();
-      final data = await apiService.getRekapData(widget.tahunAjaran.slug, userId);
+      final data = await apiService.getRekapData(
+        tahun: widget.tahunAjaran.tahunAjaran,
+        semester: widget.tahunAjaran.semester,
+        userId: userId,
+      );
 
       setState(() {
         dataList = [
