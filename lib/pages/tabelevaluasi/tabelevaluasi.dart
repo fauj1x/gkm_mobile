@@ -55,6 +55,12 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
     {"judul": "Luaran Karya Mahasiswa", "progress": 0.0, "status": "", "score": 0},
   ];
 
+  final List<TahunAjaran> tahunAjaranList = [
+    TahunAjaran(id: 1, tahunAjaran: '2022/2023', semester: 'genap', slug: '2022-2023-genap', createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    TahunAjaran(id: 2, tahunAjaran: '2023/2024', semester: 'ganjil', slug: '2023-2024-ganjil', createdAt: DateTime.now(), updatedAt: DateTime.now()),
+    TahunAjaran(id: 3, tahunAjaran: '2023/2024', semester: 'genap', slug: '2023-2024-genap', createdAt: DateTime.now(), updatedAt: DateTime.now()),
+  ];
+
   final Map<String, Widget Function(TahunAjaran)> formRoutes = {
     "Kerjasama Tridharma": (ta) => kerjasamatridharma(tahunAjaran: ta),
     "Data Mahasiswa": (ta) => MahasiswaPage(tahunAjaran: ta),
@@ -84,7 +90,7 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
       final apiService = ApiService();
 
       final data = await apiService.getRekapData(
-        selectedTahunAjaran.id!,
+        selectedTahunAjaran.slug!,
         userId,
       );
 
@@ -138,9 +144,34 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Tabel Evaluasi",
-                style: GoogleFonts.poppins(
-                    fontSize: 22, fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Tabel Evaluasi",
+                    style: GoogleFonts.poppins(
+                        fontSize: 22, fontWeight: FontWeight.bold)),
+                DropdownButton<TahunAjaran>(
+                  value: selectedTahunAjaran,
+                  style: GoogleFonts.poppins(color: Colors.black),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  borderRadius: BorderRadius.circular(10),
+                  onChanged: (TahunAjaran? newValue) async {
+                    if (newValue != null) {
+                      setState(() {
+                        selectedTahunAjaran = newValue;
+                      });
+                      await fetchAndMapDataFromAPI(); // Ambil data dari API sesuai tahun & semester terpilih
+                    }
+                  },
+                  items: tahunAjaranList.map<DropdownMenuItem<TahunAjaran>>((TahunAjaran value) {
+                    return DropdownMenuItem<TahunAjaran>(
+                      value: value,
+                      child: Text("${value.tahunAjaran} - ${value.semester}"),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(

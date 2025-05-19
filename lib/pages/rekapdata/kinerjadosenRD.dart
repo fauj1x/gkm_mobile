@@ -31,7 +31,7 @@ class _KinerjaDosenState extends State<kinerjadosenRD> {
   Future<void> fetchRekapData() async {
     try {
       final apiService = ApiService();
-      final data = await apiService.getRekapData(widget.tahunAjaran.id, userId);
+      final data = await apiService.getRekapData(widget.tahunAjaran.slug, userId);
 
       setState(() {
         dataList = [
