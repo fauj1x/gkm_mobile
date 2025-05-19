@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/api_services.dart';
 import 'package:gkm_mobile/utils/kategori_tabel.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
 import 'package:gkm_mobile/pages/kinerjadosen/kinerjadosen.dart';
@@ -19,7 +18,6 @@ import 'package:gkm_mobile/pages/rekapdata/pkm_dtps.dart';
 import 'package:gkm_mobile/pages/rekapdata/prestasi_mahasiswa.dart';
 import 'package:gkm_mobile/pages/rekapdata/kerjasamatridharma.dart';
 import 'package:gkm_mobile/pages/rekapdata/mahasiswa.dart';
-import '../../services/api_services.dart';
 import '../rekapdata/kinerjadosenRD.dart';
 
 class tabelevaluasi extends StatefulWidget {
@@ -30,14 +28,11 @@ class tabelevaluasi extends StatefulWidget {
 }
 
 class _tabelevaluasiState extends State<tabelevaluasi> {
-  TahunAjaran selectedTahunAjaran = TahunAjaran(
-    id: 2,
-    tahunAjaran: '2023/2024',
-    semester: 'ganjil',
-    slug: '2023-2024-ganjil',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  );
+  TahunAjaran? selectedTahunAjaran;
+
+  List<TahunAjaran> tahunAjaranList = [];
+  bool isLoadingTahunAjaran = false;
+  bool isLoadingRekap = false;
 
   final List<Map<String, dynamic>> rekapData = [
     {"judul": "Kerjasama Tridharma", "progress": 0.0, "status": "", "score": 0},
@@ -53,12 +48,6 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
     {"judul": "Masa Studi Lulusan", "progress": 0.0, "status": "", "score": 0},
     {"judul": "Evaluasi Lulusan", "progress": 0.0, "status": "", "score": 0},
     {"judul": "Luaran Karya Mahasiswa", "progress": 0.0, "status": "", "score": 0},
-  ];
-
-  final List<TahunAjaran> tahunAjaranList = [
-    TahunAjaran(id: 1, tahunAjaran: '2022/2023', semester: 'genap', slug: '2022-2023-genap', createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    TahunAjaran(id: 2, tahunAjaran: '2023/2024', semester: 'ganjil', slug: '2023-2024-ganjil', createdAt: DateTime.now(), updatedAt: DateTime.now()),
-    TahunAjaran(id: 3, tahunAjaran: '2023/2024', semester: 'genap', slug: '2023-2024-genap', createdAt: DateTime.now(), updatedAt: DateTime.now()),
   ];
 
   final Map<String, Widget Function(TahunAjaran)> formRoutes = {
@@ -80,17 +69,42 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
   @override
   void initState() {
     super.initState();
-    fetchAndMapDataFromAPI();
+    fetchTahunAjaran();
+  }
+
+  Future<void> fetchTahunAjaran() async {
+    setState(() => isLoadingTahunAjaran = true);
+    try {
+      final list = await ApiService().getData<TahunAjaran>(
+            (json) => TahunAjaran.fromJson(json),
+        "tahun-ajaran", // endpoint sesuai API kamu
+      );
+      setState(() {
+        tahunAjaranList = list;
+        if (tahunAjaranList.isNotEmpty) {
+          selectedTahunAjaran = tahunAjaranList.first;
+        }
+        isLoadingTahunAjaran = false;
+      });
+      if (tahunAjaranList.isNotEmpty) {
+        await fetchAndMapDataFromAPI();
+      }
+    } catch (e) {
+      setState(() => isLoadingTahunAjaran = false);
+      debugPrint("❌ Gagal mengambil tahun ajaran: $e");
+    }
   }
 
   Future<void> fetchAndMapDataFromAPI() async {
+    if (selectedTahunAjaran == null) return;
+    setState(() => isLoadingRekap = true);
     try {
       final userIdStr = await AuthProvider().getId();
       final userId = int.parse(userIdStr);
       final apiService = ApiService();
 
       final data = await apiService.getRekapData(
-        selectedTahunAjaran.slug!,
+        selectedTahunAjaran!.slug!,
         userId,
       );
 
@@ -124,14 +138,13 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
           item["status"] = statusText;
           item["score"] = (progress * 100).round();
         }
+        isLoadingRekap = false;
       });
     } catch (e) {
+      setState(() => isLoadingRekap = false);
       debugPrint("❌ Gagal mengambil rekap data: $e");
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,43 +163,54 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                 Text("Tabel Evaluasi",
                     style: GoogleFonts.poppins(
                         fontSize: 22, fontWeight: FontWeight.bold)),
-                DropdownButton<TahunAjaran>(
-                  value: selectedTahunAjaran,
-                  style: GoogleFonts.poppins(color: Colors.black),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  borderRadius: BorderRadius.circular(10),
-                  onChanged: (TahunAjaran? newValue) async {
-                    if (newValue != null) {
-                      setState(() {
-                        selectedTahunAjaran = newValue;
-                      });
-                      await fetchAndMapDataFromAPI(); // Ambil data dari API sesuai tahun & semester terpilih
-                    }
-                  },
-                  items: tahunAjaranList.map<DropdownMenuItem<TahunAjaran>>((TahunAjaran value) {
-                    return DropdownMenuItem<TahunAjaran>(
-                      value: value,
-                      child: Text("${value.tahunAjaran} - ${value.semester}"),
-                    );
-                  }).toList(),
+                SizedBox(
+                  width: 160,
+                  child: DropdownButton<TahunAjaran>(
+                    isExpanded: true,
+                    value: tahunAjaranList.contains(selectedTahunAjaran) ? selectedTahunAjaran : null,
+                    style: GoogleFonts.poppins(color: Colors.black),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    borderRadius: BorderRadius.circular(10),
+                    onChanged: isLoadingTahunAjaran
+                        ? null
+                        : (TahunAjaran? newValue) async {
+                      if (newValue != null) {
+                        setState(() {
+                          selectedTahunAjaran = newValue;
+                        });
+                        await fetchAndMapDataFromAPI();
+                      }
+                    },
+                    hint: isLoadingTahunAjaran
+                        ? const Text('Memuat...')
+                        : const Text('Pilih Tahun Ajaran'),
+                    items: tahunAjaranList.map<DropdownMenuItem<TahunAjaran>>((TahunAjaran value) {
+                      return DropdownMenuItem<TahunAjaran>(
+                        value: value,
+                        child: Text("${value.tahunAjaran} - ${value.semester}"),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
+              child: isLoadingRekap
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
                 itemCount: rekapData.length,
                 itemBuilder: (context, index) {
                   var item = rekapData[index];
                   return InkWell(
                     onTap: () {
                       final builder = formRoutes[item["judul"]];
-                      if (builder != null) {
+                      if (builder != null && selectedTahunAjaran != null) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                builder(selectedTahunAjaran),
+                                builder(selectedTahunAjaran!),
                           ),
                         );
                       }
