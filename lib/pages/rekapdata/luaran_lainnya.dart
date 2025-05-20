@@ -32,8 +32,7 @@ class _LuaranlainnyaState extends State<luaranlainnya> {
     try {
       final apiService = ApiService();
       final data = await apiService.getRekapData(
-        tahun: widget.tahunAjaran.tahunAjaran,
-        semester: widget.tahunAjaran.semester,
+        tahun_ajaran_id: widget.tahunAjaran.tahunAjaran,
         userId: userId,
       );
       setState(() {

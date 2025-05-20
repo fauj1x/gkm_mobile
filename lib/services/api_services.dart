@@ -100,15 +100,13 @@ class ApiService {
     }
   }
   Future<Map<String, dynamic>> getRekapData({
-    required String tahun,
-    required String semester,
+    required String tahun_ajaran_id,
     required int userId,
   }) async {
-    final uri = Uri.parse("$baseUrl/rekap")
+    final uri = Uri.parse("$baseUrl/rekap?tahun_ajaran_id=$tahun_ajaran_id&user_id=$userId")
         .replace(queryParameters: {
       "user_id": userId.toString(),
-      "tahun": tahun,
-      "semester": semester,
+      "tahun_ajaran_id": tahun_ajaran_id,
     });
 
     final response = await http.get(

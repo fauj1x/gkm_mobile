@@ -90,8 +90,7 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
       final apiService = ApiService();
 
       final data = await apiService.getRekapData(
-        tahun: selectedTahunAjaran.tahunAjaran,
-        semester: selectedTahunAjaran.semester,
+        tahun_ajaran_id: widget.tahunAjaran,
         userId: userId,
       );
 
