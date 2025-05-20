@@ -30,9 +30,12 @@ class _PendidikanState extends State<kerjasamatridharma> {
 
   Future<void> fetchRekapData() async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final tahunAjaranId = prefs.getInt('tahun_ajaran_id') ?? 0;
+
       final apiService = ApiService();
       final data = await apiService.getRekapData(
-        tahun_ajaran_id: widget.tahunAjaran.tahunAjaran,
+        tahun_ajaran_id: tahunAjaranId.toString(),
         userId: userId,
       );
 
