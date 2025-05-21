@@ -99,4 +99,38 @@ class ApiService {
       throw Exception("Gagal menghapus data dari $endpoint: ${response.body}");
     }
   }
+
+  Future<Map<String, dynamic>> getRekapData({
+    required String tahunAjaranSlug, // contoh: "2023-2024-ganjil"
+    required int userId,
+    String? semester, // opsional
+  }) async {
+    // Susun path endpoint sesuai route baru
+    String path = "$baseUrl/rekap/$userId/$tahunAjaranSlug";
+
+    // Bangun Uri dengan query semester jika ada
+    final uri = Uri.parse(path).replace(
+      queryParameters: semester != null && semester.isNotEmpty
+          ? {"semester": semester}
+          : null,
+    );
+
+    final response = await http.get(
+      uri,
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer ${await AuthProvider().getToken()}",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return jsonResponse['data'];
+    } else {
+      throw Exception("Gagal mengambil data rekap: ${response.body}");
+    }
+  }
+
+
+
 }

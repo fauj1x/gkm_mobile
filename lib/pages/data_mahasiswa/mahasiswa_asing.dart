@@ -93,12 +93,12 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
             Text(
               menuName,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               subMenuName,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -117,13 +117,13 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -138,7 +138,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -297,22 +297,22 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Data'),
+          title: const Text('Tambah Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                     controller: controller1Controller,
                     decoration:
-                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
+                        const InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
                 TextField(
                     controller: controller2Controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText:
                             'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
                 TextField(
                     controller: controller3Controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText:
                             'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
               ],
@@ -323,7 +323,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
@@ -336,7 +336,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
@@ -356,22 +356,22 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Data'),
+          title: const Text('Edit Data'),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                     controller: controller1Controller,
                     decoration:
-                        InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
+                        const InputDecoration(labelText: 'Jumlah Mahasiswa Aktif	')),
                 TextField(
                     controller: controller2Controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText:
                             'Jumlah Mahasiswa Asing Penuh Waktu (Full-time)')),
                 TextField(
                     controller: controller3Controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText:
                             'Jumlah Mahasiswa Asing Paruh Waktu (Part-time)')),
               ],
@@ -382,7 +382,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             TextButton(
               onPressed: () {
@@ -395,7 +395,7 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Simpan'),
+              child: const Text('Simpan'),
             ),
           ],
         );
