@@ -19,7 +19,6 @@ import 'package:gkm_mobile/pages/rekapdata/prestasi_mahasiswa.dart';
 import 'package:gkm_mobile/pages/rekapdata/kerjasamatridharma.dart';
 import 'package:gkm_mobile/pages/rekapdata/mahasiswa.dart';
 import '../rekapdata/kinerjadosenRD.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class tabelevaluasi extends StatefulWidget {
   const tabelevaluasi({super.key});
@@ -88,19 +87,12 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
         isLoadingTahunAjaran = false;
       });
       if (tahunAjaranList.isNotEmpty) {
-        // Simpan tahun_ajaran_id pertama ke SharedPreferences pada awal load
-        await saveTahunAjaranIdToPrefs(tahunAjaranList.first.id);
         await fetchAndMapDataFromAPI();
       }
     } catch (e) {
       setState(() => isLoadingTahunAjaran = false);
       debugPrint("❌ Gagal mengambil tahun ajaran: $e");
     }
-  }
-
-  Future<void> saveTahunAjaranIdToPrefs(int tahunAjaranId) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('tahun_ajaran_id', tahunAjaranId);
   }
 
   Future<void> fetchAndMapDataFromAPI() async {
@@ -111,9 +103,10 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
       final userId = int.parse(userIdStr);
       final apiService = ApiService();
 
+      // Gunakan slug (atau properti yang sesuai) sebagai tahunAjaranSlug
       final data = await apiService.getRekapData(
-        tahun_ajaran_id: selectedTahunAjaran!.id.toString(),
-        userId:userId,
+        tahunAjaranSlug: selectedTahunAjaran!.slug, // Pastikan model TahunAjaran punya .slug
+        userId: userId,
       );
 
       setState(() {
@@ -186,9 +179,7 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                         setState(() {
                           selectedTahunAjaran = newValue;
                         });
-                        // Simpan tahun_ajaran_id ke SharedPreferences
-                        await saveTahunAjaranIdToPrefs(newValue.id);
-
+                        // Tidak perlu simpan ke SharedPreferences
                         await fetchAndMapDataFromAPI();
                       }
                     },

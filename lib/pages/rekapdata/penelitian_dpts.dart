@@ -32,7 +32,7 @@ class _PenelitianDtpsState extends State<PenelitianDtps> {
     try {
       final apiService = ApiService();
       final data = await apiService.getRekapData(
-        tahun_ajaran_id: widget.tahunAjaran.tahunAjaran,
+        tahunAjaranSlug: widget.tahunAjaran.slug, // gunakan slug di sini!
         userId: userId,
       );
       setState(() {

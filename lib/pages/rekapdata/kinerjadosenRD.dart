@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/services/api_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gkm_mobile/services/auth.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 
@@ -23,8 +23,9 @@ class _KinerjaDosenState extends State<kinerjadosenRD> {
   }
 
   Future<void> _fetchUserIdAndRekap() async {
-    final prefs = await SharedPreferences.getInstance();
-    userId = int.parse(prefs.getString('id') ?? '0');
+    // Ambil userId dari AuthProvider, bukan dari SharedPreferences
+    final userIdStr = await AuthProvider().getId();
+    userId = int.tryParse(userIdStr) ?? 0;
     await fetchRekapData();
   }
 
@@ -32,7 +33,7 @@ class _KinerjaDosenState extends State<kinerjadosenRD> {
     try {
       final apiService = ApiService();
       final data = await apiService.getRekapData(
-        tahun_ajaran_id: widget.tahunAjaran.tahunAjaran,
+        tahunAjaranSlug: widget.tahunAjaran.slug, // gunakan slug di sini!
         userId: userId,
       );
       setState(() {
@@ -40,38 +41,38 @@ class _KinerjaDosenState extends State<kinerjadosenRD> {
           [
             "1",
             "Pengakuan/Rekognisi Dosen",
-            data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]["count"].toString(),
-            data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]["status"]
+            (data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.1) Pengakuan/Rekognisi Dosen"]?["status"] ?? "-")
           ],
           [
             "2",
             "Penelitian DTPS",
-            data["Tabel 3.b.2) Penelitian DTPS"]["count"].toString(),
-            data["Tabel 3.b.2) Penelitian DTPS"]["status"]
+            (data["Tabel 3.b.2) Penelitian DTPS"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.2) Penelitian DTPS"]?["status"] ?? "-")
           ],
           [
             "3",
             "PKM DTPS",
-            data["Tabel 3.b.3) PkM DTPS"]["count"].toString(),
-            data["Tabel 3.b.3) PkM DTPS"]["status"]
+            (data["Tabel 3.b.3) PkM DTPS"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.3) PkM DTPS"]?["status"] ?? "-")
           ],
           [
             "4",
-            "Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS",
-            data["Tabel 3.b.4) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS"]["count"].toString(),
-            data["Tabel 3.b.4) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah DTPS"]["status"]
+            "Pagelaran/Pameran/Publikasi Ilmiah DTPS",
+            (data["Tabel 3.b.4) Pagelaran/Pameran/Publikasi Ilmiah DTPS"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.4) Pagelaran/Pameran/Publikasi Ilmiah DTPS"]?["status"] ?? "-")
           ],
           [
             "5",
             "Karya Ilmiah DTPS yang Disitasi",
-            data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]["count"].toString(),
-            data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]["status"]
+            (data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.5) Karya Ilmiah DTPS yang Disitasi"]?["status"] ?? "-")
           ],
           [
             "6",
-            "Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat",
-            data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat"]["count"].toString(),
-            data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi oleh Industri/Masyarakat"]["status"]
+            "Produk/Jasa DTPS yang Diadopsi",
+            (data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi"]?["count"] ?? "-").toString(),
+            (data["Tabel 3.b.6) Produk/Jasa DTPS yang Diadopsi"]?["status"] ?? "-")
           ],
         ];
       });

@@ -32,7 +32,7 @@ class _EvaluasiLulusanState extends State<EvaluasiLulusan> {
     try {
       final apiService = ApiService();
       final data = await apiService.getRekapData(
-        tahun_ajaran_id: widget.tahunAjaran.tahunAjaran,
+        tahunAjaranSlug: widget.tahunAjaran.slug, // gunakan slug di sini!
         userId: userId,
       );
 
