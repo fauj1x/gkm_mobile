@@ -15,6 +15,14 @@ import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_hak_ci
 import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_paten.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/teknologi_karya.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/produk_teradopsi_dosen.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/evaluasi/kepuasan.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/evaluasi/kesesuaian.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/evaluasi/tempatkerja.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/evaluasi/waktutunggu.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/ipk_lulusan.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/masastudi.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/akademik.dart';
+import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/nonakademik.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/integrasi_penelitian.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_penelitian_mahasiswa.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_rujukan_tesis.dart';
@@ -144,6 +152,31 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       // Kinerja Dosen End
       case "Kepuasan Mahasiswa":
         page = KinerjaKepuasanScreen(tahunAjaran: widget.tahunAjaran);
+        break;
+      //kinerja lulusan
+      case "Evaluasi Kepuasan Pengguna":
+        page = EvalKepuasan(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Evaluasi Kesesuaian Kerja":
+        page = Kesesuaian(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Evaluasi Tempat Kerja":
+        page = TempatKerja(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Evaluasi Waktu Tunggu":
+        page = WaktuTunggu(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Prestasi Akademik Mahasiswa":
+        page = PrestasiAkademik(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Prestasi Non Akademik Mahasiswa":
+        page = PrestasiNonAkademik(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Ipk Lulusan":
+        page = IpkLulusan(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Masa Studi Lulusan":
+        page = MasaStudiLulusan(tahunAjaran: widget.tahunAjaran);
         break;
       default:
         return;
@@ -358,7 +391,12 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                   buildMenu("Kinerja Lulusan", "assets/images/ilustrasi2.png",
                       Colors.grey.shade300, Colors.teal, [
                     "IPK Lulusan",
-                    "Prestasi Mahasiswa",
+                    "Prestasi Akademik Mahasiswa",
+                    "Prestasi Non Akademik Mahasiswa",
+                    "Evaluasi Kepuasan Pengguna",
+                    "Evaluasi Kesesuaian Kerja",
+                    "Evaluasi Waktu Tunggu",
+                    "Evaluasi Tempat Kerja",
                     "Masa Studi Lulusan",
                     "Evaluasi Lulusan"
                   ]),
