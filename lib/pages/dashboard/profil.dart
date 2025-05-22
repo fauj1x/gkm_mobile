@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/user_profiles.dart'; // Sesuaikan path ini
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import GoogleFonts
+import 'package:gkm_mobile/pages/login/login.dart';// Asumsi path ke LoginScreen Anda
 
 class UserProfileFormScreen extends StatefulWidget {
   final UserProfile? initialProfile; // Menerima data profil awal (opsional)
@@ -170,28 +172,87 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
     }
   }
 
+  // Fungsi untuk logout
+  Future<void> _logout() async {
+    // Tampilkan dialog konfirmasi logout
+    bool confirmLogout = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(
+          'Konfirmasi Logout',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin keluar dari akun ini?',
+          style: GoogleFonts.poppins(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'Batal',
+              style: GoogleFonts.poppins(color: Colors.black),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              'Logout',
+              style: GoogleFonts.poppins(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    ) ?? false;
+
+    if (confirmLogout) {
+      // Hapus data sesi dari SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear(); // Menghapus semua data yang disimpan
+
+      // Navigasi ke layar login dan hapus semua rute sebelumnya
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => login()), // Ganti dengan LoginScreen Anda
+        (Route<dynamic> route) => false, // Hapus semua rute di stack
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50], // Background yang lebih terang
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: Colors.teal[700], // Warna app bar yang konsisten
+        elevation: 4, // Sedikit shadow
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           "Edit Profil Pengguna",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white), // Icon logout
+            onPressed: _logout, // Panggil fungsi logout
+            tooltip: 'Logout', // Tooltip untuk tombol
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.teal))
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0), // Padding yang lebih besar
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -199,7 +260,13 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
                   children: [
                     TextFormField(
                       controller: _namaController,
-                      decoration: const InputDecoration(labelText: 'Nama Lengkap'),
+                      decoration: InputDecoration(
+                        labelText: 'Nama Lengkap',
+                        hintText: 'Masukkan nama lengkap Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Nama tidak boleh kosong';
@@ -207,33 +274,63 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15), // Spasi antar field
                     TextFormField(
                       controller: _nipController,
-                      decoration: const InputDecoration(labelText: 'NIP'),
+                      decoration: InputDecoration(
+                        labelText: 'NIP',
+                        hintText: 'Masukkan NIP Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       keyboardType: TextInputType.number,
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _nikController,
-                      decoration: const InputDecoration(labelText: 'NIK'),
+                      decoration: InputDecoration(
+                        labelText: 'NIK',
+                        hintText: 'Masukkan NIK Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       keyboardType: TextInputType.number,
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _nidnController,
-                      decoration: const InputDecoration(labelText: 'NIDN'),
+                      decoration: InputDecoration(
+                        labelText: 'NIDN',
+                        hintText: 'Masukkan NIDN Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       keyboardType: TextInputType.number,
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _jabatanFungsionalController,
-                      decoration: const InputDecoration(labelText: 'Jabatan Fungsional'),
+                      decoration: InputDecoration(
+                        labelText: 'Jabatan Fungsional',
+                        hintText: 'Masukkan jabatan fungsional Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _jabatanIdController,
-                      decoration: const InputDecoration(labelText: 'ID Jabatan'),
+                      decoration: InputDecoration(
+                        labelText: 'ID Jabatan',
+                        hintText: 'Masukkan ID jabatan Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
@@ -242,28 +339,35 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _handphoneController,
-                      decoration: const InputDecoration(labelText: 'Nomor Handphone'),
+                      decoration: InputDecoration(
+                        labelText: 'Nomor Handphone',
+                        hintText: 'Masukkan nomor handphone Anda',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
                       keyboardType: TextInputType.phone,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30), // Spasi sebelum tombol
                     Center(
                       child: ElevatedButton(
                         onPressed: _saveUserProfile,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                          backgroundColor: Colors.teal[700], // Warna tombol yang lebih kuat
+                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 18), // Padding lebih besar
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12), // Border radius lebih besar
                           ),
+                          elevation: 5, // Tambahkan shadow
                         ),
                         child: _isLoading
                             ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text(
+                            : Text(
                                 'Simpan Perubahan',
-                                style: TextStyle(fontSize: 16, color: Colors.white),
+                                style: GoogleFonts.poppins(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                               ),
                       ),
                     ),
