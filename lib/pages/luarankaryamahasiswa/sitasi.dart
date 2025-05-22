@@ -1,26 +1,24 @@
+// lib/widgets/sitasi_mahasiswa_screen.dart
 import 'package:flutter/material.dart';
-// Pastikan import model yang sesuai
-import 'package:gkm_mobile/models/luaran_penelitian_lain_aio.dart'; // Ganti sesuai path dan nama file
-import 'package:gkm_mobile/models/luaranmhs_sitasi.dart';
-import 'package:gkm_mobile/models/tahun_ajaran.dart';
+import 'package:gkm_mobile/models/luaranmhs_sitasi.dart'; // Sesuaikan path ini
+import 'package:gkm_mobile/models/tahun_ajaran.dart'; // Jika masih relevan, pertahankan
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LuaranPenelitianLainAioScreen extends StatefulWidget {
-  final TahunAjaran tahunAjaran;
-  const LuaranPenelitianLainAioScreen({Key? key, required this.tahunAjaran}) : super(key: key);
+class SitasiMahasiswaScreen extends StatefulWidget {
+  final TahunAjaran? tahunAjaran; // Dapat dihapus jika tidak digunakan
+  const SitasiMahasiswaScreen({Key? key, this.tahunAjaran}) : super(key: key);
 
   @override
-  _LuaranPenelitianLainAioScreenState createState() => _LuaranPenelitianLainAioScreenState();
+  SitasiMahasiswaScreenState createState() => SitasiMahasiswaScreenState();
 }
 
-class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioScreen> {
-  List<sitasimahasiswa> dataList = [];
+class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
+  List<SitasiMahasiswa> dataList = [];
   ApiService apiService = ApiService();
-
-  String menuName = "Luaran Mahasiswa"; // Sesuaikan
-  String subMenuName = "Sitasi"; // Bisa diisi sesuai
-  String endPoint = ""; // Endpoint API
+  String menuName = "Data Sitasi Mahasiswa";
+  String subMenuName = ""; // Biarkan kosong jika tidak ada sub-menu
+  String endPoint = "luaran-sitasi-mahasiswa"; // Endpoint API
   int userId = 0;
 
   @override
@@ -33,36 +31,32 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userId = int.tryParse(prefs.getString('id') ?? '0') ?? 0;
+      userId = int.parse(prefs.getString('id') ?? '0');
     });
   }
 
   Future<void> _fetchData() async {
     try {
-      final data = await apiService.getData(
-          LuaranPenelitianLainAioModel.fromJson, endPoint);
+      final data = await apiService.getData(SitasiMahasiswa.fromJson, endPoint);
       setState(() {
-        dataList = data.cast<sitasimahasiswa>();
+        dataList = data;
       });
     } catch (e) {
       print("Error fetching data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengambil data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal mengambil data: $e')),
       );
     }
   }
 
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
-      await apiService.postData(LuaranPenelitianLainAioModel.fromJson, newData, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil ditambahkan!')),
-      );
+      await apiService.postData(SitasiMahasiswa.fromJson, newData, endPoint);
+      _fetchData(); // Refresh data setelah menambahkan
     } catch (e) {
       print("Error adding data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menambah data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal menambahkan data: $e')),
       );
     }
   }
@@ -70,29 +64,23 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
   Future<void> _deleteData(int id) async {
     try {
       await apiService.deleteData(id, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil dihapus!')),
-      );
+      _fetchData(); // Refresh data setelah menghapus
     } catch (e) {
       print("Error deleting data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal menghapus data: $e')),
       );
     }
   }
 
   Future<void> _editData(int id, Map<String, dynamic> updatedData) async {
     try {
-      await apiService.updateData(LuaranPenelitianLainAioModel.fromJson, id, updatedData, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil diupdate!')),
-      );
+      await apiService.updateData(SitasiMahasiswa.fromJson, id, updatedData, endPoint);
+      _fetchData(); // Refresh data setelah mengedit
     } catch (e) {
       print("Error editing data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengupdate data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal mengedit data: $e')),
       );
     }
   }
@@ -106,7 +94,9 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,37 +120,38 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Jika ingin tambahkan search, bisa di sini
+                // Input Search
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Icon(Icons.search, color: Color(0xFF009688)),
+                      Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: const TextStyle(color: Color(0xFF009688)),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(vertical: 10),
                           ),
-                          // Implementasi search jika perlu
                         ),
                       ),
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
+
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -168,97 +159,88 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
                       scrollDirection: Axis.vertical,
                       child: Column(
                         children: [
-                          // Header table
+                          // Header Tabel
                           Container(
                             color: Colors.teal,
                             child: Row(
                               children: [
-                                _headerCell("No", 50),
+                                _headerCell("No.", 50),
                                 _headerCell("Nama Mahasiswa", 150),
-                                _headerCell("Judul Artikel", 200),
+                                _headerCell("Judul Artikel", 250),
                                 _headerCell("Jumlah Sitasi", 120),
                                 _headerCell("Tahun", 80),
-                                _headerCell("Aksi", 50),
+                                _headerCell("Aksi", 80),
                               ],
                             ),
                           ),
-                          // Data table
+
+                          // Isi Data Tabel
                           Table(
                             border: TableBorder.all(color: Colors.black54),
                             columnWidths: const {
                               0: FixedColumnWidth(50),
                               1: FixedColumnWidth(150),
-                              2: FixedColumnWidth(200),
+                              2: FixedColumnWidth(250),
                               3: FixedColumnWidth(120),
                               4: FixedColumnWidth(80),
-                              5: FixedColumnWidth(50),
+                              5: FixedColumnWidth(80),
                             },
                             children: dataList.asMap().entries.map((entry) {
-                              int index = entry.key;
                               final data = entry.value;
                               return TableRow(
                                 children: [
-                                  // Nomor
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text((index + 1).toString())),
+                                      child: Center(child: Text((entry.key + 1).toString())),
                                     ),
                                   ),
-                                  // Nama Mahasiswa
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(data.namaMahasiswa),
                                     ),
                                   ),
-                                  // Judul Artikel
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(data.judulArtikel),
                                     ),
                                   ),
-                                  // Jumlah Sitasi
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.jumlahSitasi.toString()),
+                                      child: Center(child: Text(data.jumlahSitasi.toString())),
                                     ),
                                   ),
-                                  // Tahun
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.tahun),
+                                      child: Center(child: Text(data.tahun)),
                                     ),
                                   ),
-                                  // Aksi
+                                  // Aksi Button
                                   TableCell(
                                     child: Center(
                                       child: PopupMenuButton<String>(
                                         icon: const Icon(Icons.more_vert, color: Colors.black87),
-                                        onSelected: (choice) {
+                                        onSelected: (String choice) {
                                           if (choice == "Edit") {
-                                            _showEditDialog(data.id, {
-                                              'nama_mahasiswa': data.namaMahasiswa,
-                                              'judul_artikel': data.judulArtikel,
-                                              'jumlah_sitasi': data.jumlahSitasi,
-                                              'tahun': data.tahun,
-                                            });
+                                            _showEditDialog(data.id, data);
                                           } else if (choice == "Hapus") {
                                             _deleteData(data.id);
                                           }
                                         },
-                                        itemBuilder: (context) => [
-                                          const PopupMenuItem(
+                                        itemBuilder: (BuildContext context) =>
+                                            <PopupMenuEntry<String>>[
+                                          const PopupMenuItem<String>(
                                             value: "Edit",
                                             child: ListTile(
                                               leading: Icon(Icons.edit, color: Colors.blue),
                                               title: Text("Edit"),
                                             ),
                                           ),
-                                          const PopupMenuItem(
+                                          const PopupMenuItem<String>(
                                             value: "Hapus",
                                             child: ListTile(
                                               leading: Icon(Icons.delete, color: Colors.red),
@@ -282,9 +264,10 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
               ],
             ),
           ),
-          // FloatingButton
+
+          // Floating Button
           Positioned(
-            bottom: 24,
+            bottom: 48,
             right: 24,
             child: FloatingActionButton.extended(
               onPressed: _showAddDialog,
@@ -306,6 +289,9 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
       width: width,
       padding: const EdgeInsets.all(8.0),
       alignment: Alignment.center,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54), // Menambahkan border
+      ),
       child: Text(
         text,
         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -314,7 +300,6 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
     );
   }
 
-  // Dialog Tambah Data
   void _showAddDialog() {
     final TextEditingController namaMahasiswaController = TextEditingController();
     final TextEditingController judulArtikelController = TextEditingController();
@@ -325,7 +310,7 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Tambah Data Luaran Penelitian'),
+          title: const Text('Tambah Data Sitasi Mahasiswa'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -337,6 +322,7 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
                 TextField(
                   controller: judulArtikelController,
                   decoration: const InputDecoration(labelText: 'Judul Artikel'),
+                  maxLines: null, // Allow multiple lines
                 ),
                 TextField(
                   controller: jumlahSitasiController,
@@ -353,7 +339,9 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Batal'),
             ),
             TextButton(
@@ -364,15 +352,24 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
                     jumlahSitasiController.text.isEmpty ||
                     tahunController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua field harus diisi')),
+                    const SnackBar(content: Text('Semua bidang harus diisi')),
                   );
                   return;
                 }
+
+                final int? parsedJumlahSitasi = int.tryParse(jumlahSitasiController.text);
+                if (parsedJumlahSitasi == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Jumlah Sitasi harus berupa angka')),
+                  );
+                  return;
+                }
+
                 _addData({
                   'user_id': userId,
                   'nama_mahasiswa': namaMahasiswaController.text,
                   'judul_artikel': judulArtikelController.text,
-                  'jumlah_sitasi': int.tryParse(jumlahSitasiController.text) ?? 0,
+                  'jumlah_sitasi': parsedJumlahSitasi,
                   'tahun': tahunController.text,
                 });
                 Navigator.pop(context);
@@ -385,21 +382,17 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
     );
   }
 
-  void _showEditDialog(int id, Map<String, dynamic> currentData) {
-    final TextEditingController namaMahasiswaController =
-        TextEditingController(text: currentData['nama_mahasiswa'] ?? '');
-    final TextEditingController judulArtikelController =
-        TextEditingController(text: currentData['judul_artikel'] ?? '');
-    final TextEditingController jumlahSitasiController =
-        TextEditingController(text: currentData['jumlah_sitasi']?.toString() ?? '');
-    final TextEditingController tahunController =
-        TextEditingController(text: currentData['tahun'] ?? '');
+  void _showEditDialog(int id, SitasiMahasiswa currentData) {
+    final TextEditingController namaMahasiswaController = TextEditingController(text: currentData.namaMahasiswa);
+    final TextEditingController judulArtikelController = TextEditingController(text: currentData.judulArtikel);
+    final TextEditingController jumlahSitasiController = TextEditingController(text: currentData.jumlahSitasi.toString());
+    final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Data Luaran Penelitian'),
+          title: const Text('Edit Data Sitasi Mahasiswa'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -411,6 +404,7 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
                 TextField(
                   controller: judulArtikelController,
                   decoration: const InputDecoration(labelText: 'Judul Artikel'),
+                  maxLines: null, // Allow multiple lines
                 ),
                 TextField(
                   controller: jumlahSitasiController,
@@ -427,7 +421,9 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Batal'),
             ),
             TextButton(
@@ -438,14 +434,25 @@ class _LuaranPenelitianLainAioScreenState extends State<LuaranPenelitianLainAioS
                     jumlahSitasiController.text.isEmpty ||
                     tahunController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Semua field harus diisi')),
+                    const SnackBar(content: Text('Semua bidang harus diisi')),
                   );
                   return;
                 }
+
+                final int? parsedJumlahSitasi = int.tryParse(jumlahSitasiController.text);
+                if (parsedJumlahSitasi == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Jumlah Sitasi harus berupa angka')),
+                  );
+                  return;
+                }
+
                 _editData(id, {
+                  'id': id, // Pastikan ID dikirim kembali untuk update
+                  'user_id': userId,
                   'nama_mahasiswa': namaMahasiswaController.text,
                   'judul_artikel': judulArtikelController.text,
-                  'jumlah_sitasi': int.tryParse(jumlahSitasiController.text) ?? 0,
+                  'jumlah_sitasi': parsedJumlahSitasi,
                   'tahun': tahunController.text,
                 });
                 Navigator.pop(context);

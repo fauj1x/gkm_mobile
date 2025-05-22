@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gkm_mobile/models/luaranmhs_produkmhs.dart';
+import 'package:gkm_mobile/models/luaranmhs_sitasi.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/mahasiswa_asing.dart';
 import 'package:gkm_mobile/pages/data_mahasiswa/seleksi_mahasiswa_baru.dart';
@@ -24,6 +26,13 @@ import 'package:gkm_mobile/pages/kinerja_lulusan/masastudi.dart';
 import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/akademik.dart';
 import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/nonakademik.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/integrasi_penelitian.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/bukuchaptermhs.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/hkihakciptamhs.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/hkipatenmhs.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/teknologikaryamhs.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/produk.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/publikasi.dart';
+import 'package:gkm_mobile/pages/luarankaryamahasiswa/sitasi.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_penelitian_mahasiswa.dart';
 import 'package:gkm_mobile/pages/penelitian_dtps/dtps_rujukan_tesis.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/pengakuan_rekognisi_dosen.dart';
@@ -31,6 +40,7 @@ import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/publikasi_ilmiah_dosen.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/sitasi_karya_dosen.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/kepuasan_mahasiswa.dart';
+import 'package:gkm_mobile/pages/pkmdtpsmahasiswa/pkmdtpsmahasiswa.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/penelitian_dtps.dart';
@@ -172,11 +182,37 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         case "Prestasi Non Akademik Mahasiswa":
         page = PrestasiNonAkademik(tahunAjaran: widget.tahunAjaran);
         break;
-        case "Ipk Lulusan":
-        page = IpkLulusan(tahunAjaran: widget.tahunAjaran);
+        case "IPK Lulusan":
+        page = IpkLulusanScreen(tahunAjaran: widget.tahunAjaran);
         break;
         case "Masa Studi Lulusan":
         page = MasaStudiLulusan(tahunAjaran: widget.tahunAjaran);
+        break;
+        //luaran karya mahasiswa
+        case "Publikasi Mahasiswa":
+        page = PublikasiMahasiswaScreen(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Sitasi Karya Mahasiswa":
+        page = SitasiMahasiswaScreen(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Produk/Jasa Mahasiswa":
+        page = ProdukMahasiswaScreen(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "HKI Mahasiswa (Paten)":
+        page = HkiPatenMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "HKI Mahasiswa (Hak Cipta)":
+        page = HkiHakCiptaMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Teknologi & Karya Mahasiswa":
+        page = TeknologiKaryaMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Buku & Chapter Mahasiswa":
+        page = BukuChapterMahasiswa(tahunAjaran: widget.tahunAjaran);
+        break;
+        //pkm dtps mahasiswa
+        case "PkM DTPS Mahasiswa":
+        page = TemaPenelitianMahasiswaScreen(tahunAjaran: widget.tahunAjaran);
         break;
       default:
         return;
@@ -408,7 +444,10 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                     "Publikasi Mahasiswa",
                     "Sitasi Karya Mahasiswa",
                     "Produk/Jasa Mahasiswa",
-                    "Luaran Mahasiswa Lainnya"
+                    "HKI Mahasiswa (Paten)",
+                    "HKI Mahasiswa (Hak Cipta)",
+                    "Teknologi & Karya Mahasiswa",
+                    "Buku & Chapter Mahasiswa"
                   ]),
                   buildMenu("Rekap Data", "assets/images/ilustrasi2.png",
                       Colors.grey.shade300, Colors.teal, ["Rekap Semua Data"]),

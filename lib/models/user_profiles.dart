@@ -1,3 +1,6 @@
+// lib/models/user_profile.dart
+import 'package:flutter/foundation.dart'; // Digunakan untuk @required jika diperlukan, tapi tidak wajib untuk final.
+
 class UserProfile {
   final int id;
   final String nip;
@@ -23,15 +26,31 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      id: json['id'],
-      nip: json['nip'],
-      nik: json['nik'],
-      nidn: json['nidn'],
-      nama: json['nama'],
-      jabatanFungsional: json['jabatan_fungsional'],
-      jabatanId: json['jabatan_id'],
-      handphone: json['handphone'],
-      userId: json['user_id'],
+      // Menggunakan operator null-aware coalescing (??) dan tryParse untuk keamanan
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      nip: json['nip'] as String? ?? '',
+      nik: json['nik'] as String? ?? '',
+      nidn: json['nidn'] as String? ?? '',
+      nama: json['nama'] as String? ?? '',
+      jabatanFungsional: json['jabatan_fungsional'] as String? ?? '',
+      jabatanId: int.tryParse(json['jabatan_id'].toString()) ?? 0,
+      handphone: json['handphone'] as String? ?? '',
+      userId: int.tryParse(json['user_id'].toString()) ?? 0,
     );
+  }
+
+  // Menambahkan metode toJson untuk kemudahan serialisasi data
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nip': nip,
+      'nik': nik,
+      'nidn': nidn,
+      'nama': nama,
+      'jabatan_fungsional': jabatanFungsional,
+      'jabatan_id': jabatanId,
+      'handphone': handphone,
+      'user_id': userId,
+    };
   }
 }

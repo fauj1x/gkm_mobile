@@ -4,6 +4,9 @@ import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gkm_mobile/models/user_profiles.dart'; // Menggunakan user_profiles.dart sesuai permintaan
+import 'package:gkm_mobile/pages/dashboard/profil.dart'; // Menggunakan profil.dart sesuai permintaan
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -16,18 +19,69 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ApiService apiService = ApiService();
   List<TahunAjaran> tahunAjaranList = [];
 
-  Future<void> _fetchTahunAjaran() async {
-    var data = await apiService.getData(TahunAjaran.fromJson, "tahun-ajaran");
-    data = data.reversed.toList();
-    setState(() {
-      tahunAjaranList = data;
-    });
-  }
+  UserProfile? _userProfile; // Variabel untuk menyimpan data profil pengguna
+  bool _isLoadingProfile = true; // Status loading data profil
 
   @override
   void initState() {
     super.initState();
     _fetchTahunAjaran();
+    _fetchUserProfile(); // Panggil fungsi untuk mengambil profil saat initState
+  }
+
+  Future<void> _fetchTahunAjaran() async {
+    try {
+      var data = await apiService.getData(TahunAjaran.fromJson, "tahun-ajaran");
+      data = data.reversed.toList();
+      setState(() {
+        tahunAjaranList = data;
+      });
+    } catch (e) {
+      print("Error fetching tahun ajaran: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mengambil data Tahun Ajaran: $e')),
+      );
+    }
+  }
+
+  Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoadingProfile = true;
+    });
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int userId = int.tryParse(prefs.getString('id') ?? '0') ?? 0;
+
+      if (userId != 0) {
+        // Mengubah endpoint dari "user-profile" menjadi "pkm-mahasiswa"
+        final List<UserProfile> profiles = await apiService.getData(UserProfile.fromJson, "user-profiles");
+        _userProfile = profiles.firstWhere(
+          (profile) => profile.userId == userId,
+          orElse: () => UserProfile( // Default jika tidak ditemukan
+            id: 0, userId: userId, nip: '', nik: '', nidn: '', nama: 'Pengguna',
+            jabatanFungsional: 'Tidak Diketahui', jabatanId: 0, handphone: '',
+          ),
+        );
+      } else {
+        _userProfile = UserProfile(
+          id: 0, userId: 0, nip: '', nik: '', nidn: '', nama: 'Tamu',
+          jabatanFungsional: 'Tidak Diketahui', jabatanId: 0, handphone: '',
+        );
+      }
+    } catch (e) {
+      print("Error fetching user profile for dashboard: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat profil pengguna: $e')),
+      );
+      _userProfile = UserProfile(
+        id: 0, userId: 0, nip: '', nik: '', nidn: '', nama: 'Error',
+        jabatanFungsional: 'Terjadi Kesalahan', jabatanId: 0, handphone: '',
+      );
+    } finally {
+      setState(() {
+        _isLoadingProfile = false;
+      });
+    }
   }
 
   @override
@@ -46,52 +100,96 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // HEADER / PROFIL
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: Colors.grey[300],
-                        child: Icon(Icons.person, color: Colors.grey[600]),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'KOKO Faisal',
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Dosen',
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
+                  child: InkWell( // Menggunakan InkWell agar bisa diklik
+                    onTap: () async {
+                      if (_userProfile != null) {
+                        // Navigasi ke UserProfileFormScreen dan tunggu hasilnya
+                        // Asumsi 'profil.dart' berisi class UserProfileFormScreen
+                        final bool? profileUpdated = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserProfileFormScreen(initialProfile: _userProfile),
+                          ),
+                        );
+                        // Jika profil diperbarui, refresh data di halaman ini
+                        if (profileUpdated == true) {
+                          _fetchUserProfile();
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Profil sedang dimuat atau tidak tersedia.')),
+                        );
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.grey[300],
+                          child: _isLoadingProfile
+                              ? const CircularProgressIndicator(color: Colors.teal) // Indikator loading
+                              : Icon(Icons.person, color: Colors.grey[600]),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'assets/icons/notification.png',
-                          width: 24,
-                          height: 24,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _isLoadingProfile
+                                  ? Text(
+                                      'Memuat...',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : Text(
+                                      _userProfile?.nama ?? 'Nama Pengguna', // Mengambil nama dari model
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                              _isLoadingProfile
+                                  ? Text(
+                                      'Memuat...',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    )
+                                  : Text(
+                                      _userProfile?.jabatanFungsional ?? 'Jabatan', // Mengambil jabatan dari model
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                            ],
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'assets/icons/pusatbantuan.png',
-                          width: 24,
-                          height: 24,
+                        IconButton(
+                          onPressed: () {
+                            // Aksi untuk notifikasi
+                          },
+                          icon: Image.asset(
+                            'assets/icons/notification.png', // Pastikan path ini benar
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          onPressed: () {
+                            // Aksi untuk pusat bantuan
+                          },
+                          icon: Image.asset(
+                            'assets/icons/pusatbantuan.png', // Pastikan path ini benar
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -103,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.teal[700],
                     borderRadius: BorderRadius.circular(8),
                     image: const DecorationImage(
-                      image: AssetImage('assets/images/detail.png'),
+                      image: AssetImage('assets/images/detail.png'), // Pastikan path ini benar
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -136,7 +234,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              // Aksi untuk mengisi data sekarang
+                            },
                             child: Text(
                               'Isi sekarang',
                               style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
@@ -242,13 +342,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ],
                       ),
                       const Divider(),
-                      for (int i = 0; i < 6; i++) ...[
+                      for (int i = 0; i < tahunAjaranList.length; i++) ...[ // Menggunakan tahunAjaranList
                         Row(
                           children: [
                             Expanded(
                               flex: 3,
                               child: Text(
-                                '2022 / 2023',
+                                tahunAjaranList[i].tahunAjaran, // Mengambil tahunAjaran dari model
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w300,
                                   color: Colors.black54,
@@ -258,11 +358,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Expanded(
                               flex: 3,
                               child: Text(
-                                i % 2 == 0 ? 'Ganjil' : 'Genap',
+                                tahunAjaranList[i].semester, // Mengambil semester dari model
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w300,
                                   color: Colors.black54,
                                 ),
+                                overflow: TextOverflow.ellipsis, // Tambahkan ini jika teks terlalu panjang
                               ),
                             ),
                             Expanded(
@@ -305,7 +406,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        if (i < 5) const Divider(),
+                        if (i < tahunAjaranList.length - 1) const Divider(), // Divider hanya jika bukan item terakhir
                       ],
                     ],
                   ),
@@ -313,8 +414,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-        ),
       ),
+    ),
     );
   }
 
