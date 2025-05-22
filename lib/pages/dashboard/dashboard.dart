@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
@@ -193,10 +196,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
 
-                // KOTAK INFO
+                // KOTAK INFO (disesuaikan dengan desain dari gambar)
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.teal[700],
                     borderRadius: BorderRadius.circular(8),
@@ -250,25 +253,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Text(
                                   '45%',
                                   style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                    color: Colors.indigo.shade400,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: LinearProgressIndicator(
-                                    value: 0.45,
-                                    minHeight: 6,
-                                    backgroundColor: Colors.white.withOpacity(0.3),
-                                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      // ILUSTRASI GAMBAR
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end, // Mendorong ke bawah
+                          crossAxisAlignment: CrossAxisAlignment.end, // Mendorong ke kanan
+                          children: [
+                            Image.asset(
+                              'assets/images/ilustrasi_dashboard.png',
+                              height: 150,
+                              fit: BoxFit.contain,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -290,30 +301,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            _openExcelImportDialog(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(color: Colors.teal.shade700, width: 1.5),
+                      Row(
+                        children: [
+                          // Tombol Import (kiri)
+                          Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  _openExcelImportDialog(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(color: Colors.teal.shade700, width: 1.5),
+                                  ),
+                                ),
+                                icon: Icon(Icons.upload_file, color: Colors.teal[700]),
+                                label: Text(
+                                  'Import Excel',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.teal[700],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          icon: Icon(Icons.upload_file, color: Colors.teal[700]),
-                          label: Text(
-                            'Import Data Menggunakan Excel',
-                            style: GoogleFonts.poppins(
-                              color: Colors.teal[700],
-                              fontWeight: FontWeight.bold,
+
+                          SizedBox(width: 12), // Spasi antar tombol
+
+                          // Tombol Export (kanan)
+                          Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  // Ganti dengan fungsi export kamu
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.teal.shade700,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                icon: Icon(Icons.download, color: Colors.white),
+                                label: Text(
+                                  'Export Excel',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -425,8 +471,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       allowedExtensions: ['xlsx', 'xls'],
     );
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null) {
       String fileName = result.files.single.name;
+
+      // Untuk Web: pakai bytes, Mobile pakai path
+      Uint8List? fileBytes = result.files.single.bytes;
+      String? filePath = result.files.single.path;
 
       showDialog(
         context: context,
@@ -446,34 +496,74 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Text('Batal', style: GoogleFonts.poppins()),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
 
-                // Tampilkan alert sukses
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    title: Text(
-                      'Import Berhasil',
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                    ),
-                    content: Text(
-                      'File berhasil diimpor ke sistem.',
-                      style: GoogleFonts.poppins(),
-                    ),
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal[700],
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
+                try {
+                  if (kIsWeb) {
+                    // Web harus ada bytes
+                    if (fileBytes == null) {
+                      throw Exception('File bytes tidak tersedia untuk web.');
+                    }
+                  } else {
+                    // Mobile/Desktop harus ada path
+                    if (filePath == null) {
+                      throw Exception('File path tidak tersedia.');
+                    }
+                  }
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      title: Text(
+                        'Import Berhasil',
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
-                );
+                      content: Text(
+                        'File berhasil diimpor ke sistem.',
+                        style: GoogleFonts.poppins(),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal[700],
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  );
+                } catch (e) {
+                  print('Gagal mengimpor file: $e');
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      title: Text(
+                        'Import Gagal',
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                      ),
+                      content: Text(
+                        'Terjadi kesalahan saat mengimpor file:\n\n$e',
+                        style: GoogleFonts.poppins(),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal[700],
@@ -484,46 +574,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("File tidak dipilih atau path null")),
+      );
     }
   }
 
   Future<bool> _showExitPopup(BuildContext context) async {
     return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              'Konfirmasi Keluar',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+      context: context,
+      builder: (context) => AlertDialog(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        title: Text(
+          'Konfirmasi Keluar',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin keluar?',
+          style: GoogleFonts.poppins(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'Batal',
+              style: GoogleFonts.poppins(color: Colors.black),
             ),
-            content: Text(
-              'Apakah Anda yakin ingin keluar?',
-              style: GoogleFonts.poppins(),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  'Batal',
-                  style: GoogleFonts.poppins(color: Colors.black),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF00B98F),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Text(
-                  'Keluar',
-                  style: GoogleFonts.poppins(color: Colors.white),
-                ),
-              ),
-            ],
           ),
-        ) ??
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF00B98F),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              'Keluar',
+              style: GoogleFonts.poppins(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    ) ??
         false;
   }
 }
+
