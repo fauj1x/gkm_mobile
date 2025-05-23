@@ -269,7 +269,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.indigo.shade700,
+                                color: Colors.teal[700],
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -288,8 +288,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   // Aksi ketika tombol ditekan
                                 },
                                 style: OutlinedButton.styleFrom(
-                                  side:
-                                      BorderSide(color: Colors.indigo.shade400),
+                                  side: BorderSide(color: Colors.teal.shade700),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -298,7 +297,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   'Selengkapnya',
                                   style: GoogleFonts.poppins(
                                     fontSize: 13,
-                                    color: Colors.indigo.shade400,
+                                    color: Colors.teal[700],
                                   ),
                                 ),
                               ),
@@ -351,7 +350,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           // Tombol Import (kiri)
                           Expanded(
                             child: SizedBox(
-                              height: 48,
+                              height: 43,
                               child: ElevatedButton.icon(
                                 onPressed: () async {
                                   dynamic rawId = await AuthProvider().getId();
@@ -386,7 +385,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           // Tombol Export (kanan)
                           Expanded(
                             child: SizedBox(
-                              height: 48,
+                              height: 43,
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   // Ganti dengan fungsi export kamu
