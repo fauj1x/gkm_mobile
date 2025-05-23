@@ -1,11 +1,11 @@
 import 'dart:typed_data';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
 import 'package:gkm_mobile/services/api_services.dart';
+import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -154,8 +154,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Expanded(
                         flex: 2,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end, // Mendorong ke bawah
-                          crossAxisAlignment: CrossAxisAlignment.end, // Mendorong ke kanan
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Image.asset(
                               'assets/images/ilustrasi_dashboard.png',
@@ -193,8 +193,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: SizedBox(
                               height: 48,
                               child: ElevatedButton.icon(
-                                onPressed: () {
-                                  _openExcelImportDialog(context);
+                                onPressed: () async {
+                                  dynamic rawId = await AuthProvider().getId();
+                                  int userId = rawId is int ? rawId : int.tryParse(rawId.toString()) ?? 0;
+                                  _openExcelImportDialog(context, userId);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
@@ -215,9 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                           ),
-
-                          SizedBox(width: 12), // Spasi antar tombol
-
+                          SizedBox(width: 12),
                           // Tombol Export (kanan)
                           Expanded(
                             child: SizedBox(
@@ -247,96 +247,131 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'Tahun Ajaran',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'Semester',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: Text(
-                              'Aksi',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(),
-                      for (int i = 0; i < 6; i++) ...[
-                        Row(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
                           children: [
                             Expanded(
                               flex: 3,
-                              child: Text(
-                                '2022 / 2023',
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black54,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'Tahun Ajaran',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               flex: 3,
-                              child: Text(
-                                i % 2 == 0 ? 'Ganjil' : 'Genap',
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black54,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'Semester',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               flex: 4,
-                              child: Row(
-                                children: [
-                                  // Tombol Ubah Data
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 40,
-                                      child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => UbahData(tahunAjaran: tahunAjaranList[i])),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.teal[700],
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                                          elevation: 2,
-                                        ),
-                                        icon: const Icon(Icons.edit, size: 16, color: Colors.white),
-                                        label: Text(
-                                          'Ubah Data',
-                                          style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  'Aksi',
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black87,
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        if (i < 5) const Divider(),
+                      ),
+                      const Divider(height: 16),
+                      for (var tahunAjaran in tahunAjaranList) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0), // Space antar baris
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    tahunAjaran.tahunAjaran,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    (tahunAjaran.semester == 'ganjil')
+                                        ? 'Ganjil'
+                                        : 'Genap',
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => UbahData(tahunAjaran: tahunAjaran),
+                                              ),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.teal[700],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                                            elevation: 2,
+                                          ),
+                                          icon: const Icon(Icons.edit, size: 16, color: Colors.white),
+                                          label: Text(
+                                            'Ubah Data',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.white,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ],
                   ),
@@ -349,18 +384,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Future<void> _openExcelImportDialog(BuildContext context) async {
+  Future<void> _openExcelImportDialog(BuildContext context, int userId) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'xls'],
+      withData: true, // <-- Tambahkan ini
     );
 
     if (result != null) {
       String fileName = result.files.single.name;
-
-      // Untuk Web: pakai bytes, Mobile pakai path
+      String filePath = result.files.single.path ?? '';
+      print("DEBUG: filePath: $filePath");
       Uint8List? fileBytes = result.files.single.bytes;
-      String? filePath = result.files.single.path;
+
+      if (fileBytes == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Gagal membaca file, coba lagi.")),
+        );
+        return;
+      }
 
       showDialog(
         context: context,
@@ -384,17 +426,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pop();
 
                 try {
-                  if (kIsWeb) {
-                    // Web harus ada bytes
-                    if (fileBytes == null) {
-                      throw Exception('File bytes tidak tersedia untuk web.');
-                    }
-                  } else {
-                    // Mobile/Desktop harus ada path
-                    if (filePath == null) {
-                      throw Exception('File path tidak tersedia.');
-                    }
-                  }
+                  final response = await apiService.importExcel(
+                    userId: userId,
+                    filePath: filePath,
+                  );
 
                   showDialog(
                     context: context,
@@ -421,8 +456,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   );
                 } catch (e) {
-                  print('Gagal mengimpor file: $e');
-
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -469,8 +502,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text(
           'Konfirmasi Keluar',
           style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
@@ -501,7 +533,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-    ) ??
-        false;
+    ) ?? false;
   }
 }

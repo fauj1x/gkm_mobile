@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:gkm_mobile/services/auth.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,8 +13,8 @@ String _camelToSnake(String input) {
 }
 
 class ApiService {
-  String baseUrl = "https://gkm-polije.com/api";
-  // String baseUrl = "http://localhost:9000/api";
+  String baseUrl = "https://www.gkm-polije.com/api";
+  // String baseUrl = "http://10.0.2.2:8000/api";
 
   // Fungsi umum untuk GET semua data
   Future<List<T>> getData<T>(
@@ -131,6 +133,50 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> importExcel({
+    required int userId,
+    required String filePath,
+  }) async {
+    final url = Uri.parse("$baseUrl/import-excel/$userId");
+    final token = await AuthProvider().getToken();
 
+    final Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json',
+    };
+
+    print('DEBUG: Mulai request import excel');
+    print('DEBUG: url: $url');
+    print('DEBUG: userId: $userId');
+
+    final request = http.MultipartRequest('POST', url)
+      ..headers.addAll(headers)
+      ..files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          filePath,
+          filename: filePath.split('/').last,
+        ),
+      );
+
+    print('DEBUG: Headers: ${request.headers}');
+    print('DEBUG: Files: ${request.files.length}');
+
+    final streamedResponse = await request.send();
+    print('DEBUG: streamedResponse statusCode: ${streamedResponse.statusCode}');
+    print('DEBUG: streamedResponse message: ${streamedResponse.reasonPhrase}');
+
+    final response = await http.Response.fromStream(streamedResponse);
+    print('DEBUG: response.statusCode: ${response.statusCode}');
+    print('DEBUG: response.body: ${response.body}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('DEBUG: Import excel berhasil');
+      return jsonDecode(response.body);
+    } else {
+      print('DEBUG: Import excel gagal');
+      throw Exception("Gagal import excel: ${response.body}");
+    }
+  }
 
 }
