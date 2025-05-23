@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/kinerjalulusan_ipk.dart'; // Sesuaikan path ini jika perlu
+import 'package:gkm_mobile/models/kinerjalulusan_ipk.dart'; // Sesuaikan path ini
 import 'package:gkm_mobile/models/tahun_ajaran.dart'; // Jika masih relevan, pertahankan
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class IpkLulusan extends StatefulWidget {
+class IpkLulusanScreen extends StatefulWidget {
   // Jika tahunAjaran tidak digunakan, bisa dihapus atau disesuaikan
   final TahunAjaran? tahunAjaran; 
-  const IpkLulusan({Key? key, this.tahunAjaran}) : super(key: key);
+  const IpkLulusanScreen({Key? key, this.tahunAjaran}) : super(key: key);
 
   @override
-  IpkLulusanState createState() => IpkLulusanState();
+  IpkLulusanScreenState createState() => IpkLulusanScreenState();
 }
 
-class IpkLulusanState extends State<IpkLulusan> {
+class IpkLulusanScreenState extends State<IpkLulusanScreen> {
   List<IpkLulusanModel> dataList = [];
   ApiService apiService = ApiService();
   String menuName = "Data IPK Lulusan";
@@ -28,6 +28,7 @@ class IpkLulusanState extends State<IpkLulusan> {
     _fetchData();
   }
 
+  // Mengambil ID pengguna dari SharedPreferences
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -35,6 +36,7 @@ class IpkLulusanState extends State<IpkLulusan> {
     });
   }
 
+  // Mengambil data IPK lulusan dari API
   Future<void> _fetchData() async {
     try {
       final data = await apiService.getData(IpkLulusanModel.fromJson, endPoint);
@@ -43,17 +45,18 @@ class IpkLulusanState extends State<IpkLulusan> {
       });
     } catch (e) {
       print("Error fetching data: $e");
-      // Tampilkan SnackBar atau dialog kepada user
+      // Menampilkan SnackBar kepada pengguna jika terjadi kesalahan
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal mengambil data: $e')),
       );
     }
   }
 
+  // Menambahkan data IPK lulusan baru ke API
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(IpkLulusanModel.fromJson, newData, endPoint);
-      _fetchData(); // Refresh data setelah menambahkan
+      _fetchData(); // Memperbarui data setelah penambahan berhasil
     } catch (e) {
       print("Error adding data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,10 +65,11 @@ class IpkLulusanState extends State<IpkLulusan> {
     }
   }
 
+  // Menghapus data IPK lulusan dari API berdasarkan ID
   Future<void> _deleteData(int id) async {
     try {
       await apiService.deleteData(id, endPoint);
-      _fetchData(); // Refresh data setelah menghapus
+      _fetchData(); // Memperbarui data setelah penghapusan berhasil
     } catch (e) {
       print("Error deleting data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,10 +78,11 @@ class IpkLulusanState extends State<IpkLulusan> {
     }
   }
 
+  // Mengedit data IPK lulusan di API berdasarkan ID
   Future<void> _editData(int id, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(IpkLulusanModel.fromJson, id, updatedData, endPoint);
-      _fetchData(); // Refresh data setelah mengedit
+      _fetchData(); // Memperbarui data setelah pengeditan berhasil
     } catch (e) {
       print("Error editing data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -121,7 +126,7 @@ class IpkLulusanState extends State<IpkLulusan> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Input Search
+                // Input Pencarian
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
@@ -228,7 +233,7 @@ class IpkLulusanState extends State<IpkLulusan> {
                                       child: Center(child: Text(data.ipkRataRata.toStringAsFixed(2))), // Format ke 2 desimal
                                     ),
                                   ),
-                                  // Aksi Button
+                                  // Tombol Aksi (Edit/Hapus)
                                   TableCell(
                                     child: Center(
                                       child: PopupMenuButton<String>(
@@ -274,7 +279,7 @@ class IpkLulusanState extends State<IpkLulusan> {
             ),
           ),
 
-          // Floating Button
+          // Tombol Tambah Data (Floating Action Button)
           Positioned(
             bottom: 48,
             right: 24,
@@ -293,6 +298,7 @@ class IpkLulusanState extends State<IpkLulusan> {
     );
   }
 
+  // Widget pembantu untuk sel header tabel
   Widget _headerCell(String text, double width) {
     return Container(
       width: width,
@@ -309,6 +315,7 @@ class IpkLulusanState extends State<IpkLulusan> {
     );
   }
 
+  // Menampilkan dialog untuk menambah data baru
   void _showAddDialog() {
     final TextEditingController tahunController = TextEditingController();
     final TextEditingController jumlahLulusanController = TextEditingController();
@@ -392,6 +399,7 @@ class IpkLulusanState extends State<IpkLulusan> {
     );
   }
 
+  // Menampilkan dialog untuk mengedit data yang sudah ada
   void _showEditDialog(int id, IpkLulusanModel currentData) {
     final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
     final TextEditingController jumlahLulusanController = TextEditingController(text: currentData.jumlahLulusan.toString());

@@ -1,24 +1,23 @@
-// lib/widgets/produk_mahasiswa_screen.dart
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/luaranmhs_produkmhs.dart'; // Sesuaikan path ini
+import 'package:gkm_mobile/models/pkmdtps_pkm.dart'; // Sesuaikan path ini
 import 'package:gkm_mobile/models/tahun_ajaran.dart'; // Jika masih relevan, pertahankan
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProdukMahasiswaScreen extends StatefulWidget {
+class TemaPenelitianMahasiswaScreen extends StatefulWidget {
   final TahunAjaran? tahunAjaran; // Dapat dihapus jika tidak digunakan
-  const ProdukMahasiswaScreen({Key? key, this.tahunAjaran}) : super(key: key);
+  const TemaPenelitianMahasiswaScreen({Key? key, this.tahunAjaran}) : super(key: key);
 
   @override
-  ProdukMahasiswaScreenState createState() => ProdukMahasiswaScreenState();
+  TemaPenelitianMahasiswaScreenState createState() => TemaPenelitianMahasiswaScreenState();
 }
 
-class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
-  List<ProdukMahasiswa> dataList = [];
+class TemaPenelitianMahasiswaScreenState extends State<TemaPenelitianMahasiswaScreen> {
+  List<TemaPenelitianMahasiswa> dataList = [];
   ApiService apiService = ApiService();
-  String menuName = "Data Produk Mahasiswa";
+  String menuName = "Data Tema Penelitian Mahasiswa";
   String subMenuName = ""; // Biarkan kosong jika tidak ada sub-menu
-  String endPoint = "luaran-produk-mahasiswa"; // Endpoint API
+  String endPoint = "pkm-mahasiswa"; // Endpoint API untuk Tema Penelitian Mahasiswa
   int userId = 0;
 
   @override
@@ -28,6 +27,7 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     _fetchData();
   }
 
+  // Mengambil ID pengguna dari SharedPreferences
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -35,24 +35,27 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     });
   }
 
+  // Mengambil data tema penelitian mahasiswa dari API
   Future<void> _fetchData() async {
     try {
-      final data = await apiService.getData(ProdukMahasiswa.fromJson, endPoint);
+      final data = await apiService.getData(TemaPenelitianMahasiswa.fromJson, endPoint);
       setState(() {
         dataList = data;
       });
     } catch (e) {
       print("Error fetching data: $e");
+      // Menampilkan SnackBar kepada pengguna jika terjadi kesalahan
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal mengambil data: $e')),
       );
     }
   }
 
+  // Menambahkan data tema penelitian mahasiswa baru ke API
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
-      await apiService.postData(ProdukMahasiswa.fromJson, newData, endPoint);
-      _fetchData(); // Refresh data setelah menambahkan
+      await apiService.postData(TemaPenelitianMahasiswa.fromJson, newData, endPoint);
+      _fetchData(); // Memperbarui data setelah penambahan berhasil
     } catch (e) {
       print("Error adding data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,10 +64,11 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     }
   }
 
+  // Menghapus data tema penelitian mahasiswa dari API berdasarkan ID
   Future<void> _deleteData(int id) async {
     try {
       await apiService.deleteData(id, endPoint);
-      _fetchData(); // Refresh data setelah menghapus
+      _fetchData(); // Memperbarui data setelah penghapusan berhasil
     } catch (e) {
       print("Error deleting data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -73,10 +77,11 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     }
   }
 
+  // Mengedit data tema penelitian mahasiswa di API berdasarkan ID
   Future<void> _editData(int id, Map<String, dynamic> updatedData) async {
     try {
-      await apiService.updateData(ProdukMahasiswa.fromJson, id, updatedData, endPoint);
-      _fetchData(); // Refresh data setelah mengedit
+      await apiService.updateData(TemaPenelitianMahasiswa.fromJson, id, updatedData, endPoint);
+      _fetchData(); // Memperbarui data setelah pengeditan berhasil
     } catch (e) {
       print("Error editing data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +125,7 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Input Search
+                // Input Pencarian
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
@@ -165,10 +170,9 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
                             child: Row(
                               children: [
                                 _headerCell("No.", 50),
+                                _headerCell("Tema", 150),
                                 _headerCell("Nama Mahasiswa", 150),
-                                _headerCell("Nama Produk", 150),
-                                _headerCell("Deskripsi Produk", 250),
-                                _headerCell("Bukti", 100),
+                                _headerCell("Judul", 250),
                                 _headerCell("Tahun", 80),
                                 _headerCell("Aksi", 80),
                               ],
@@ -183,9 +187,8 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
                               1: FixedColumnWidth(150),
                               2: FixedColumnWidth(150),
                               3: FixedColumnWidth(250),
-                              4: FixedColumnWidth(100),
+                              4: FixedColumnWidth(80),
                               5: FixedColumnWidth(80),
-                              6: FixedColumnWidth(80),
                             },
                             children: dataList.asMap().entries.map((entry) {
                               final data = entry.value;
@@ -200,25 +203,19 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.namaMahasiswa),
+                                      child: Text(data.tema),
                                     ),
                                   ),
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.namaProduk),
+                                      child: Text(data.namaMhs),
                                     ),
                                   ),
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.deskripsiProduk),
-                                    ),
-                                  ),
-                                  TableCell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(data.bukti), // Menampilkan teks bukti
+                                      child: Text(data.judul),
                                     ),
                                   ),
                                   TableCell(
@@ -227,7 +224,7 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
                                       child: Center(child: Text(data.tahun)),
                                     ),
                                   ),
-                                  // Aksi Button
+                                  // Tombol Aksi (Edit/Hapus)
                                   TableCell(
                                     child: Center(
                                       child: PopupMenuButton<String>(
@@ -273,7 +270,7 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
             ),
           ),
 
-          // Floating Button
+          // Tombol Tambah Data (Floating Action Button)
           Positioned(
             bottom: 48,
             right: 24,
@@ -292,6 +289,7 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     );
   }
 
+  // Widget pembantu untuk sel header tabel
   Widget _headerCell(String text, double width) {
     return Container(
       width: width,
@@ -308,38 +306,34 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     );
   }
 
+  // Menampilkan dialog untuk menambah data baru
   void _showAddDialog() {
-    final TextEditingController namaMahasiswaController = TextEditingController();
-    final TextEditingController namaProdukController = TextEditingController();
-    final TextEditingController deskripsiProdukController = TextEditingController();
-    final TextEditingController buktiController = TextEditingController();
+    final TextEditingController temaController = TextEditingController();
+    final TextEditingController namaMhsController = TextEditingController();
+    final TextEditingController judulController = TextEditingController();
     final TextEditingController tahunController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Tambah Data Produk Mahasiswa'),
+          title: const Text('Tambah Data Tema Penelitian Mahasiswa'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: namaMahasiswaController,
+                  controller: temaController,
+                  decoration: const InputDecoration(labelText: 'Tema Penelitian'),
+                ),
+                TextField(
+                  controller: namaMhsController,
                   decoration: const InputDecoration(labelText: 'Nama Mahasiswa'),
                 ),
                 TextField(
-                  controller: namaProdukController,
-                  decoration: const InputDecoration(labelText: 'Nama Produk'),
-                ),
-                TextField(
-                  controller: deskripsiProdukController,
-                  decoration: const InputDecoration(labelText: 'Deskripsi Produk'),
-                  maxLines: 3,
-                ),
-                TextField(
-                  controller: buktiController,
-                  decoration: const InputDecoration(labelText: 'Bukti (URL/Path)'),
+                  controller: judulController,
+                  decoration: const InputDecoration(labelText: 'Judul Penelitian'),
+                  maxLines: null, // Memungkinkan input multi-baris
                 ),
                 TextField(
                   controller: tahunController,
@@ -359,10 +353,9 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
             TextButton(
               onPressed: () {
                 // Validasi input
-                if (namaMahasiswaController.text.isEmpty ||
-                    namaProdukController.text.isEmpty ||
-                    deskripsiProdukController.text.isEmpty ||
-                    buktiController.text.isEmpty ||
+                if (temaController.text.isEmpty ||
+                    namaMhsController.text.isEmpty ||
+                    judulController.text.isEmpty ||
                     tahunController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Semua bidang harus diisi')),
@@ -372,10 +365,9 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
 
                 _addData({
                   'user_id': userId,
-                  'nama_mahasiswa': namaMahasiswaController.text,
-                  'nama_produk': namaProdukController.text,
-                  'deskripsi_produk': deskripsiProdukController.text,
-                  'bukti': buktiController.text,
+                  'tema': temaController.text,
+                  'nama_mhs': namaMhsController.text,
+                  'judul': judulController.text,
                   'tahun': tahunController.text,
                 });
                 Navigator.pop(context);
@@ -388,38 +380,34 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
     );
   }
 
-  void _showEditDialog(int id, ProdukMahasiswa currentData) {
-    final TextEditingController namaMahasiswaController = TextEditingController(text: currentData.namaMahasiswa);
-    final TextEditingController namaProdukController = TextEditingController(text: currentData.namaProduk);
-    final TextEditingController deskripsiProdukController = TextEditingController(text: currentData.deskripsiProduk);
-    final TextEditingController buktiController = TextEditingController(text: currentData.bukti);
+  // Menampilkan dialog untuk mengedit data yang sudah ada
+  void _showEditDialog(int id, TemaPenelitianMahasiswa currentData) {
+    final TextEditingController temaController = TextEditingController(text: currentData.tema);
+    final TextEditingController namaMhsController = TextEditingController(text: currentData.namaMhs);
+    final TextEditingController judulController = TextEditingController(text: currentData.judul);
     final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Data Produk Mahasiswa'),
+          title: const Text('Edit Data Tema Penelitian Mahasiswa'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: namaMahasiswaController,
+                  controller: temaController,
+                  decoration: const InputDecoration(labelText: 'Tema Penelitian'),
+                ),
+                TextField(
+                  controller: namaMhsController,
                   decoration: const InputDecoration(labelText: 'Nama Mahasiswa'),
                 ),
                 TextField(
-                  controller: namaProdukController,
-                  decoration: const InputDecoration(labelText: 'Nama Produk'),
-                ),
-                TextField(
-                  controller: deskripsiProdukController,
-                  decoration: const InputDecoration(labelText: 'Deskripsi Produk'),
-                  maxLines: 3,
-                ),
-                TextField(
-                  controller: buktiController,
-                  decoration: const InputDecoration(labelText: 'Bukti (URL/Path)'),
+                  controller: judulController,
+                  decoration: const InputDecoration(labelText: 'Judul Penelitian'),
+                  maxLines: null, // Memungkinkan input multi-baris
                 ),
                 TextField(
                   controller: tahunController,
@@ -439,10 +427,9 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
             TextButton(
               onPressed: () {
                 // Validasi input
-                if (namaMahasiswaController.text.isEmpty ||
-                    namaProdukController.text.isEmpty ||
-                    deskripsiProdukController.text.isEmpty ||
-                    buktiController.text.isEmpty ||
+                if (temaController.text.isEmpty ||
+                    namaMhsController.text.isEmpty ||
+                    judulController.text.isEmpty ||
                     tahunController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Semua bidang harus diisi')),
@@ -453,10 +440,9 @@ class ProdukMahasiswaScreenState extends State<ProdukMahasiswaScreen> {
                 _editData(id, {
                   'id': id, // Pastikan ID dikirim kembali untuk update
                   'user_id': userId,
-                  'nama_mahasiswa': namaMahasiswaController.text,
-                  'nama_produk': namaProdukController.text,
-                  'deskripsi_produk': deskripsiProdukController.text,
-                  'bukti': buktiController.text,
+                  'tema': temaController.text,
+                  'nama_mhs': namaMhsController.text,
+                  'judul': judulController.text,
                   'tahun': tahunController.text,
                 });
                 Navigator.pop(context);

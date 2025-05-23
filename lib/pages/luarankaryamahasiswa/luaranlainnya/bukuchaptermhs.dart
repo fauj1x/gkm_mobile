@@ -1,22 +1,24 @@
+// lib/widgets/buku_chapter_mahasiswa_widget.dart
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:gkm_mobile/models/luaranmhs_bukuchptrmhs.dart';// Pastikan path sesuai
+import 'package:gkm_mobile/models/luaranmhs_bukuchptrmhs.dart'; // Sesuaikan path ini
+import 'package:gkm_mobile/models/tahun_ajaran.dart'; // Jika masih relevan, pertahankan
 import 'package:gkm_mobile/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class BukuChapterMhsScreen extends StatefulWidget {
-  final dynamic tahunAjaran; // Jika diperlukan
-  const BukuChapterMhsScreen({Key? key, this.tahunAjaran}) : super(key: key);
+class BukuChapterMahasiswa extends StatefulWidget {
+  final TahunAjaran? tahunAjaran; // Dapat dihapus jika tidak digunakan
+  const BukuChapterMahasiswa({Key? key, this.tahunAjaran}) : super(key: key);
 
   @override
-  _BukuChapterMhsScreenState createState() => _BukuChapterMhsScreenState();
+  BukuChapterMahasiswaState createState() => BukuChapterMahasiswaState();
 }
 
-class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
+class BukuChapterMahasiswaState extends State<BukuChapterMahasiswa> {
   List<BukuChapterMhs> dataList = [];
   ApiService apiService = ApiService();
-
-  String menuName = "Buku Chapter Mahasiswa";
-  String endPoint = "buku-chapter-mhs"; // Sesuaikan endpoint API kamu
+  String menuName = "Data Buku/Chapter Buku Mahasiswa";
+  String subMenuName = ""; // Biarkan kosong jika tidak ada sub-menu
+  String endPoint = "luaran-bukuchapter-mahasiswa"; // Endpoint API
   int userId = 0;
 
   @override
@@ -29,7 +31,7 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userId = int.tryParse(prefs.getString('id') ?? '0') ?? 0;
+      userId = int.parse(prefs.getString('id') ?? '0');
     });
   }
 
@@ -42,7 +44,7 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
     } catch (e) {
       print("Error fetching data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengambil data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal mengambil data: $e')),
       );
     }
   }
@@ -50,14 +52,11 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(BukuChapterMhs.fromJson, newData, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil ditambahkan!')),
-      );
+      _fetchData(); // Refresh data setelah menambahkan
     } catch (e) {
       print("Error adding data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menambah data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal menambahkan data: $e')),
       );
     }
   }
@@ -65,14 +64,11 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   Future<void> _deleteData(int id) async {
     try {
       await apiService.deleteData(id, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil dihapus!')),
-      );
+      _fetchData(); // Refresh data setelah menghapus
     } catch (e) {
       print("Error deleting data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal menghapus data: $e')),
       );
     }
   }
@@ -80,14 +76,11 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   Future<void> _editData(int id, Map<String, dynamic> updatedData) async {
     try {
       await apiService.updateData(BukuChapterMhs.fromJson, id, updatedData, endPoint);
-      _fetchData();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil diupdate!')),
-      );
+      _fetchData(); // Refresh data setelah mengedit
     } catch (e) {
-      print("Error updating data: $e");
+      print("Error editing data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengupdate data: ${e.toString()}')),
+        SnackBar(content: Text('Gagal mengedit data: $e')),
       );
     }
   }
@@ -95,56 +88,186 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(menuName),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              menuName,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subMenuName,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
       body: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header tabel
+                // Input Search
                 Container(
-                  color: Colors.teal,
-                  child: Row(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Row(
                     children: [
-                      _headerCell("No", 50),
-                      _headerCell("Judul Buku", 200),
-                      _headerCell("Tahun", 80),
-                      _headerCell("Keterangan", 200),
-                      _headerCell("Aksi", 50),
+                      Icon(Icons.search, color: Color(0xFF009688)),
+                      Expanded(
+                        child: TextField(
+                          style: TextStyle(color: Color(0xFF009688)),
+                          decoration: InputDecoration(
+                            hintText: "Cari data...",
+                            hintStyle: TextStyle(color: Color(0xFF009688)),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 10),
+                Text(
+                  "Tabel $menuName $subMenuName",
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: dataList.length,
-                    itemBuilder: (context, index) {
-                      final data = dataList[index];
-                      return TableRowWidget(
-                        index: index,
-                        data: data,
-                        onEdit: () => _showEditDialog(data),
-                        onDelete: () => _deleteData(data.id),
-                      );
-                    },
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          // Header Tabel
+                          Container(
+                            color: Colors.teal,
+                            child: Row(
+                              children: [
+                                _headerCell("No.", 50),
+                                _headerCell("Luaran Penelitian", 200),
+                                _headerCell("Tahun", 100),
+                                _headerCell("Keterangan", 200),
+                                _headerCell("Aksi", 80),
+                              ],
+                            ),
+                          ),
+
+                          // Isi Data Tabel
+                          Table(
+                            border: TableBorder.all(color: Colors.black54),
+                            columnWidths: const {
+                              0: FixedColumnWidth(50),
+                              1: FixedColumnWidth(200),
+                              2: FixedColumnWidth(100),
+                              3: FixedColumnWidth(200),
+                              4: FixedColumnWidth(80),
+                            },
+                            children: dataList.asMap().entries.map((entry) {
+                              final data = entry.value;
+                              return TableRow(
+                                children: [
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text((entry.key + 1).toString())),
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(data.luaranPenelitian),
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.tahun)),
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(data.keterangan),
+                                    ),
+                                  ),
+                                  // Aksi Button
+                                  TableCell(
+                                    child: Center(
+                                      child: PopupMenuButton<String>(
+                                        icon: const Icon(Icons.more_vert, color: Colors.black87),
+                                        onSelected: (String choice) {
+                                          if (choice == "Edit") {
+                                            _showEditDialog(data.id, data);
+                                          } else if (choice == "Hapus") {
+                                            _deleteData(data.id);
+                                          }
+                                        },
+                                        itemBuilder: (BuildContext context) =>
+                                            <PopupMenuEntry<String>>[
+                                          const PopupMenuItem<String>(
+                                            value: "Edit",
+                                            child: ListTile(
+                                              leading: Icon(Icons.edit, color: Colors.blue),
+                                              title: Text("Edit"),
+                                            ),
+                                          ),
+                                          const PopupMenuItem<String>(
+                                            value: "Hapus",
+                                            child: ListTile(
+                                              leading: Icon(Icons.delete, color: Colors.red),
+                                              title: Text("Hapus"),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 10),
               ],
             ),
           ),
-          // Floating button
+
+          // Floating Button
           Positioned(
-            bottom: 24,
+            bottom: 48,
             right: 24,
             child: FloatingActionButton.extended(
               onPressed: _showAddDialog,
               icon: const Icon(Icons.add, color: Colors.white),
-              label: const Text("Tambah Data"),
+              label: const Text(
+                "Tambah Data",
+                style: TextStyle(color: Colors.white),
+              ),
               backgroundColor: Colors.teal,
             ),
           ),
@@ -157,7 +280,10 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
     return Container(
       width: width,
       padding: const EdgeInsets.all(8.0),
-      color: Colors.teal,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54), // Menambahkan border
+      ),
       child: Text(
         text,
         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -167,154 +293,135 @@ class _BukuChapterMhsScreenState extends State<BukuChapterMhsScreen> {
   }
 
   void _showAddDialog() {
-    final TextEditingController judulController = TextEditingController();
+    final TextEditingController luaranPenelitianController = TextEditingController();
     final TextEditingController tahunController = TextEditingController();
     final TextEditingController keteranganController = TextEditingController();
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Tambah Buku Chapter Mahasiswa'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(controller: judulController, decoration: const InputDecoration(labelText: 'Judul Buku')),
-              TextField(controller: tahunController, decoration: const InputDecoration(labelText: 'Tahun')),
-              TextField(controller: keteranganController, decoration: const InputDecoration(labelText: 'Keterangan')),
-            ],
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Tambah Data Buku/Chapter Buku Mahasiswa'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: luaranPenelitianController,
+                  decoration: const InputDecoration(labelText: 'Luaran Penelitian'),
+                ),
+                TextField(
+                  controller: tahunController,
+                  decoration: const InputDecoration(labelText: 'Tahun'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: keteranganController,
+                  decoration: const InputDecoration(labelText: 'Keterangan'),
+                  maxLines: 3, // Multi-line input for description
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              if (judulController.text.isEmpty || tahunController.text.isEmpty || keteranganController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Semua field harus diisi')));
-                return;
-              }
-              _addData({
-                'user_id': userId,
-                'luaran_penelitian': judulController.text,
-                'tahun': tahunController.text,
-                'keterangan': keteranganController.text,
-              });
-              Navigator.pop(context);
-            },
-            child: const Text('Simpan'),
-          ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Validasi input
+                if (luaranPenelitianController.text.isEmpty ||
+                    tahunController.text.isEmpty ||
+                    keteranganController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Semua bidang harus diisi')),
+                  );
+                  return;
+                }
+
+                _addData({
+                  'user_id': userId,
+                  'luaran_penelitian': luaranPenelitianController.text,
+                  'tahun': tahunController.text,
+                  'keterangan': keteranganController.text,
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Simpan'),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  void _showEditDialog(BukuChapterMhs data) {
-    final TextEditingController judulController = TextEditingController(text: data.luaranPenelitian);
-    final TextEditingController tahunController = TextEditingController(text: data.tahun);
-    final TextEditingController keteranganController = TextEditingController(text: data.keterangan);
+  void _showEditDialog(int id, BukuChapterMhs currentData) {
+    final TextEditingController luaranPenelitianController = TextEditingController(text: currentData.luaranPenelitian);
+    final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
+    final TextEditingController keteranganController = TextEditingController(text: currentData.keterangan);
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Edit Buku Chapter Mahasiswa'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(controller: judulController, decoration: const InputDecoration(labelText: 'Judul Buku')),
-              TextField(controller: tahunController, decoration: const InputDecoration(labelText: 'Tahun')),
-              TextField(controller: keteranganController, decoration: const InputDecoration(labelText: 'Keterangan')),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              if (judulController.text.isEmpty || tahunController.text.isEmpty || keteranganController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Semua field harus diisi')));
-                return;
-              }
-              _editData(data.id, {
-                'luaran_penelitian': judulController.text,
-                'tahun': tahunController.text,
-                'keterangan': keteranganController.text,
-              });
-              Navigator.pop(context);
-            },
-            child: const Text('Simpan'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Widget untuk menampilkan baris data
-class TableRowWidget extends StatelessWidget {
-  final int index;
-  final BukuChapterMhs data;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-
-  const TableRowWidget({
-    Key? key,
-    required this.index,
-    required this.data,
-    required this.onEdit,
-    required this.onDelete,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _cell((index + 1).toString(), 50),
-        _cell(data.luaranPenelitian, 200),
-        _cell(data.tahun, 80),
-        _cell(data.keterangan, 200),
-        _actionsCell(onEdit, onDelete),
-      ],
-    );
-  }
-
-  Widget _cell(String text, double width) {
-    return Container(
-      width: width,
-      padding: const EdgeInsets.all(8.0),
-      child: Text(text),
-    );
-  }
-
-  Widget _actionsCell(VoidCallback onEdit, VoidCallback onDelete) {
-    return Container(
-      width: 50,
-      child: PopupMenuButton<String>(
-        icon: const Icon(Icons.more_vert),
-        onSelected: (choice) {
-          if (choice == 'edit') {
-            onEdit();
-          } else if (choice == 'delete') {
-            onDelete();
-          }
-        },
-        itemBuilder: (context) => [
-          const PopupMenuItem(
-            value: 'edit',
-            child: ListTile(
-              leading: Icon(Icons.edit, color: Colors.blue),
-              title: Text('Edit'),
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Data Buku/Chapter Buku Mahasiswa'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: luaranPenelitianController,
+                  decoration: const InputDecoration(labelText: 'Luaran Penelitian'),
+                ),
+                TextField(
+                  controller: tahunController,
+                  decoration: const InputDecoration(labelText: 'Tahun'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: keteranganController,
+                  decoration: const InputDecoration(labelText: 'Keterangan'),
+                  maxLines: 3, // Multi-line input for description
+                ),
+              ],
             ),
           ),
-          const PopupMenuItem(
-            value: 'delete',
-            child: ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text('Hapus'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Batal'),
             ),
-          ),
-        ],
-      ),
+            TextButton(
+              onPressed: () {
+                // Validasi input
+                if (luaranPenelitianController.text.isEmpty ||
+                    tahunController.text.isEmpty ||
+                    keteranganController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Semua bidang harus diisi')),
+                  );
+                  return;
+                }
+
+                _editData(id, {
+                  'id': id, // Pastikan ID dikirim kembali untuk update
+                  'user_id': userId,
+                  'luaran_penelitian': luaranPenelitianController.text,
+                  'tahun': tahunController.text,
+                  'keterangan': keteranganController.text,
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Simpan'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

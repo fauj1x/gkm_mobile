@@ -1,12 +1,15 @@
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart'; // Digunakan untuk kIsWeb
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/ubahdata/ubahdata.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gkm_mobile/models/user_profiles.dart'; // Menggunakan user_profiles.dart sesuai permintaan
+import 'package:gkm_mobile/pages/dashboard/profil.dart'; // Menggunakan profil.dart sesuai permintaan (asumsi ini UserProfileFormScreen)
+import 'package:shared_preferences/shared_preferences.dart'; // Diperlukan untuk SharedPreferences
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -19,18 +22,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ApiService apiService = ApiService();
   List<TahunAjaran> tahunAjaranList = [];
 
-  Future<void> _fetchTahunAjaran() async {
-    var data = await apiService.getData(TahunAjaran.fromJson, "tahun-ajaran");
-    data = data.reversed.toList();
-    setState(() {
-      tahunAjaranList = data;
-    });
-  }
+  UserProfile? _userProfile; // Variabel untuk menyimpan data profil pengguna
+  bool _isLoadingProfile = true; // Status loading data profil
 
   @override
   void initState() {
     super.initState();
     _fetchTahunAjaran();
+    _fetchUserProfile(); // Panggil fungsi untuk mengambil profil saat initState
+  }
+
+  Future<void> _fetchTahunAjaran() async {
+    try {
+      var data = await apiService.getData(TahunAjaran.fromJson, "tahun-ajaran");
+      data = data.reversed.toList();
+      setState(() {
+        tahunAjaranList = data;
+      });
+    } catch (e) {
+      print("Error fetching tahun ajaran: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mengambil data Tahun Ajaran: $e')),
+      );
+    }
+  }
+
+  Future<void> _fetchUserProfile() async {
+    setState(() {
+      _isLoadingProfile = true;
+    });
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int userId = int.tryParse(prefs.getString('id') ?? '0') ?? 0;
+
+      if (userId != 0) {
+        // Menggunakan endpoint "pkm-mahasiswa" sesuai permintaan Anda
+        final List<UserProfile> profiles =
+            await apiService.getData(UserProfile.fromJson, "user-profiles");
+
+        if (profiles.isNotEmpty) {
+          _userProfile = profiles.firstWhere(
+            (profile) => profile.userId == userId,
+            orElse: () => UserProfile(
+              // Default jika tidak ditemukan di antara profil yang ada
+              id: 0, userId: userId, nip: '', nik: '', nidn: '',
+              nama: 'Pengguna',
+              jabatanFungsional: 'Tidak Diketahui', jabatanId: 0, handphone: '',
+            ),
+          );
+        } else {
+          // Jika list profiles kosong dari API, buat profil default
+          _userProfile = UserProfile(
+            id: 0,
+            userId: userId,
+            nip: '',
+            nik: '',
+            nidn: '',
+            nama: 'Pengguna',
+            jabatanFungsional: 'Tidak Diketahui',
+            jabatanId: 0,
+            handphone: '',
+          );
+        }
+      } else {
+        // Jika userId tidak ditemukan di SharedPreferences
+        _userProfile = UserProfile(
+          id: 0,
+          userId: 0,
+          nip: '',
+          nik: '',
+          nidn: '',
+          nama: 'Tamu',
+          jabatanFungsional: 'Tidak Diketahui',
+          jabatanId: 0,
+          handphone: '',
+        );
+      }
+    } catch (e) {
+      print("Error fetching user profile for dashboard: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat profil pengguna: $e')),
+      );
+      // Atur profil ke default 'Error' jika terjadi kesalahan
+      _userProfile = UserProfile(
+        id: 0,
+        userId: 0,
+        nip: '',
+        nik: '',
+        nidn: '',
+        nama: 'Error',
+        jabatanFungsional: 'Terjadi Kesalahan',
+        jabatanId: 0,
+        handphone: '',
+      );
+    } finally {
+      setState(() {
+        _isLoadingProfile = false;
+      });
+    }
   }
 
   @override
@@ -48,43 +137,112 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 // HEADER / PROFIL
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: Colors.grey[300],
-                        child: Icon(Icons.person, color: Colors.grey[600]),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'KOKO Faisal',
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Dosen',
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: InkWell(
+                    // Menggunakan InkWell agar bisa diklik
+                    onTap: () async {
+                      if (_userProfile != null) {
+                        // Navigasi ke UserProfileFormScreen dan tunggu hasilnya
+                        // Asumsi 'profil.dart' berisi class UserProfileFormScreen
+                        final bool? profileUpdated = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserProfileFormScreen(
+                                initialProfile: _userProfile),
+                          ),
+                        );
+                        // Jika profil diperbarui, refresh data di halaman ini
+                        if (profileUpdated == true) {
+                          _fetchUserProfile();
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  'Profil sedang dimuat atau tidak tersedia.')),
+                        );
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.grey[300],
+                          child: _isLoadingProfile
+                              ? const CircularProgressIndicator(
+                                  color: Colors.teal) // Indikator loading
+                              : Icon(Icons.person, color: Colors.grey[600]),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _isLoadingProfile
+                                  ? Text(
+                                      'Memuat...',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : Text(
+                                      _userProfile?.nama ??
+                                          'Nama Pengguna', // Mengambil nama dari model
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                              _isLoadingProfile
+                                  ? Text(
+                                      'Memuat...',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    )
+                                  : Text(
+                                      _userProfile?.jabatanFungsional ??
+                                          'Jabatan', // Mengambil jabatan dari model
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // Aksi untuk notifikasi
+                          },
+                          icon: Image.asset(
+                            'assets/icons/notification.png', // Pastikan path ini benar
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // Aksi untuk pusat bantuan
+                          },
+                          icon: Image.asset(
+                            'assets/icons/pusatbantuan.png', // Pastikan path ini benar
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
                 // KOTAK INFO (disesuaikan dengan desain dari gambar)
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -130,7 +288,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   // Aksi ketika tombol ditekan
                                 },
                                 style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: Colors.indigo.shade400),
+                                  side:
+                                      BorderSide(color: Colors.indigo.shade400),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -187,6 +346,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     children: [
                       Row(
+                        // Mengubah SizedBox menjadi Row untuk tombol import/export
                         children: [
                           // Tombol Import (kiri)
                           Expanded(
@@ -195,7 +355,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: ElevatedButton.icon(
                                 onPressed: () async {
                                   dynamic rawId = await AuthProvider().getId();
-                                  int userId = rawId is int ? rawId : int.tryParse(rawId.toString()) ?? 0;
+                                  int userId = rawId is int
+                                      ? rawId
+                                      : int.tryParse(rawId.toString()) ?? 0;
                                   _openExcelImportDialog(context, userId);
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -203,12 +365,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   elevation: 2,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    side: BorderSide(color: Colors.teal.shade700, width: 1.5),
+                                    side: BorderSide(
+                                        color: Colors.teal.shade700,
+                                        width: 1.5),
                                   ),
                                 ),
-                                icon: Icon(Icons.upload_file, color: Colors.teal[700]),
+                                icon: Icon(Icons.upload_file,
+                                    color: Colors.teal[700]),
                                 label: Text(
-                                  'Import Excel',
+                                  'Import Excel', // Teks disingkat
                                   style: GoogleFonts.poppins(
                                     color: Colors.teal[700],
                                     fontWeight: FontWeight.bold,
@@ -235,7 +400,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 icon: Icon(Icons.download, color: Colors.white),
                                 label: Text(
-                                  'Export Excel',
+                                  'Export Excel', // Teks disingkat
                                   style: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -299,7 +464,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       const Divider(height: 16),
                       for (var tahunAjaran in tahunAjaranList) ...[
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0), // Space antar baris
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0), // Space antar baris
                           child: Row(
                             children: [
                               Expanded(
@@ -342,19 +508,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => UbahData(tahunAjaran: tahunAjaran),
+                                                builder: (context) => UbahData(
+                                                    tahunAjaran: tahunAjaran),
                                               ),
                                             );
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.teal[700],
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
-                                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                             elevation: 2,
                                           ),
-                                          icon: const Icon(Icons.edit, size: 16, color: Colors.white),
+                                          icon: const Icon(Icons.edit,
+                                              size: 16, color: Colors.white),
                                           label: Text(
                                             'Ubah Data',
                                             style: GoogleFonts.poppins(
@@ -385,6 +555,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _openExcelImportDialog(BuildContext context, int userId) async {
+    // Simpan context utama
+    final mainContext = context;
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'xls'],
@@ -407,7 +579,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           title: Text(
             'Konfirmasi Import',
             style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
@@ -426,15 +599,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Navigator.of(context).pop();
 
                 try {
-                  final response = await apiService.importExcel(
+                  await apiService.importExcel(
                     userId: userId,
                     filePath: filePath,
                   );
 
                   showDialog(
-                    context: context,
+                    context: mainContext,
                     builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       title: Text(
                         'Import Berhasil',
                         style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
@@ -448,45 +622,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onPressed: () => Navigator.of(context).pop(),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal[700],
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
+                          child: Text('OK',
+                              style: GoogleFonts.poppins(color: Colors.white)),
                         ),
                       ],
                     ),
                   );
                 } catch (e) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      title: Text(
-                        'Import Gagal',
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                      ),
-                      content: Text(
-                        'Terjadi kesalahan saat mengimpor file:\n\n$e',
-                        style: GoogleFonts.poppins(),
-                      ),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: Text('OK', style: GoogleFonts.poppins(color: Colors.white)),
-                        ),
-                      ],
-                    ),
+                  print("Error fetching tahun ajaran: $e");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text('Gagal mengambil data Tahun Ajaran: $e')),
                   );
                 }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal[700],
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
-              child: Text('Import', style: GoogleFonts.poppins(color: Colors.white)),
+              child: Text('Import',
+                  style: GoogleFonts.poppins(color: Colors.white)),
             ),
           ],
         ),
@@ -500,39 +659,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<bool> _showExitPopup(BuildContext context) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        title: Text(
-          'Konfirmasi Keluar',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          'Apakah Anda yakin ingin keluar?',
-          style: GoogleFonts.poppins(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(
-              'Batal',
-              style: GoogleFonts.poppins(color: Colors.black),
+          context: context,
+          builder: (context) => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              'Konfirmasi Keluar',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
+            content: Text(
+              'Apakah Anda yakin ingin keluar?',
+              style: GoogleFonts.poppins(),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  'Batal',
+                  style: GoogleFonts.poppins(color: Colors.black),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF00B98F),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                child: Text(
+                  'Keluar',
+                  style: GoogleFonts.poppins(color: Colors.white),
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00B98F),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            child: Text(
-              'Keluar',
-              style: GoogleFonts.poppins(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    ) ?? false;
+        ) ??
+        false;
   }
 }
