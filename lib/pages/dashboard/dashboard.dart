@@ -214,26 +214,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            // Aksi untuk notifikasi
-                          },
-                          icon: Image.asset(
-                            'assets/icons/notification.png', // Pastikan path ini benar
-                            width: 24,
-                            height: 24,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            // Aksi untuk pusat bantuan
-                          },
-                          icon: Image.asset(
-                            'assets/icons/pusatbantuan.png', // Pastikan path ini benar
-                            width: 24,
-                            height: 24,
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -265,9 +245,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Selamat Datang, Administrator! 🎉',
+                              _userProfile != null
+                                  ? 'Selamat Datang, ${_userProfile!.nama}! 🎉'
+                                  : 'Selamat Datang! 🎉',
                               style: GoogleFonts.poppins(
-                                fontSize: 16,
+                                fontSize: 14  ,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.teal[700],
                               ),
