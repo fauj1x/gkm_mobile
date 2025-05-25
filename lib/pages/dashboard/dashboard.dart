@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart'; // Digunakan untuk kIsWeb
@@ -9,6 +10,7 @@ import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/models/user_profiles.dart'; // Menggunakan user_profiles.dart sesuai permintaan
 import 'package:gkm_mobile/pages/dashboard/profil.dart'; // Menggunakan profil.dart sesuai permintaan (asumsi ini UserProfileFormScreen)
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Diperlukan untuk SharedPreferences
 
 class DashboardScreen extends StatefulWidget {
@@ -249,7 +251,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ? 'Selamat Datang, ${_userProfile!.nama}! 🎉'
                                   : 'Selamat Datang! 🎉',
                               style: GoogleFonts.poppins(
-                                fontSize: 14  ,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.teal[700],
                               ),
@@ -369,8 +371,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: SizedBox(
                               height: 43,
                               child: ElevatedButton.icon(
-                                onPressed: () {
-                                  // Ganti dengan fungsi export kamu
+                                onPressed: () async {
+                                  dynamic rawId = await AuthProvider().getId();
+                                  int userId = rawId is int
+                                      ? rawId
+                                      : int.tryParse(rawId.toString()) ?? 0;
+                                  await exportExcelToFile(userId: userId);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.teal.shade700,
@@ -634,6 +640,66 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("File tidak dipilih atau path null")),
+      );
+    }
+  }
+
+  // Save excel file interactively
+  Future<void> exportExcelToFile({
+    required int userId,
+  }) async {
+    try {
+      Uint8List bytes = await apiService.exportExcel(userId: userId);
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      String? sanitizedDir = selectedDirectory?.replaceAll(
+          RegExp(r'(/Documents)+$'), '/Documents');
+
+      if (selectedDirectory == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Penyimpanan dibatalkan oleh pengguna.')),
+        );
+        return;
+      }
+
+      final filePath =
+          '$sanitizedDir/rekap_${userId}_${DateTime.now().millisecondsSinceEpoch}.xlsx';
+      final file = File(filePath);
+
+      if (await file.exists()) {
+        bool? overwrite = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Konfirmasi'),
+            content: Text('File sudah ada. Timpa file yang lama?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('Batal'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Timpa'),
+              ),
+            ],
+          ),
+        );
+        if (overwrite != true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ekspor dibatalkan. File tidak ditimpa.')),
+          );
+          return;
+        }
+      }
+
+      await file.writeAsBytes(bytes);
+      print("File berhasil disimpan di: $filePath");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('File berhasil diekspor ke $filePath')),
+      );
+    } catch (e) {
+      print("Error exporting Excel file: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mengekspor file: $e')),
       );
     }
   }
