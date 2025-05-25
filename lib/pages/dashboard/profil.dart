@@ -1,10 +1,12 @@
 // lib/screens/user_profile_form_screen.dart
+import 'dart:convert'; // Import untuk jsonEncode jika belum ada di ApiService
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/user_profiles.dart'; // Sesuaikan path ini
 import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import GoogleFonts
+import 'package:gkm_mobile/pages/login/login.dart'; // Asumsi path ke LoginScreen Anda
 
 class UserProfileFormScreen extends StatefulWidget {
   final UserProfile? initialProfile; // Menerima data profil awal (opsional)
@@ -17,7 +19,7 @@ class UserProfileFormScreen extends StatefulWidget {
 
 class UserProfileFormScreenState extends State<UserProfileFormScreen> {
   final ApiService apiService = ApiService();
-  final _formKey = GlobalKey<FormState>(); // Kunci untuk validasi form
+  final _formKey = GlobalKey<FormState>(); // Kunci untuk validasi form utama
 
   // Controllers untuk setiap field input
   late TextEditingController _nipController;
@@ -29,7 +31,7 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
   late TextEditingController _handphoneController;
   int _userId = 0; // Untuk menyimpan userId dari SharedPreferences
 
-  bool _isLoading = true; // Status loading data
+  bool _isLoading = true; // Status loading data untuk layar utama
   UserProfile? _currentProfile; // Profil yang sedang ditampilkan/diedit
 
   @override
@@ -74,13 +76,9 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
     } else if (_userId != 0) {
       // Jika tidak ada profil awal, coba ambil dari API berdasarkan userId
       try {
-        // Asumsi API Anda memiliki endpoint untuk mendapatkan profil user yang sedang login
-        // atau Anda perlu mengirim userId sebagai parameter.
-        // Contoh: apiService.getData(UserProfile.fromJson, "user-profile", queryParams: {'user_id': _userId.toString()});
-        // Atau jika API mengembalikan profil user yang sedang login tanpa parameter tambahan:
-        final List<UserProfile> profiles = await apiService.getData(UserProfile.fromJson, "user-profile");
+        final List<UserProfile> profile = await apiService.getData(UserProfile.fromJson, "user-profiles");
         // Filter berdasarkan userId yang login
-        _currentProfile = profiles.firstWhere(
+        _currentProfile = profile.firstWhere(
           (profile) => profile.userId == _userId,
           orElse: () => UserProfile( // Default jika tidak ditemukan
             id: 0, // ID 0 atau ID sementara untuk profil baru
@@ -126,49 +124,42 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
   }
 
   // Menyimpan perubahan profil ke API
+  // Fungsi ini dipanggil baik dari form utama maupun dari dialog
   Future<void> _saveUserProfile() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+    final Map<String, dynamic> updatedData = {
+      'id': _currentProfile?.id ?? 0, // Gunakan ID yang ada atau 0 jika baru
+      'user_id': _userId, // Pastikan userId yang benar
+      'nip': _nipController.text,
+      'nik': _nikController.text,
+      'nidn': _nidnController.text,
+      'nama': _namaController.text,
+      'jabatan_fungsional': _jabatanFungsionalController.text,
+      'jabatan_id': int.tryParse(_jabatanIdController.text) ?? 0,
+      'handphone': _handphoneController.text,
+    };
 
-      final Map<String, dynamic> updatedData = {
-        'id': _currentProfile?.id ?? 0, // Gunakan ID yang ada atau 0 jika baru
-        'user_id': _userId, // Pastikan userId yang benar
-        'nip': _nipController.text,
-        'nik': _nikController.text,
-        'nidn': _nidnController.text,
-        'nama': _namaController.text,
-        'jabatan_fungsional': _jabatanFungsionalController.text,
-        'jabatan_id': int.tryParse(_jabatanIdController.text) ?? 0,
-        'handphone': _handphoneController.text,
-      };
-
-      try {
-        if (_currentProfile != null && _currentProfile!.id != 0) {
-          // Jika profil sudah ada (memiliki ID), lakukan update
-          await apiService.updateData(UserProfile.fromJson, _currentProfile!.id, updatedData, "user-profile");
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profil berhasil diperbarui!')),
-          );
-        } else {
-          // Jika profil belum ada (ID 0), lakukan post (buat baru)
-          await apiService.postData(UserProfile.fromJson, updatedData, "user-profile");
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profil berhasil ditambahkan!')),
-          );
-        }
-        Navigator.pop(context, true); // Kembali ke layar sebelumnya dengan indikasi sukses
-      } catch (e) {
-        print("Error saving user profile: $e");
+    try {
+      if (_currentProfile != null && _currentProfile!.id != 0) {
+        // Jika profil sudah ada (memiliki ID), lakukan update
+        await apiService.updateData(UserProfile.fromJson, _currentProfile!.id, updatedData, "user-profiles"); // UBAH KE "user-profiles"
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal menyimpan profil: $e')),
+          const SnackBar(content: Text('Profil berhasil diperbarui!')),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
+      } else {
+        // Jika profil belum ada (ID 0), lakukan post (buat baru)
+        await apiService.postData(UserProfile.fromJson, updatedData, "user-profiles"); // UBAH KE "user-profiles"
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profil berhasil ditambahkan!')),
+        );
       }
+      // Setelah sukses menyimpan, muat ulang data profil di layar utama
+      await _loadUserProfile();
+    } catch (e) {
+      print("Error saving user profile: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan profil: $e')),
+      );
+      rethrow; // Melemparkan error agar bisa ditangkap oleh caller (dialog)
     }
   }
 
@@ -224,6 +215,198 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
     }
   }
 
+  // --- Fungsi untuk menampilkan dialog edit profil ---
+  void _showEditProfileDialog() {
+    // Pastikan _currentProfile tidak null sebelum mengisi controllers
+    if (_currentProfile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak ada data profil untuk diedit.')),
+      );
+      return;
+    }
+
+    // Isi controllers dengan data profil saat ini
+    // Ini penting agar dialog menampilkan data yang terbaru
+    _populateControllers(_currentProfile!);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        final _dialogFormKey = GlobalKey<FormState>(); // Kunci form untuk validasi di dalam dialog
+        
+        // Gunakan StatefulBuilder untuk mengelola state lokal di dalam dialog
+        // seperti status loading untuk tombol "Simpan"
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setStateDialog) {
+            bool _isSaving = false; // Status loading lokal untuk dialog
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              title: Text(
+                'Edit Profil Pengguna',
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: _dialogFormKey, // Terapkan key form untuk validasi di dialog
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min, // Agar dialog menyesuaikan konten
+                    children: [
+                      TextFormField(
+                        controller: _namaController,
+                        decoration: InputDecoration(
+                          labelText: 'Nama Lengkap',
+                          hintText: 'Masukkan nama lengkap Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nama tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15), // Spasi antar field
+                      TextFormField(
+                        controller: _nipController,
+                        decoration: InputDecoration(
+                          labelText: 'NIP',
+                          hintText: 'Masukkan NIP Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _nikController,
+                        decoration: InputDecoration(
+                          labelText: 'NIK',
+                          hintText: 'Masukkan NIK Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _nidnController,
+                        decoration: InputDecoration(
+                          labelText: 'NIDN',
+                          hintText: 'Masukkan NIDN Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _jabatanFungsionalController,
+                        decoration: InputDecoration(
+                          labelText: 'Jabatan Fungsional',
+                          hintText: 'Masukkan jabatan fungsional Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _jabatanIdController,
+                        decoration: InputDecoration(
+                          labelText: 'ID Jabatan',
+                          hintText: 'Masukkan ID jabatan Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
+                            return 'ID Jabatan harus berupa angka';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _handphoneController,
+                        decoration: InputDecoration(
+                          labelText: 'Nomor Handphone',
+                          hintText: 'Masukkan nomor handphone Anda',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        keyboardType: TextInputType.phone,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Tutup dialog
+                    // Setel ulang controllers agar tidak mempertahankan data yang belum disimpan
+                    _populateControllers(_currentProfile!);
+                  },
+                  child: Text(
+                    'Batal',
+                    style: GoogleFonts.poppins(color: Colors.black54),
+                  ),
+                ),
+                ElevatedButton(
+                  // Tombol dinonaktifkan jika sedang dalam proses penyimpanan
+                  onPressed: _isSaving ? null : () async {
+                    if (_dialogFormKey.currentState!.validate()) {
+                      setStateDialog(() { // Set state loading di dalam dialog
+                        _isSaving = true;
+                      });
+                      try {
+                        await _saveUserProfile(); // Panggil fungsi simpan
+                        // Jika berhasil disimpan, dialog akan ditutup
+                        if (mounted) {
+                          Navigator.pop(context);
+                        }
+                      } catch (e) {
+                        // Error sudah ditangani di _saveUserProfile
+                        // Tapi kita pastikan _isSaving kembali false
+                      } finally {
+                        if (mounted) {
+                          setStateDialog(() { // Pastikan _isSaving kembali false di dalam dialog
+                            _isSaving = false;
+                          });
+                        }
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal[700], // Warna tombol yang lebih kuat
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // Border radius lebih besar
+                    ),
+                  ),
+                  child: _isSaving // Tampilkan CircularProgressIndicator jika _isSaving true
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'Simpan',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -238,10 +421,16 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
           },
         ),
         title: Text(
-          "Edit Profil Pengguna",
+          "Profil Pengguna", // Judul disesuaikan karena ada tombol edit
           style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
+          // Tombol untuk membuka dialog edit
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: _isLoading ? null : _showEditProfileDialog, // Disable jika sedang loading
+            tooltip: 'Edit Profil',
+          ),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white), // Icon logout
             onPressed: _logout, // Panggil fungsi logout
@@ -253,128 +442,57 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
           ? const Center(child: CircularProgressIndicator(color: Colors.teal))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(20.0), // Padding yang lebih besar
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: _namaController,
-                      decoration: InputDecoration(
-                        labelText: 'Nama Lengkap',
-                        hintText: 'Masukkan nama lengkap Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Nama tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15), // Spasi antar field
-                    TextFormField(
-                      controller: _nipController,
-                      decoration: InputDecoration(
-                        labelText: 'NIP',
-                        hintText: 'Masukkan NIP Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _nikController,
-                      decoration: InputDecoration(
-                        labelText: 'NIK',
-                        hintText: 'Masukkan NIK Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _nidnController,
-                      decoration: InputDecoration(
-                        labelText: 'NIDN',
-                        hintText: 'Masukkan NIDN Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _jabatanFungsionalController,
-                      decoration: InputDecoration(
-                        labelText: 'Jabatan Fungsional',
-                        hintText: 'Masukkan jabatan fungsional Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _jabatanIdController,
-                      decoration: InputDecoration(
-                        labelText: 'ID Jabatan',
-                        hintText: 'Masukkan ID jabatan Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
-                          return 'ID Jabatan harus berupa angka';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _handphoneController,
-                      decoration: InputDecoration(
-                        labelText: 'Nomor Handphone',
-                        hintText: 'Masukkan nomor handphone Anda',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                      ),
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 30), // Spasi sebelum tombol
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _saveUserProfile,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal[700], // Warna tombol yang lebih kuat
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 18), // Padding lebih besar
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12), // Border radius lebih besar
-                          ),
-                          elevation: 5, // Tambahkan shadow
-                        ),
-                        child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : Text(
-                                'Simpan Perubahan',
-                                style: GoogleFonts.poppins(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProfileInfoRow('Nama Lengkap', _namaController.text),
+                  _buildProfileInfoRow('NIP', _nipController.text.isEmpty ? '-' : _nipController.text),
+                  _buildProfileInfoRow('NIK', _nikController.text.isEmpty ? '-' : _nikController.text),
+                  _buildProfileInfoRow('NIDN', _nidnController.text.isEmpty ? '-' : _nidnController.text),
+                  _buildProfileInfoRow('Jabatan Fungsional', _jabatanFungsionalController.text.isEmpty ? '-' : _jabatanFungsionalController.text),
+                  _buildProfileInfoRow('ID Jabatan', _jabatanIdController.text.isEmpty || _jabatanIdController.text == '0' ? '-' : _jabatanIdController.text),
+                  _buildProfileInfoRow('Nomor Handphone', _handphoneController.text.isEmpty ? '-' : _handphoneController.text),
+                  const SizedBox(height: 30),
+                ],
               ),
             ),
+    );
+  }
+
+  // Widget pembantu untuk menampilkan baris informasi profil
+  Widget _buildProfileInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 15.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey[300]!),
+            ),
+            child: Text(
+              value,
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
