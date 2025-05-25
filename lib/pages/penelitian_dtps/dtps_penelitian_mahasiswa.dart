@@ -23,8 +23,8 @@ class DtpsPenelitianMahasiswaState extends State<DtpsPenelitianMahasiswa> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
     _fetchUserId();
+    _fetchData();
   }
 
   Future<void> _fetchUserId() async {
@@ -34,12 +34,22 @@ class DtpsPenelitianMahasiswaState extends State<DtpsPenelitianMahasiswa> {
     });
   }
 
+  List<DtpsAioModel> filterByIdAndTahun(
+      List<DtpsAioModel> list,
+      int userId,
+      int tahunAjaranId) {
+    return list.where((item) =>
+    // item.tahunAjaranId == tahunAjaranId  &&
+        item.userId == userId
+    ).toList();
+  }
+
   Future<void> _fetchData() async {
     try {
       final data =
       await apiService.getData(DtpsAioModel.fromJson, endPoint);
       setState(() {
-        dataList = data;
+        dataList = filterByIdAndTahun(data, userId, widget.tahunAjaran.id);
       });
     } catch (e) {
       print("Error fetching data: $e");
