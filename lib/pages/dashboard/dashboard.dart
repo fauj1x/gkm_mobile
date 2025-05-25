@@ -12,6 +12,7 @@ import 'package:gkm_mobile/models/user_profiles.dart'; // Menggunakan user_profi
 import 'package:gkm_mobile/pages/dashboard/profil.dart'; // Menggunakan profil.dart sesuai permintaan (asumsi ini UserProfileFormScreen)
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Diperlukan untuk SharedPreferences
+import 'package:url_launcher/url_launcher.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -258,7 +259,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Lihat perkembangan terbaru dan kelola data dengan mudah di sini!',
+                              'Lihat perkembangan terbaru dan kelola data dengan lebih mudah di website GKM POLIJE!',
                               style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 color: Colors.grey[700],
@@ -268,8 +269,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             SizedBox(
                               height: 36,
                               child: OutlinedButton(
-                                onPressed: () {
-                                  // Aksi ketika tombol ditekan
+                                onPressed: () async {
+                                  const url = "https://gkm-polije.com";
+                                  await launchUrl(Uri.parse(url));
                                 },
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(color: Colors.teal.shade700),
@@ -278,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Selengkapnya',
+                                  'Kunjungi Website',
                                   style: GoogleFonts.poppins(
                                     fontSize: 13,
                                     color: Colors.teal[700],
