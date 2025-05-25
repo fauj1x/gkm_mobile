@@ -177,6 +177,10 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                       if (newValue != null) {
                         setState(() {
                           selectedTahunAjaran = newValue;
+                          // ubah print berikut agar sesuai format keinginan
+                          final tahunAwal = newValue.tahunAjaran.split('/').first;
+                          final tahunAkhir = newValue.tahunAjaran.split('/').last;
+                          print("Selected Tahun Ajaran: $tahunAwal-$tahunAkhir-${newValue.semester.toLowerCase()}");
                         });
                         // Tidak perlu simpan ke SharedPreferences
                         await fetchAndMapDataFromAPI();
@@ -186,9 +190,11 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                         ? const Text('Memuat...')
                         : const Text('Pilih Tahun Ajaran'),
                     items: tahunAjaranList.map<DropdownMenuItem<TahunAjaran>>((TahunAjaran value) {
+                      final tahunAwal = value.tahunAjaran.split('/').first;
+                      final tahunAkhir = value.tahunAjaran.split('/').last;
                       return DropdownMenuItem<TahunAjaran>(
                         value: value,
-                        child: Text("${value.tahunAjaran} - ${value.semester}"),
+                        child: Text("$tahunAwal-$tahunAkhir-${value.semester.toLowerCase()}"),
                       );
                     }).toList(),
                   ),
@@ -210,9 +216,12 @@ class _tabelevaluasiState extends State<tabelevaluasi> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                builder(selectedTahunAjaran!),
+                            builder: (context) => builder(selectedTahunAjaran!),
                           ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Tahun ajaran belum dipilih atau halaman tidak ditemukan")),
                         );
                       }
                     },

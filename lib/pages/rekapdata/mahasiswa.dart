@@ -39,7 +39,7 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
         dataList = [
           [
             "1",
-            "Mahasiswa aktif",
+            "Seleksi Mahasiswa",
             data["Tabel 2.a Seleksi Mahasiswa"]["count"].toString(),
             data["Tabel 2.a Seleksi Mahasiswa"]["status"]
           ],
