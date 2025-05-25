@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
+import 'package:gkm_mobile/services/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../dashboard/dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,21 +38,13 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward();
+  }
 
-    Future.delayed(Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              OnboardingScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: ScaleTransition(scale: animation, child: child),
-            );
-          },
-        ),
-      );
-    });
+  Future<bool> _delayedAuthCheck(BuildContext context) async {
+    // enteni sek 2 detik ben ketok apik
+    await Future.delayed(const Duration(seconds: 2));
+    // lagek jajal login
+    return Provider.of<AuthProvider>(context, listen: false).checkAuth();
   }
 
   @override
@@ -59,25 +55,39 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ScaleTransition(
-              scale: _scaleAnimation,
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: Image.asset(
-                  'assets/images/logoGKM.png', // Ganti dengan logo BICOPI
-                  width: 150,
-                ),
+    return FutureBuilder<bool>(
+      future: _delayedAuthCheck(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show splash while waiting
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Image.asset(
+                        'assets/images/logoGKM.png',
+                        width: 150,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const CircularProgressIndicator(),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        } else {
+          bool isAuthenticated = snapshot.data ?? false;
+          // Navigate to the correct screen
+          return isAuthenticated ? DashboardScreen() : OnboardingScreen();
+        }
+      },
     );
   }
 }
