@@ -23,8 +23,8 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
     _fetchUserId();
+    _fetchData();
   }
 
   Future<void> _fetchUserId() async {
@@ -34,12 +34,22 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
     });
   }
 
+  List<SeleksiMahasiswaBaruModel> filterByIdAndTahun(
+      List<SeleksiMahasiswaBaruModel> list,
+      int userId,
+      int tahunAjaranId) {
+    return list.where((item) =>
+    item.tahunAjaranId == tahunAjaranId &&
+        item.userId == userId
+    ).toList();
+  }
+
   Future<void> _fetchData() async {
     try {
       final data = await apiService.getData(
           SeleksiMahasiswaBaruModel.fromJson, endPoint);
       setState(() {
-        dataList = data;
+        dataList = filterByIdAndTahun(data, userId, widget.tahunAjaran.id);
       });
     } catch (e) {
       print("Error fetching data: $e");
@@ -93,8 +103,8 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
           children: [
             Text(
               menuName,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 2),
             Text(
@@ -139,7 +149,8 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
                 const SizedBox(height: 10),
                 Text(
                   "Tabel $menuName $subMenuName",
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
 
@@ -345,32 +356,35 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
               children: [
                 TextField(
                     controller: controller1Controller,
-                    decoration: const InputDecoration(labelText: 'Tahun Akademik')),
+                    decoration:
+                        const InputDecoration(labelText: 'Tahun Akademik')),
                 TextField(
                     controller: controller2Controller,
-                    decoration: const InputDecoration(labelText: 'Daya Tampung')),
+                    decoration:
+                        const InputDecoration(labelText: 'Daya Tampung')),
                 TextField(
                     controller: controller3Controller,
                     decoration: const InputDecoration(labelText: 'Pendaftar')),
                 TextField(
                     controller: controller4Controller,
-                    decoration: const InputDecoration(labelText: 'Lulus Seleksi')),
+                    decoration:
+                        const InputDecoration(labelText: 'Lulus Seleksi')),
                 TextField(
                     controller: controller5Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Baru Reguler')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Baru Reguler')),
                 TextField(
                     controller: controller6Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Baru Transfer')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Baru Transfer')),
                 TextField(
                     controller: controller7Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Aktif Reguler')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Aktif Reguler')),
                 TextField(
                     controller: controller8Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Aktif Transfer')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Aktif Transfer')),
               ],
             ),
           ),
@@ -433,32 +447,35 @@ class SeleksiMahasiswaBaruState extends State<SeleksiMahasiswaBaru> {
               children: [
                 TextField(
                     controller: controller1Controller,
-                    decoration: const InputDecoration(labelText: 'Tahun Akademik')),
+                    decoration:
+                        const InputDecoration(labelText: 'Tahun Akademik')),
                 TextField(
                     controller: controller2Controller,
-                    decoration: const InputDecoration(labelText: 'Daya Tampung')),
+                    decoration:
+                        const InputDecoration(labelText: 'Daya Tampung')),
                 TextField(
                     controller: controller3Controller,
                     decoration: const InputDecoration(labelText: 'Pendaftar')),
                 TextField(
                     controller: controller4Controller,
-                    decoration: const InputDecoration(labelText: 'Lulus Seleksi')),
+                    decoration:
+                        const InputDecoration(labelText: 'Lulus Seleksi')),
                 TextField(
                     controller: controller5Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Baru Reguler')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Baru Reguler')),
                 TextField(
                     controller: controller6Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Baru Transfer')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Baru Transfer')),
                 TextField(
                     controller: controller7Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Aktif Reguler')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Aktif Reguler')),
                 TextField(
                     controller: controller8Controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Mahasiswa Aktif Transfer')),
+                    decoration: const InputDecoration(
+                        labelText: 'Mahasiswa Aktif Transfer')),
               ],
             ),
           ),

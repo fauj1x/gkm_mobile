@@ -22,8 +22,8 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
     _fetchUserId();
+    _fetchData();
   }
 
   Future<void> _fetchUserId() async {
@@ -33,12 +33,22 @@ class MahasiswaAsingState extends State<MahasiswaAsing> {
     });
   }
 
+  List<MahasiswaAsingModel> filterByIdAndTahun(
+      List<MahasiswaAsingModel> list,
+      int userId,
+      int tahunAjaranId) {
+    return list.where((item) =>
+    item.tahunAjaranId == tahunAjaranId &&
+        item.userId == userId
+    ).toList();
+  }
+
   Future<void> _fetchData() async {
     try {
       final data =
           await apiService.getData(MahasiswaAsingModel.fromJson, endPoint);
       setState(() {
-        dataList = data;
+        dataList = filterByIdAndTahun(data, userId, widget.tahunAjaran.id);
       });
     } catch (e) {
       print("Error fetching data: $e");
