@@ -40,14 +40,14 @@ class _PrestasiMahasiswaState extends State<PrestasiMahasiswa> {
           [
             "1",
             "Prestasi Akademik Mahasiswa",
-            data["Tabel 8.b.1) Prestasi Akademik Mahasiswa"]["count"].toString(),
-            data["Tabel 8.b.1) Prestasi Akademik Mahasiswa"]["status"]
+            data["Tabel 8.b.1) Prestasi Akademik"]["count"].toString(),
+            data["Tabel 8.b.1) Prestasi Akademik"]["status"]
           ],
           [
             "2",
             "Prestasi Non-akademik Mahasiswa",
-            data["Tabel 8.b.2) Prestasi Non-akademik Mahasiswa"]["count"].toString(),
-            data["Tabel 8.b.2) Prestasi Non-akademik Mahasiswa"]["status"]
+            data["Tabel 8.b.2) Prestasi Non-akademik"]["count"].toString(),
+            data["Tabel 8.b.2) Prestasi Non-akademik"]["status"]
           ],
 
         ];

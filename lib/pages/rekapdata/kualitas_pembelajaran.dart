@@ -40,14 +40,14 @@ class _KualitasPembelajaranState extends State<KualitasPembelajaran> {
           [
             "1",
             "Kurikulum, Capaian Pembelajaran, dan Rencana Pembelajaran",
-            data["Tabel 5.a Kurikulum, Capaian Pembelajaran, dan Rencana Pembelajaran"]["count"].toString(),
-            data["Tabel 5.a Kurikulum, Capaian Pembelajaran, dan Rencana Pembelajaran"]["status"]
+            data["Tabel 5.a Kurikulum & Rencana Pembelajaran"]["count"].toString(),
+            data["Tabel 5.a Kurikulum & Rencana Pembelajaran"]["status"]
           ],
           [
             "2",
             "Integrasi Kegiatan Penelitian/PkM dalam Pembelajaran",
-            data["Tabel 5.b Integrasi Kegiatan Penelitian/PkM dalam Pembelajaran"]["count"].toString(),
-            data["Tabel 5.b Integrasi Kegiatan Penelitian/PkM dalam Pembelajaran"]["status"]
+            data["Tabel 5.b Integrasi Penelitian/PkM"]["count"].toString(),
+            data["Tabel 5.b Integrasi Penelitian/PkM"]["status"]
           ],
           [
             "3",

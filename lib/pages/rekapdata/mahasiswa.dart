@@ -46,8 +46,8 @@ class _MahasiswaPageState extends State<MahasiswaPage> {
           [
             "2",
             "Mahasiswa Asing",
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["count"].toString(),
-            data["Tabel 2.b Mahasiswa Asing\t\t"]["status"]
+            data["Tabel 2.b Mahasiswa Asing"]["count"].toString(),
+            data["Tabel 2.b Mahasiswa Asing"]["status"]
           ],
 
         ];

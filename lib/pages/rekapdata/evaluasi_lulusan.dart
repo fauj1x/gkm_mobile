@@ -41,26 +41,26 @@ class _EvaluasiLulusanState extends State<EvaluasiLulusan> {
           [
             "1",
             "Waktu Tunggu Lulusan",
-            data["Tabel 8.d.1) Waktu Tunggu Lulusan"]["count"].toString(),
-            data["Tabel 8.d.1) Waktu Tunggu Lulusan"]["status"]
+            data["Tabel 8.d.1) Waktu Tunggu"]["count"].toString(),
+            data["Tabel 8.d.1) Waktu Tunggu"]["status"]
           ],
           [
             "2",
             "Kesesuaian Bidang Kerja Lulusan",
-            data["Tabel 8.d.2) Kesesuaian Bidang Kerja Lulusan"]["count"].toString(),
-            data["Tabel 8.d.2) Kesesuaian Bidang Kerja Lulusan"]["status"]
+            data["Tabel 8.d.2) Kesesuaian Kerja"]["count"].toString(),
+            data["Tabel 8.d.2) Kesesuaian Kerja"]["status"]
           ],
           [
             "3",
             "Tempat Kerja Lulusan",
-            data["Tabel 8.e.1) Tempat Kerja Lulusan"]["count"].toString(),
-            data["Tabel 8.e.1) Tempat Kerja Lulusan"]["status"]
+            data["Tabel 8.e.1) Tempat Kerja"]["count"].toString(),
+            data["Tabel 8.e.1) Tempat Kerja"]["status"]
           ],
           [
             "4",
             "Kepuasan Pengguna Lulusan",
-            data["Tabel 8.e.2) Kepuasan Pengguna Lulusan"]["count"].toString(),
-            data["Tabel 8.e.2) Kepuasan Pengguna Lulusan"]["status"]
+            data["Tabel 8.e.2) Kepuasan Pengguna"]["count"].toString(),
+            data["Tabel 8.e.2) Kepuasan Pengguna"]["status"]
           ],
 
         ];

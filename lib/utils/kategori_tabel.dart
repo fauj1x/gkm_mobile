@@ -36,18 +36,18 @@ final Map<String, List<String>> kategoriTabel = {
     "Tabel 5.c Kepuasan Mahasiswa",
   ],
   "Penelitian DTPS": [
-    "Tabel 6.a Penelitian DTPS yang Melibatkan Mahasiswa",
-    "Tabel 6.b Penelitian DTPS yang Menjadi Rujukan Tema Tesis/Disertasi",
+    "Tabel 6.a Penelitian DTPS + Mahasiswa",
+    "Tabel 6.b Penelitian Rujukan Tesis",
   ],
   "PKM DTPS": [
-    "Tabel 7 PkM DTPS yang Melibatkan Mahasiswa",
+    "Tabel 7 PkM DTPS + Mahasiswa",
   ],
   "IPK Lulusan": [
     "Tabel 8.a IPK Lulusan",
   ],
   "Prestasi Mahasiswa": [
-    "Tabel 8.b.1) Prestasi Akademik Mahasiswa",
-    "Tabel 8.b.2) Prestasi Non-akademik Mahasiswa",
+    "Tabel 8.b.1) Prestasi Akademik",
+    "Tabel 8.b.2) Prestasi Non-akademik",
   ],
   "Masa Studi Lulusan": [
     "Tabel 8.c Masa Studi Lulusan",
@@ -59,12 +59,12 @@ final Map<String, List<String>> kategoriTabel = {
     "Tabel 8.e.2) Kepuasan Pengguna Lulusan",
   ],
   "Luaran Karya Mahasiswa": [
-    "Tabel 8.f.1) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah Mahasiswa",
-    "Tabel 8.f.2) Karya Ilmiah Mahasiswa yang Disitasi",
-    "Tabel 8.f.3) Produk/Jasa Mahasiswa yang Diadopsi oleh Industri/Masyarakat",
-    "Tabel 8.f.4) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Paten, Paten Sederhana)",
-    "Tabel 8.f.5) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Hak Cipta, Desain Produk Industri, dll.)",
-    "Tabel 8.f.6) Luaran Penelitian yang Dihasilkan Mahasiswa - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial",
-    "Tabel 8.f.7) Luaran Penelitian yang Dihasilkan Mahasiswa - Buku ber-ISBN, Book Chapter",
+    "Tabel 8.f.1) Publikasi Mahasiswa",
+    "Tabel 8.f.2) Sitasi Mahasiswa",
+    "Tabel 8.f.3) Produk Mahasiswa",
+    "Tabel 8.f.4) HKI Mahasiswa - Paten",
+    "Tabel 8.f.5) HKI Mahasiswa - Hak Cipta",
+    "Tabel 8.f.6) Teknologi Mahasiswa",
+    "Tabel 8.f.7) Buku Mahasiswa",
   ],
 };

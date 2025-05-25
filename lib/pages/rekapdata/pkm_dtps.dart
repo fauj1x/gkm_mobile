@@ -40,8 +40,8 @@ class _PkmDtpsState extends State<Pkm_Dtps> {
           [
             "1",
             "PKM DTPS yang Melibatkan Mahasiswa",
-            data["Tabel 7 PkM DTPS yang Melibatkan Mahasiswa"]["count"].toString(),
-            data["Tabel 7 PkM DTPS yang Melibatkan Mahasiswa"]["status"]
+            data["Tabel 7 PkM DTPS + Mahasiswa"]["count"].toString(),
+            data["Tabel 7 PkM DTPS + Mahasiswa"]["status"]
           ],
 
 

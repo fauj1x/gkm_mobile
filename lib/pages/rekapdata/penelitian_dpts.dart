@@ -40,14 +40,14 @@ class _PenelitianDtpsState extends State<PenelitianDtps> {
           [
             "1",
             "Penelitian DTPS yang Melibatkan Mahasiswa",
-            data["Tabel 6.a Penelitian DTPS yang Melibatkan Mahasiswa"]["count"].toString(),
-            data["Tabel 6.a Penelitian DTPS yang Melibatkan Mahasiswa"]["status"]
+            data["Tabel 6.a Penelitian DTPS + Mahasiswa"]["count"].toString(),
+            data["Tabel 6.a Penelitian DTPS + Mahasiswa"]["status"]
           ],
           [
             "2",
             "Penelitian DTPS yang Menjadi Rujukan Tema Tesis/Disertasi",
-            data["Tabel 6.b Penelitian DTPS yang Menjadi Rujukan Tema Tesis/Disertasi"]["count"].toString(),
-            data["Tabel 6.b Penelitian DTPS yang Menjadi Rujukan Tema Tesis/Disertasi"]["status"]
+            data["Tabel 6.b Penelitian Rujukan Tesis"]["count"].toString(),
+            data["Tabel 6.b Penelitian Rujukan Tesis"]["status"]
           ],
 
 

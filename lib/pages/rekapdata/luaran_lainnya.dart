@@ -40,26 +40,26 @@ class _LuaranlainnyaState extends State<luaranlainnya> {
           [
             "1",
             "Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)",
-            data["Tabel 3.b.7) Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)"]["count"].toString(),
-            data["Tabel 3.b.7) Luaran Penelitian/PkM Lainnya - HKI (Paten, Paten Sederhana)"]["status"]
+            data["Tabel 3.b.7) Luaran HKI - Paten"]["count"].toString(),
+            data["Tabel 3.b.7) Luaran HKI - Paten"]["status"]
           ],
           [
             "2",
             "Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)",
-            data["Tabel 3.b.8) Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["count"].toString(),
-            data["Tabel 3.b.8) Luaran Penelitian/PkM Lainnya - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["status"]
+            data["Tabel 3.b.8) Luaran HKI - Hak Cipta"]["count"].toString(),
+            data["Tabel 3.b.8) Luaran HKI - Hak Cipta"]["status"]
           ],
           [
             "3",
             "Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial",
-            data["Tabel 3.b.9) Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["count"].toString(),
-            data["Tabel 3.b.9) Luaran Penelitian/PkM Lainnya - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["status"]
+            data["Tabel 3.b.9) Teknologi Tepat Guna DTPS"]["count"].toString(),
+            data["Tabel 3.b.9) Teknologi Tepat Guna DTPS"]["status"]
           ],
           [
             "4",
             "Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter",
-            data["Tabel 3.b.10) Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter"]["count"].toString(),
-            data["Tabel 3.b.10) Luaran Penelitian/PkM Lainnya - Buku ber-ISBN, Book Chapter"]["status"]
+            data["Tabel 3.b.10) Buku/Book Chapter DTPS"]["count"].toString(),
+            data["Tabel 3.b.10) Buku/Book Chapter DTPS"]["status"]
           ],
         ];
       });

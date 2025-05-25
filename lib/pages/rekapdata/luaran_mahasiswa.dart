@@ -40,44 +40,44 @@ class _LuaranmahasiswaState extends State<luaranmahasiswa> {
           [
             "1",
             "Pagelaran/Pameran/Presentasi/Publikasi Ilmiah Mahasiswa",
-            data["Tabel 8.f.1) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah Mahasiswa"]["count"].toString(),
-            data["Tabel 8.f.1) Pagelaran/Pameran/Presentasi/Publikasi Ilmiah Mahasiswa"]["status"]
+            data["Tabel 8.f.1) Publikasi Mahasiswa"]["count"].toString(),
+            data["Tabel 8.f.1) Publikasi Mahasiswa"]["status"]
           ],
           [
             "2",
             "Karya Ilmiah Mahasiswa yang Disitasi",
-            data["Tabel 8.f.2) Karya Ilmiah Mahasiswa yang Disitasi"]["count"].toString(),
-            data["Tabel 8.f.2) Karya Ilmiah Mahasiswa yang Disitasi"]["status"]
+            data["Tabel 8.f.2) Sitasi Mahasiswa"]["count"].toString(),
+            data["Tabel 8.f.2) Sitasi Mahasiswa"]["status"]
           ],
           [
             "3",
             "Produk/Jasa Mahasiswa yang Diadopsi oleh Industri/Masyarakat",
-            data["Tabel 8.f.3) Produk/Jasa Mahasiswa yang Diadopsi oleh Industri/Masyarakat"]["count"].toString(),
-            data["Tabel 8.f.3) Produk/Jasa Mahasiswa yang Diadopsi oleh Industri/Masyarakat"]["status"]
+            data["Tabel 8.f.3) Produk Mahasiswa"]["count"].toString(),
+            data["Tabel 8.f.3) Produk Mahasiswa"]["status"]
           ],
           [
             "4",
             "Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Paten, Paten Sederhana)",
-            data["Tabel 8.f.4) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Paten, Paten Sederhana)"]["count"].toString(),
-            data["Tabel 8.f.4) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Paten, Paten Sederhana)"]["status"]
+            data["Tabel 8.f.4) HKI Mahasiswa - Paten"]["count"].toString(),
+            data["Tabel 8.f.4) HKI Mahasiswa - Paten"]["status"]
           ],
           [
             "5",
             "Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Hak Cipta, Desain Produk Industri, dll.)",
-            data["Tabel 8.f.5) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["count"].toString(),
-            data["Tabel 8.f.5) Luaran Penelitian yang Dihasilkan Mahasiswa - HKI (Hak Cipta, Desain Produk Industri, dll.)"]["status"]
+            data["Tabel 8.f.5) HKI Mahasiswa - Hak Cipta"]["count"].toString(),
+            data["Tabel 8.f.5) HKI Mahasiswa - Hak Cipta"]["status"]
           ],
           [
             "6",
             "Luaran Penelitian yang Dihasilkan Mahasiswa - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial",
-            data["Tabel 8.f.6) Luaran Penelitian yang Dihasilkan Mahasiswa - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["count"].toString(),
-            data["Tabel 8.f.6) Luaran Penelitian yang Dihasilkan Mahasiswa - Teknologi Tepat Guna, Produk, Karya Seni, Rekayasa Sosial"]["status"]
+            data["Tabel 8.f.6) Teknologi Mahasiswa"]["count"].toString(),
+            data["Tabel 8.f.6) Teknologi Mahasiswa"]["status"]
           ],
           [
             "7",
             "Luaran Penelitian yang Dihasilkan Mahasiswa - Buku ber-ISBN, Book Chapter",
-            data["Tabel 8.f.7) Luaran Penelitian yang Dihasilkan Mahasiswa - Buku ber-ISBN, Book Chapter"]["count"].toString(),
-            data["Tabel 8.f.7) Luaran Penelitian yang Dihasilkan Mahasiswa - Buku ber-ISBN, Book Chapter"]["status"]
+            data["Tabel 8.f.7) Buku Mahasiswa"]["count"].toString(),
+            data["Tabel 8.f.7) Buku Mahasiswa"]["status"]
           ],
 
         ];
