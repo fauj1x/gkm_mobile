@@ -1,10 +1,10 @@
 // lib/screens/user_profile_form_screen.dart
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/user_profiles.dart'; // Sesuaikan path ini
+import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import GoogleFonts
-import 'package:gkm_mobile/pages/login/login.dart';// Asumsi path ke LoginScreen Anda
 
 class UserProfileFormScreen extends StatefulWidget {
   final UserProfile? initialProfile; // Menerima data profil awal (opsional)
@@ -218,7 +218,7 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
       // Navigasi ke layar login dan hapus semua rute sebelumnya
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => login()), // Ganti dengan LoginScreen Anda
+        MaterialPageRoute(builder: (context) => OnboardingScreen()), // Ganti dengan LoginScreen Anda
         (Route<dynamic> route) => false, // Hapus semua rute di stack
       );
     }

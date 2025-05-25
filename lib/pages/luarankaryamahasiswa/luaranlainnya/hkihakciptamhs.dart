@@ -27,6 +27,15 @@ class HkiHakCiptaMahasiswaState extends State<HkiHakCiptaMahasiswa> {
     _fetchUserId();
     _fetchData();
   }
+  List<HkiHakCiptaMhs> filterByIdAndTahun(
+      List<HkiHakCiptaMhs> list,
+      int userId,
+      int tahunAjaranId) {
+    return list.where((item) =>
+    //item.tahunAjaranId == tahunAjaranId &&
+        item.userId == userId
+    ).toList();
+  }
 
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -39,7 +48,7 @@ class HkiHakCiptaMahasiswaState extends State<HkiHakCiptaMahasiswa> {
     try {
       final data = await apiService.getData(HkiHakCiptaMhs.fromJson, endPoint);
       setState(() {
-        dataList = data;
+        dataList = filterByIdAndTahun(data, userId, widget.tahunAjaran?.id ?? 0);
       });
     } catch (e) {
       print("Error fetching data: $e");
