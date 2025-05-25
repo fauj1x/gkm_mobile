@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:gkm_mobile/services/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 /// Utility untuk mengubah CamelCase ke snake_case
 String _camelToSnake(String input) {
@@ -179,4 +181,25 @@ class ApiService {
     }
   }
 
+  Future<Uint8List> exportExcel({
+    required int userId,
+  }) async {
+    final url = Uri.parse("$baseUrl/export-excel/$userId");
+    final token = await AuthProvider().getToken();
+
+    final response = await http.get(
+      url,
+      headers: {
+        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('DEBUG: Berhasil mengunduh file Excel');
+      return response.bodyBytes;
+    } else {
+      throw Exception("Gagal mengunduh file: ${response.body}");
+    }
+  }
 }
