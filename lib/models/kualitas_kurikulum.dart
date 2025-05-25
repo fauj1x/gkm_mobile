@@ -1,98 +1,117 @@
-class kualitas_kurikulum { // Nama kelas diubah
+class KualitasKurikulum {
   final int? id;
   final int userId;
-  final String nama_mata_kuliah; // Dari struktur data baru
-  final String kode_mata_kuliah; // Dari struktur data baru
-  final String mata_kuliah_kompetensi; // Dari struktur data baru
-  final int sks_kuliah; // Dari struktur data baru (sesuaikan tipe data jika perlu)
-  final int sks_seminar; // Dari struktur data baru (sesuaikan tipe data jika perlu)
-  final int sks_praktikum; // Dari struktur data baru (sesuaikan tipe data jika perlu)
-  final int konversi_sks; // Dari struktur data baru (sesuaikan tipe data jika perlu)
-  final String semester; // Dari struktur data baru
-  final String metode_pembelajaran; // Dari struktur data baru
-  final String dokumen; // Dari struktur data baru
-  final String unit_penyelenggara; // Dari struktur data baru
-  final String capaian_kuliah_sikap; // Dari struktur data baru
-  final String capaian_kuliah_pengetahuan; // Dari struktur data baru
-  final String capaian_kuliah_keterampilan_umum; // Dari struktur data baru
-  final String capaian_kuliah_keterampilan_khusus; // Dari struktur data baru
-  final String tahun; // Dari struktur data baru (sesuaikan tipe data jika perlu)
+  final String namaMataKuliah;
+  final String kodeMataKuliah;
+  final bool? mataKuliahKompetensi;
+  final int? sksKuliah;
+  final int? sksSeminar;
+  final int? sksPraktikum;
+  final int? konversiSks;
+  final int? semester;
+  final String? metodePembelajaran;
+  final String? dokumen;
+  final String? unitPenyelenggara;
+  final bool? capaianKuliahSikap;
+  final bool? capaianKuliahPengetahuan;
+  final bool? capaianKuliahKeterampilanUmum;
+  final bool? capaianKuliahKeterampilanKhusus;
+  final String? tahun;
   final DateTime? deletedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
- kualitas_kurikulum({ // Constructor disesuaikan
+  KualitasKurikulum({
     this.id,
     required this.userId,
-    required this.nama_mata_kuliah,
-    required this.kode_mata_kuliah,
-    required this.mata_kuliah_kompetensi,
-    required this.sks_kuliah,
-    required this.sks_seminar,
-    required this.sks_praktikum,
-    required this.konversi_sks,
-    required this.semester,
-    required this.metode_pembelajaran,
-    required this.dokumen,
-    required this.unit_penyelenggara,
-    required this.capaian_kuliah_sikap,
-    required this.capaian_kuliah_pengetahuan,
-    required this.capaian_kuliah_keterampilan_umum,
-    required this.capaian_kuliah_keterampilan_khusus,
-    required this.tahun,
+    required this.namaMataKuliah,
+    required this.kodeMataKuliah,
+    this.mataKuliahKompetensi,
+    this.sksKuliah,
+    this.sksSeminar,
+    this.sksPraktikum,
+    this.konversiSks,
+    this.semester,
+    this.metodePembelajaran,
+    this.dokumen,
+    this.unitPenyelenggara,
+    this.capaianKuliahSikap,
+    this.capaianKuliahPengetahuan,
+    this.capaianKuliahKeterampilanUmum,
+    this.capaianKuliahKeterampilanKhusus,
+    this.tahun,
     this.deletedAt,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory kualitas_kurikulum.fromJson(Map<String, dynamic> json) { // Factory disesuaikan
-    return kualitas_kurikulum( // Nama kelas diubah
-      id: json['id'] != null ? int.tryParse(json['id'].toString()) : null,
-      userId: int.tryParse(json['user_id'].toString()) ?? 0,
-      nama_mata_kuliah: json['nama_mata_kuliah'] ?? '',
-      kode_mata_kuliah: json['kode_mata_kuliah'] ?? '',
-      mata_kuliah_kompetensi: json['mata_kuliah_kompetensi'] ?? '',
-      sks_kuliah: int.tryParse(json['sks_kuliah'].toString()) ?? 0, // Ambil dan parse
-      sks_seminar: int.tryParse(json['sks_seminar'].toString()) ?? 0, // Ambil dan parse
-      sks_praktikum: int.tryParse(json['sks_praktikum'].toString()) ?? 0, // Ambil dan parse
-      konversi_sks: int.tryParse(json['konversi_sks'].toString()) ?? 0, // Ambil dan parse
-      semester: json['semester'] ?? '',
-      metode_pembelajaran: json['metode_pembelajaran'] ?? '',
-      dokumen: json['dokumen'] ?? '',
-      unit_penyelenggara: json['unit_penyelenggara'] ?? '',
-      capaian_kuliah_sikap: json['capaian_kuliah_sikap'] ?? '',
-      capaian_kuliah_pengetahuan: json['capaian_kuliah_pengetahuan'] ?? '',
-      capaian_kuliah_keterampilan_umum: json['capaian_kuliah_keterampilan_umum'] ?? '',
-      capaian_kuliah_keterampilan_khusus: json['capaian_kuliah_keterampilan_khusus'] ?? '',
-      tahun: json['tahun'] ?? '', // Ambil dari JSON
+  factory KualitasKurikulum.fromJson(Map<String, dynamic> json) {
+    return KualitasKurikulum(
+      id: json['id'] as int?,
+      userId: json['user_id'] as int? ?? 0,
+      namaMataKuliah: json['nama_mata_kuliah'] ?? '',
+      kodeMataKuliah: json['kode_mata_kuliah'] ?? '',
+      mataKuliahKompetensi: json['mata_kuliah_kompetensi'] == null
+          ? null
+          : json['mata_kuliah_kompetensi'] == 1,
+      sksKuliah: json['sks_kuliah'] as int?,
+      sksSeminar: json['sks_seminar'] as int?,
+      sksPraktikum: json['sks_praktikum'] as int?,
+      konversiSks: json['konversi_sks'] as int?,
+      semester: json['semester'] as int?,
+      metodePembelajaran: json['metode_pembelajaran'],
+      dokumen: json['dokumen'],
+      unitPenyelenggara: json['unit_penyelenggara'],
+      capaianKuliahSikap: json['capaian_kuliah_sikap'] == null
+          ? null
+          : json['capaian_kuliah_sikap'] == 1,
+      capaianKuliahPengetahuan: json['capaian_kuliah_pengetahuan'] == null
+          ? null
+          : json['capaian_kuliah_pengetahuan'] == 1,
+      capaianKuliahKeterampilanUmum: json['capaian_kuliah_keterampilan_umum'] == null
+          ? null
+          : json['capaian_kuliah_keterampilan_umum'] == 1,
+      capaianKuliahKeterampilanKhusus: json['capaian_kuliah_keterampilan_khusus'] == null
+          ? null
+          : json['capaian_kuliah_keterampilan_khusus'] == 1,
+      tahun: json['tahun'],
       deletedAt: json['deleted_at'] != null
-          ? DateTime.tryParse(json['deleted_at'].toString())
+          ? DateTime.tryParse(json['deleted_at'])
           : null,
-      createdAt: DateTime.parse(json['created_at'].toString()),
-      updatedAt: DateTime.parse(json['updated_at'].toString()),
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    // Untuk operasi POST (menambah data), biasanya hanya kirim field data
     return {
+      'id': id,
       'user_id': userId,
-      'nama_mata_kuliah': nama_mata_kuliah,
-      'kode_mata_kuliah': kode_mata_kuliah,
-      'mata_kuliah_kompetensi': mata_kuliah_kompetensi,
-      'sks_kuliah': sks_kuliah,
-      'sks_seminar': sks_seminar,
-      'sks_praktikum': sks_praktikum,
-      'konversi_sks': konversi_sks,
+      'nama_mata_kuliah': namaMataKuliah,
+      'kode_mata_kuliah': kodeMataKuliah,
+      'mata_kuliah_kompetensi': mataKuliahKompetensi == true ? 1 : 0,
+      'sks_kuliah': sksKuliah,
+      'sks_seminar': sksSeminar,
+      'sks_praktikum': sksPraktikum,
+      'konversi_sks': konversiSks,
       'semester': semester,
-      'metode_pembelajaran': metode_pembelajaran,
+      'metode_pembelajaran': metodePembelajaran,
       'dokumen': dokumen,
-      'unit_penyelenggara': unit_penyelenggara,
-      'capaian_kuliah_sikap': capaian_kuliah_sikap,
-      'capaian_kuliah_pengetahuan': capaian_kuliah_pengetahuan,
-      'capaian_kuliah_keterampilan_umum': capaian_kuliah_keterampilan_umum,
-      'capaian_kuliah_keterampilan_khusus': capaian_kuliah_keterampilan_khusus,
-      'tahun': tahun, // Kirim
+      'unit_penyelenggara': unitPenyelenggara,
+      'capaian_kuliah_sikap': capaianKuliahSikap == true ? 1 : 0,
+      'capaian_kuliah_pengetahuan': capaianKuliahPengetahuan == true ? 1 : 0,
+      'capaian_kuliah_keterampilan_umum':
+          capaianKuliahKeterampilanUmum == true ? 1 : 0,
+      'capaian_kuliah_keterampilan_khusus':
+          capaianKuliahKeterampilanKhusus == true ? 1 : 0,
+      'tahun': tahun,
+      'deleted_at': deletedAt?.toIso8601String(),
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }

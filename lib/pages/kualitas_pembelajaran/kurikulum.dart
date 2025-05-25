@@ -19,7 +19,7 @@ class kurikulum extends StatefulWidget { // Nama kelas widget diubah
 class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
 
   // Tipe list menggunakan model Kinerja_Mata_Kuliah
-  List<kualitas_kurikulum> dataList = [];
+  List<KualitasKurikulum> dataList = [];
   ApiService apiService = ApiService();
   // Sesuaikan nama menu dan sub-menu
   String menuName = "Kurikulum"; // Contoh
@@ -45,7 +45,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
     try {
       // Menggunakan model Kinerja_Mata_Kuliah
       final data = await apiService.getData(
-          kualitas_kurikulum.fromJson, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
+          KualitasKurikulum.fromJson, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
       setState(() {
         dataList = data;
       });
@@ -62,7 +62,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
     try {
       // Menggunakan model Kinerja_Mata_Kuliah
       await apiService.postData(
-         kualitas_kurikulum.fromJson, newData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
+         KualitasKurikulum.fromJson, newData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
       _fetchData(); // Refresh data setelah berhasil menambah
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Data berhasil ditambahkan!')),
@@ -94,7 +94,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
     try {
       // Menggunakan model Kinerja_Mata_Kuliah
       await apiService.updateData(
-          kualitas_kurikulum.fromJson, id, updatedData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
+          KualitasKurikulum.fromJson, id, updatedData, endPoint); // Menggunakan Kinerja_Mata_Kuliah.fromJson
       _fetchData(); // Refresh data setelah berhasil mengedit
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Data berhasil diupdate!')),
@@ -236,7 +236,7 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                             },
                             children: dataList.asMap().entries.map((entry) {
                               int index = entry.key;
-                              kualitas_kurikulum data = entry.value; // Menggunakan model
+                              KualitasKurikulum data = entry.value; // Menggunakan model
                               return TableRow(
                                 children: [
                                   // Nomor
@@ -250,112 +250,112 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.nama_mata_kuliah)),
+                                      child: Center(child: Text(data.namaMataKuliah)),
                                     ),
                                   ),
                                   // Kode Mata Kuliah
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.kode_mata_kuliah)),
+                                      child: Center(child: Text(data.kodeMataKuliah)),
                                     ),
                                   ),
                                    // Kompetensi
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.mata_kuliah_kompetensi)),
+                                      child: Center(child: Text(data.mataKuliahKompetensi == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // SKS Kuliah
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.sks_kuliah.toString())),
+                                      child: Center(child: Text(data.sksKuliah.toString())),
                                     ),
                                   ),
                                    // SKS Seminar
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.sks_seminar.toString())),
+                                      child: Center(child: Text(data.sksSeminar.toString())),
                                     ),
                                   ),
                                    // SKS Praktikum
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.sks_praktikum.toString())),
+                                      child: Center(child: Text(data.sksPraktikum.toString())),
                                     ),
                                   ),
                                    // Konversi SKS
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.konversi_sks.toString())),
+                                      child: Center(child: Text(data.konversiSks.toString())),
                                     ),
                                   ),
                                    // Semester
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.semester)),
+                                      child: Center(child: Text(data.semester == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Metode Pembelajaran
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.metode_pembelajaran)),
+                                      child: Center(child: Text(data.metodePembelajaran == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Dokumen
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.dokumen)),
+                                      child: Center(child: Text(data.dokumen??'')),
                                     ),
                                   ),
                                    // Unit Penyelenggara
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.unit_penyelenggara)),
+                                      child: Center(child: Text(data.unitPenyelenggara == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Capaian Kuliah Sikap
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.capaian_kuliah_sikap)),
+                                      child: Center(child: Text(data.capaianKuliahSikap == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Capaian Kuliah Pengetahuan
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.capaian_kuliah_pengetahuan)),
+                                      child: Center(child: Text(data.capaianKuliahPengetahuan == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Capaian Kuliah Keterampilan Umum
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.capaian_kuliah_keterampilan_umum)),
+                                      child: Center(child: Text(data.capaianKuliahKeterampilanUmum == true ? "ya":"tidak")),
                                     ),
                                   ),
                                    // Capaian Kuliah Keterampilan Khusus
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.capaian_kuliah_keterampilan_khusus)),
+                                      child: Center(child: Text(data.capaianKuliahKeterampilanKhusus == true ? "ya":"tidak")),
                                     ),
                                   ),
                                   // Tahun
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.tahun)),
+                                      child: Center(child: Text(data.tahun??'')),
                                     ),
                                   ),
                                   // Aksi Button
@@ -369,21 +369,21 @@ class KinerjaMataKuliahState extends State<kurikulum> { // Nama state diubah
                                             // Pastikan ID data ada sebelum mengedit
                                             if (data.id != null) {
                                                _showEditDialog(data.id!, {
-                                                'nama_mata_kuliah': data.nama_mata_kuliah,
-                                                'kode_mata_kuliah': data.kode_mata_kuliah,
-                                                'mata_kuliah_kompetensi': data.mata_kuliah_kompetensi,
-                                                'sks_kuliah': data.sks_kuliah,
-                                                'sks_seminar': data.sks_seminar,
-                                                'sks_praktikum': data.sks_praktikum,
-                                                'konversi_sks': data.konversi_sks,
+                                                'nama_mata_kuliah': data.namaMataKuliah,
+                                                'kode_mata_kuliah': data.kodeMataKuliah,
+                                                'mata_kuliah_kompetensi': data.mataKuliahKompetensi,
+                                                'sks_kuliah': data.sksKuliah,
+                                                'sks_seminar': data.sksSeminar,
+                                                'sks_praktikum': data.sksPraktikum,
+                                                'konversi_sks': data.konversiSks,
                                                 'semester': data.semester,
-                                                'metode_pembelajaran': data.metode_pembelajaran,
+                                                'metode_pembelajaran': data.metodePembelajaran,
                                                 'dokumen': data.dokumen,
-                                                'unit_penyelenggara': data.unit_penyelenggara,
-                                                'capaian_kuliah_sikap': data.capaian_kuliah_sikap,
-                                                'capaian_kuliah_pengetahuan': data.capaian_kuliah_pengetahuan,
-                                                'capaian_kuliah_keterampilan_umum': data.capaian_kuliah_keterampilan_umum,
-                                                'capaian_kuliah_keterampilan_khusus': data.capaian_kuliah_keterampilan_khusus,
+                                                'unit_penyelenggara': data.unitPenyelenggara,
+                                                'capaian_kuliah_sikap': data.capaianKuliahSikap,
+                                                'capaian_kuliah_pengetahuan': data.capaianKuliahPengetahuan,
+                                                'capaian_kuliah_keterampilan_umum': data.capaianKuliahKeterampilanUmum,
+                                                'capaian_kuliah_keterampilan_khusus': data.capaianKuliahKeterampilanKhusus,
                                                 'tahun': data.tahun,
                                               });
                                             } else {

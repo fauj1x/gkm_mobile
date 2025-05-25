@@ -26,6 +26,7 @@ import 'package:gkm_mobile/pages/kinerja_lulusan/masastudi.dart';
 import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/akademik.dart';
 import 'package:gkm_mobile/pages/kinerja_lulusan/prestasi_mahasiswa/nonakademik.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/integrasi_penelitian.dart';
+import 'package:gkm_mobile/pages/kualitas_pembelajaran/kurikulum.dart';
 import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/bukuchaptermhs.dart';
 import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/hkihakciptamhs.dart';
 import 'package:gkm_mobile/pages/luarankaryamahasiswa/luaranlainnya/hkipatenmhs.dart';
@@ -41,6 +42,7 @@ import 'package:gkm_mobile/pages/kinerja_dosen/publikasi_ilmiah_dosen.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/sitasi_karya_dosen.dart';
 import 'package:gkm_mobile/pages/kualitas_pembelajaran/kepuasan_mahasiswa.dart';
 import 'package:gkm_mobile/pages/pkmdtpsmahasiswa/pkmdtpsmahasiswa.dart';
+import 'package:gkm_mobile/pages/rekapdata/rekapdata.dart';
 import 'package:gkm_mobile/pages/tabelevaluasi/tabelevaluasi.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/penelitian_dtps.dart';
@@ -108,6 +110,9 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
       // Kualitas Pembelajaran
       case "Integrasi Penelitian":
         page = IntegrasiPenelitian(tahunAjaran: widget.tahunAjaran);
+        break;
+        case "Kurikulum & Pembelajaran":
+        page = kurikulum(tahunAjaran: widget.tahunAjaran);
         break;
       case "Profil Dosen":
         page = const Placeholder();
@@ -433,8 +438,8 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                     "Evaluasi Kesesuaian Kerja",
                     "Evaluasi Waktu Tunggu",
                     "Evaluasi Tempat Kerja",
-                    "Masa Studi Lulusan",
-                    "Evaluasi Lulusan"
+                    "Masa Studi Lulusan"
+                    
                   ]),
                   buildMenu(
                       "Luaran Karya Mahasiswa",
