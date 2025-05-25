@@ -216,7 +216,7 @@ class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.tahun)),
+                                      child: Center(child: Text(data.tahun??'')),
                                     ),
                                   ),
                                   // Aksi Button
@@ -369,7 +369,7 @@ class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
                   'user_id': userId,
                   'nama_mahasiswa': namaMahasiswaController.text,
                   'judul_artikel': judulArtikelController.text,
-                  'jumlah_sitasi': parsedJumlahSitasi,
+                  'jumlah_sitasi': parsedJumlahSitasi.toString(),
                   'tahun': tahunController.text,
                 });
                 Navigator.pop(context);
@@ -385,7 +385,7 @@ class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
   void _showEditDialog(int id, SitasiMahasiswa currentData) {
     final TextEditingController namaMahasiswaController = TextEditingController(text: currentData.namaMahasiswa);
     final TextEditingController judulArtikelController = TextEditingController(text: currentData.judulArtikel);
-    final TextEditingController jumlahSitasiController = TextEditingController(text: currentData.jumlahSitasi.toString());
+    final jumlahSitasiController = TextEditingController(text: currentData.jumlahSitasi.toString());
     final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
 
     showDialog(
@@ -431,7 +431,7 @@ class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
                 // Validasi input
                 if (namaMahasiswaController.text.isEmpty ||
                     judulArtikelController.text.isEmpty ||
-                    jumlahSitasiController.text.isEmpty ||
+                    jumlahSitasiController.text.isEmpty||
                     tahunController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Semua bidang harus diisi')),
@@ -439,22 +439,25 @@ class SitasiMahasiswaScreenState extends State<SitasiMahasiswaScreen> {
                   return;
                 }
 
-                final int? parsedJumlahSitasi = int.tryParse(jumlahSitasiController.text);
-                if (parsedJumlahSitasi == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Jumlah Sitasi harus berupa angka')),
-                  );
-                  return;
-                }
+                
 
-                _editData(id, {
-                  'id': id, // Pastikan ID dikirim kembali untuk update
-                  'user_id': userId,
-                  'nama_mahasiswa': namaMahasiswaController.text,
-                  'judul_artikel': judulArtikelController.text,
-                  'jumlah_sitasi': parsedJumlahSitasi,
-                  'tahun': tahunController.text,
-                });
+                final int? parsedJumlahSitasi = int.tryParse(jumlahSitasiController.text);
+if (parsedJumlahSitasi == null) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Jumlah Sitasi harus berupa angka')),
+  );
+  return;
+}
+
+_editData(id, {
+  'id': id,
+  'user_id': userId,
+  'nama_mahasiswa': namaMahasiswaController.text,
+  'judul_artikel': judulArtikelController.text,
+  'jumlah_sitasi': parsedJumlahSitasi,  // Kirim sebagai int
+  'tahun': tahunController.text,
+});
+
                 Navigator.pop(context);
               },
               child: const Text('Simpan'),
