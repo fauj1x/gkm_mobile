@@ -2,6 +2,7 @@
 import 'dart:convert'; // Import untuk jsonEncode jika belum ada di ApiService
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/models/user_profiles.dart'; // Sesuaikan path ini
+import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import GoogleFonts
@@ -208,7 +209,7 @@ class UserProfileFormScreenState extends State<UserProfileFormScreen> {
       // Navigasi ke layar login dan hapus semua rute sebelumnya
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => login()), // Ganti dengan LoginScreen Anda
+        MaterialPageRoute(builder: (context) => OnboardingScreen()), // Ganti dengan LoginScreen Anda
         (Route<dynamic> route) => false, // Hapus semua rute di stack
       );
     }

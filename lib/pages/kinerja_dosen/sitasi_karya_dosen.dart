@@ -24,8 +24,8 @@ class SitasiKaryaDosenState extends State<SitasiKaryaDosen> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
     _fetchUserId();
+    _fetchData();
   }
 
   Future<void> _fetchUserId() async {
@@ -35,12 +35,22 @@ class SitasiKaryaDosenState extends State<SitasiKaryaDosen> {
     });
   }
 
+  List<SitasiKaryaDosenModel> filterByIdAndTahun(
+      List<SitasiKaryaDosenModel> list,
+      int userId,
+      int tahunAjaran) {
+    return list.where((item) =>
+    // item.tahunAjaran == tahunAjaran &&
+    item.userId == userId
+    ).toList();
+  }
+
   Future<void> _fetchData() async {
     try {
       final data =
           await apiService.getData(SitasiKaryaDosenModel.fromJson, endPoint);
       setState(() {
-        dataList = data;
+        dataList = filterByIdAndTahun(data, userId, widget.tahunAjaran.id);
       });
     } catch (e) {
       print("Error fetching data: $e");
