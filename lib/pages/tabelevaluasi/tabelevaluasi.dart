@@ -5,7 +5,6 @@ import 'package:gkm_mobile/services/auth.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:gkm_mobile/utils/kategori_tabel.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';
-import 'package:gkm_mobile/pages/kinerjadosen/kinerjadosen.dart';
 import 'package:gkm_mobile/pages/rekapdata/dosen.dart';
 import 'package:gkm_mobile/pages/rekapdata/evaluasi_lulusan.dart';
 import 'package:gkm_mobile/pages/rekapdata/ipk_lulusan.dart';

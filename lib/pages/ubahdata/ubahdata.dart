@@ -112,7 +112,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         page = IntegrasiPenelitian(tahunAjaran: widget.tahunAjaran);
         break;
         case "Kurikulum & Pembelajaran":
-        page = kurikulum(tahunAjaran: widget.tahunAjaran);
+        page = MataKuliahScreen(tahunAjaran: widget.tahunAjaran);
         break;
       case "Profil Dosen":
         page = const Placeholder();
