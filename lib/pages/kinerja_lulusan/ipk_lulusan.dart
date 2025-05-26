@@ -382,12 +382,13 @@ class IpkLulusanScreenState extends State<IpkLulusanScreen> {
                 }
 
                 _addData({
-                  'user_id': userId,
-                  'tahun': tahunController.text,
-                  'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
-                  'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
-                  'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
-                  'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
+                   // pastikan id dari data yang akan diedit
+   'user_id': userId, // pastikan userId sudah didefinisikan
+    'tahun': tahunController.text,
+    'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
+    'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
+    'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
+    'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
                 });
                 Navigator.pop(context);
               },
@@ -466,13 +467,13 @@ class IpkLulusanScreenState extends State<IpkLulusanScreen> {
                 }
 
                 _editData(id, {
-                  'id': id, // Pastikan ID dikirim kembali untuk update
-                  'user_id': userId,
-                  'tahun': tahunController.text,
-                  'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
-                  'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
-                  'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
-                  'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
+                    'id': id, // pastikan id dari data yang akan diedit
+    'user_id': userId,
+    'tahun': tahunController.text,
+    'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
+    'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
+    'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
+    'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
                 });
                 Navigator.pop(context);
               },

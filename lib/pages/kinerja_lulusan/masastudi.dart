@@ -165,10 +165,17 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                               children: [
                                 _headerCell("No.", 50),
                                 _headerCell("Tahun", 100),
+                                _headerCell("Masa Studi", 120), // New header
+                                _headerCell("Mhs Diterima", 120), // New header
+                                _headerCell("Lulus TS", 100), // New header
+                                _headerCell("Lulus TS-1", 100), // New header
+                                _headerCell("Lulus TS-2", 100), // New header
+                                _headerCell("Lulus TS-3", 100), // New header
+                                _headerCell("Lulus TS-4", 100), // New header
+                                _headerCell("Lulus TS-5", 100), // New header
+                                _headerCell("Lulus TS-6", 100), // New header
                                 _headerCell("Jumlah Lulusan", 120),
-                                _headerCell("IPK Minimal", 100),
-                                _headerCell("IPK Maksimal", 100),
-                                _headerCell("IPK Rata-Rata", 120),
+                                _headerCell("Mean Masa Studi", 150), // New header
                                 _headerCell("Aksi", 80),
                               ],
                             ),
@@ -180,11 +187,18 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                             columnWidths: const {
                               0: FixedColumnWidth(50),
                               1: FixedColumnWidth(100),
-                              2: FixedColumnWidth(120),
-                              3: FixedColumnWidth(100),
-                              4: FixedColumnWidth(100),
-                              5: FixedColumnWidth(120),
-                              6: FixedColumnWidth(80),
+                              2: FixedColumnWidth(120), // Masa Studi
+                              3: FixedColumnWidth(120), // Mhs Diterima
+                              4: FixedColumnWidth(100), // Lulus TS
+                              5: FixedColumnWidth(100), // Lulus TS-1
+                              6: FixedColumnWidth(100), // Lulus TS-2
+                              7: FixedColumnWidth(100), // Lulus TS-3
+                              8: FixedColumnWidth(100), // Lulus TS-4
+                              9: FixedColumnWidth(100), // Lulus TS-5
+                              10: FixedColumnWidth(100), // Lulus TS-6
+                              11: FixedColumnWidth(120), // Jumlah Lulusan
+                              12: FixedColumnWidth(150), // Mean Masa Studi
+                              13: FixedColumnWidth(80), // Aksi
                             },
                             children: dataList.asMap().entries.map((entry) {
                               final data = entry.value;
@@ -205,25 +219,67 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.masaStudi ?? '-')), // Display masaStudi
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsDiterima.toString())), // Display jumlahMhsDiterima
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs.toString())), // Display jumlahMhsLulusAkhirTs
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs1.toString())), // Display jumlahMhsLulusAkhirTs1
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs2.toString())), // Display jumlahMhsLulusAkhirTs2
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs3.toString())), // Display jumlahMhsLulusAkhirTs3
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs4.toString())), // Display jumlahMhsLulusAkhirTs4
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs5.toString())), // Display jumlahMhsLulusAkhirTs5
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: Text(data.jumlahMhsLulusAkhirTs6.toString())), // Display jumlahMhsLulusAkhirTs6
+                                    ),
+                                  ),
+                                  TableCell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Center(child: Text(data.jumlahLulusan.toString())),
                                     ),
                                   ),
                                   TableCell(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.ipkMinimal.toStringAsFixed(2))),
-                                    ),
-                                  ),
-                                  TableCell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.ipkMaksimal.toStringAsFixed(2))),
-                                    ),
-                                  ),
-                                  TableCell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: Text(data.ipkRataRata.toStringAsFixed(2))),
+                                      child: Center(child: Text(data.meanMasaStudi.toStringAsFixed(2))), // Display meanMasaStudi
                                     ),
                                   ),
                                   // Aksi Button
@@ -309,10 +365,17 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
 
   void _showAddDialog() {
     final TextEditingController tahunController = TextEditingController();
+    final TextEditingController masaStudiController = TextEditingController();
+    final TextEditingController jumlahMhsDiterimaController = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTsController = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs1Controller = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs2Controller = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs3Controller = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs4Controller = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs5Controller = TextEditingController();
+    final TextEditingController jumlahMhsLulusAkhirTs6Controller = TextEditingController();
     final TextEditingController jumlahLulusanController = TextEditingController();
-    final TextEditingController ipkMinimalController = TextEditingController();
-    final TextEditingController ipkMaksimalController = TextEditingController();
-    final TextEditingController ipkRataRataController = TextEditingController();
+    final TextEditingController meanMasaStudiController = TextEditingController();
 
     showDialog(
       context: context,
@@ -326,6 +389,51 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                 TextField(
                   controller: tahunController,
                   decoration: const InputDecoration(labelText: 'Tahun'),
+                  keyboardType: TextInputType.text, // Changed to text
+                ),
+                TextField(
+                  controller: masaStudiController,
+                  decoration: const InputDecoration(labelText: 'Masa Studi'),
+                  keyboardType: TextInputType.text, // Can be text or number based on input type
+                ),
+                TextField(
+                  controller: jumlahMhsDiterimaController,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Diterima'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTsController,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs1Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-1'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs2Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-2'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs3Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-3'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs4Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-4'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs5Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-5'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs6Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-6'),
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
@@ -334,18 +442,8 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
-                  controller: ipkMinimalController,
-                  decoration: const InputDecoration(labelText: 'IPK Minimal'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                TextField(
-                  controller: ipkMaksimalController,
-                  decoration: const InputDecoration(labelText: 'IPK Maksimal'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                TextField(
-                  controller: ipkRataRataController,
-                  decoration: const InputDecoration(labelText: 'IPK Rata-Rata'),
+                  controller: meanMasaStudiController,
+                  decoration: const InputDecoration(labelText: 'Mean Masa Studi'),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ],
@@ -362,10 +460,16 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
               onPressed: () {
                 // Validasi input
                 if (tahunController.text.isEmpty ||
+                    jumlahMhsDiterimaController.text.isEmpty ||
+                    jumlahMhsLulusAkhirTsController.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs1Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs2Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs3Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs4Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs5Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs6Controller.text.isEmpty ||
                     jumlahLulusanController.text.isEmpty ||
-                    ipkMinimalController.text.isEmpty ||
-                    ipkMaksimalController.text.isEmpty ||
-                    ipkRataRataController.text.isEmpty) {
+                    meanMasaStudiController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Semua bidang harus diisi')),
                   );
@@ -375,10 +479,17 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                 _addData({
                   'user_id': userId,
                   'tahun': tahunController.text,
+                  'masa_studi': masaStudiController.text.isNotEmpty ? masaStudiController.text : null, // Send null if empty
+                  'jumlah_mhs_diterima': int.tryParse(jumlahMhsDiterimaController.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts': int.tryParse(jumlahMhsLulusAkhirTsController.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_1': int.tryParse(jumlahMhsLulusAkhirTs1Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_2': int.tryParse(jumlahMhsLulusAkhirTs2Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_3': int.tryParse(jumlahMhsLulusAkhirTs3Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_4': int.tryParse(jumlahMhsLulusAkhirTs4Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_5': int.tryParse(jumlahMhsLulusAkhirTs5Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_6': int.tryParse(jumlahMhsLulusAkhirTs6Controller.text) ?? 0,
                   'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
-                  'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
-                  'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
-                  'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
+                  'mean_masa_studi': double.tryParse(meanMasaStudiController.text) ?? 0.0,
                 });
                 Navigator.pop(context);
               },
@@ -392,10 +503,17 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
 
   void _showEditDialog(int id, MasaStudiLulusanModel currentData) {
     final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
+    final TextEditingController masaStudiController = TextEditingController(text: currentData.masaStudi);
+    final TextEditingController jumlahMhsDiterimaController = TextEditingController(text: currentData.jumlahMhsDiterima.toString());
+    final TextEditingController jumlahMhsLulusAkhirTsController = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs1Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs1.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs2Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs2.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs3Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs3.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs4Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs4.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs5Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs5.toString());
+    final TextEditingController jumlahMhsLulusAkhirTs6Controller = TextEditingController(text: currentData.jumlahMhsLulusAkhirTs6.toString());
     final TextEditingController jumlahLulusanController = TextEditingController(text: currentData.jumlahLulusan.toString());
-    final TextEditingController ipkMinimalController = TextEditingController(text: currentData.ipkMinimal.toString());
-    final TextEditingController ipkMaksimalController = TextEditingController(text: currentData.ipkMaksimal.toString());
-    final TextEditingController ipkRataRataController = TextEditingController(text: currentData.ipkRataRata.toString());
+    final TextEditingController meanMasaStudiController = TextEditingController(text: currentData.meanMasaStudi.toString());
 
     showDialog(
       context: context,
@@ -409,6 +527,51 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                 TextField(
                   controller: tahunController,
                   decoration: const InputDecoration(labelText: 'Tahun'),
+                  keyboardType: TextInputType.text, // Changed to text
+                ),
+                TextField(
+                  controller: masaStudiController,
+                  decoration: const InputDecoration(labelText: 'Masa Studi'),
+                  keyboardType: TextInputType.text,
+                ),
+                TextField(
+                  controller: jumlahMhsDiterimaController,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Diterima'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTsController,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs1Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-1'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs2Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-2'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs3Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-3'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs4Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-4'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs5Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-5'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: jumlahMhsLulusAkhirTs6Controller,
+                  decoration: const InputDecoration(labelText: 'Jumlah Mahasiswa Lulus Akhir TS-6'),
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
@@ -417,18 +580,8 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
-                  controller: ipkMinimalController,
-                  decoration: const InputDecoration(labelText: 'IPK Minimal'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                TextField(
-                  controller: ipkMaksimalController,
-                  decoration: const InputDecoration(labelText: 'IPK Maksimal'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                ),
-                TextField(
-                  controller: ipkRataRataController,
-                  decoration: const InputDecoration(labelText: 'IPK Rata-Rata'),
+                  controller: meanMasaStudiController,
+                  decoration: const InputDecoration(labelText: 'Mean Masa Studi'),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ],
@@ -445,10 +598,16 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
               onPressed: () {
                 // Validasi input
                 if (tahunController.text.isEmpty ||
+                    jumlahMhsDiterimaController.text.isEmpty ||
+                    jumlahMhsLulusAkhirTsController.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs1Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs2Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs3Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs4Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs5Controller.text.isEmpty ||
+                    jumlahMhsLulusAkhirTs6Controller.text.isEmpty ||
                     jumlahLulusanController.text.isEmpty ||
-                    ipkMinimalController.text.isEmpty ||
-                    ipkMaksimalController.text.isEmpty ||
-                    ipkRataRataController.text.isEmpty) {
+                    meanMasaStudiController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Semua bidang harus diisi')),
                   );
@@ -459,10 +618,17 @@ class MasaStudiLulusanState extends State<MasaStudiLulusan> {
                   'id': id, // Pastikan ID dikirim kembali untuk update
                   'user_id': userId,
                   'tahun': tahunController.text,
+                  'masa_studi': masaStudiController.text.isNotEmpty ? masaStudiController.text : null, // Send null if empty
+                  'jumlah_mhs_diterima': int.tryParse(jumlahMhsDiterimaController.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts': int.tryParse(jumlahMhsLulusAkhirTsController.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_1': int.tryParse(jumlahMhsLulusAkhirTs1Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_2': int.tryParse(jumlahMhsLulusAkhirTs2Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_3': int.tryParse(jumlahMhsLulusAkhirTs3Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_4': int.tryParse(jumlahMhsLulusAkhirTs4Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_5': int.tryParse(jumlahMhsLulusAkhirTs5Controller.text) ?? 0,
+                  'jumlah_mhs_lulus_akhir_ts_6': int.tryParse(jumlahMhsLulusAkhirTs6Controller.text) ?? 0,
                   'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
-                  'ipk_minimal': double.tryParse(ipkMinimalController.text) ?? 0.0,
-                  'ipk_maksimal': double.tryParse(ipkMaksimalController.text) ?? 0.0,
-                  'ipk_rata_rata': double.tryParse(ipkRataRataController.text) ?? 0.0,
+                  'mean_masa_studi': double.tryParse(meanMasaStudiController.text) ?? 0.0,
                 });
                 Navigator.pop(context);
               },
