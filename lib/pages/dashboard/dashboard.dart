@@ -30,6 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    
     super.initState();
     _fetchTahunAjaran();
     _fetchUserProfile(); // Panggil fungsi untuk mengambil profil saat initState
