@@ -176,7 +176,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         page = Kesesuaian(tahunAjaran: widget.tahunAjaran);
         break;
         case "Evaluasi Tempat Kerja":
-        page = TempatKerja(tahunAjaran: widget.tahunAjaran);
+        page = TempatKerjaScreen(tahunAjaran:widget.tahunAjaran);
         break;
         case "Evaluasi Waktu Tunggu":
         page = WaktuTunggu(tahunAjaran: widget.tahunAjaran);

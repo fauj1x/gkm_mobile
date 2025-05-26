@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:gkm_mobile/models/kinerjalulusan_tempatkerja.dart';// Sesuaikan path ini jika perlu
-import 'package:gkm_mobile/models/tahun_ajaran.dart'; // Jika masih relevan, pertahankan
+import 'package:gkm_mobile/models/kinerjalulusan_tempatkerja.dart'; // Your TempatKerjaModel
+import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TempatKerja extends StatefulWidget {
-  final TahunAjaran? tahunAjaran; // Dapat dihapus jika tidak digunakan
-  const TempatKerja({Key? key, this.tahunAjaran}) : super(key: key);
+class TempatKerjaScreen extends StatefulWidget {
+  const TempatKerjaScreen({Key? key, required TahunAjaran tahunAjaran}) : super(key: key);
 
   @override
   TempatKerjaState createState() => TempatKerjaState();
 }
 
-class TempatKerjaState extends State<TempatKerja> {
+class TempatKerjaState extends State<TempatKerjaScreen> {
   List<TempatKerjaModel> dataList = [];
-  ApiService apiService = ApiService();
-  String menuName = "Data Tempat Kerja Lulusan";
-  String subMenuName = ""; // Biarkan kosong jika tidak ada sub-menu
-  String endPoint = "tempat-kerja"; // Endpoint API untuk Tempat Kerja
+  final ApiService apiService = ApiService();
+  final String menuName = "Data Tempat Kerja";
+  final String subMenuName = "";
+  final String endPoint = "tempat-kerja";
   int userId = 0;
+
+  final TextEditingController _searchController = TextEditingController();
+  List<TempatKerjaModel> filteredDataList = [];
 
   @override
   void initState() {
     super.initState();
     _fetchUserId();
     _fetchData();
+    _searchController.addListener(_filterData);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userId = int.parse(prefs.getString('id') ?? '0');
+      userId = int.tryParse(prefs.getString('id') ?? '0') ?? 0;
     });
   }
 
@@ -39,48 +48,102 @@ class TempatKerjaState extends State<TempatKerja> {
       final data = await apiService.getData(TempatKerjaModel.fromJson, endPoint);
       setState(() {
         dataList = data;
+        _filterData();
       });
     } catch (e) {
       print("Error fetching data: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengambil data: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mengambil data: $e')),
+        );
+      }
     }
+  }
+
+  void _filterData() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredDataList = dataList.where((data) {
+        return data.tahun.toLowerCase().contains(query) ||
+            data.jumlahLulusan.toString().contains(query) ||
+            data.jumlahLulusanTerlacak.toString().contains(query) ||
+            data.jumlahLulusanBekerjaLokal.toString().contains(query) ||
+            data.jumlahLulusanBekerjaNasional.toString().contains(query) ||
+            data.jumlahLulusanBekerjaInternasional.toString().contains(query);
+      }).toList();
+    });
   }
 
   Future<void> _addData(Map<String, dynamic> newData) async {
     try {
       await apiService.postData(TempatKerjaModel.fromJson, newData, endPoint);
-      _fetchData(); // Refresh data setelah menambahkan
+      await _fetchData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data berhasil ditambahkan!')),
+        );
+      }
     } catch (e) {
       print("Error adding data: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menambahkan data: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menambahkan data: $e')),
+        );
+      }
     }
   }
 
-  Future<void> _deleteData(int id) async {
+  Future<void> _deleteData(int? id) async {
+    if (id == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat menghapus data: ID tidak ditemukan.')),
+        );
+      }
+      return;
+    }
     try {
       await apiService.deleteData(id, endPoint);
-      _fetchData(); // Refresh data setelah menghapus
+      await _fetchData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data berhasil dihapus!')),
+        );
+      }
     } catch (e) {
       print("Error deleting data: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus data: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menghapus data: $e')),
+        );
+      }
     }
   }
 
-  Future<void> _editData(int id, Map<String, dynamic> updatedData) async {
+  Future<void> _editData(int? id, Map<String, dynamic> updatedData) async {
+    if (id == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak dapat mengedit data: ID tidak ditemukan.')),
+        );
+      }
+      return;
+    }
     try {
       await apiService.updateData(TempatKerjaModel.fromJson, id, updatedData, endPoint);
-      _fetchData(); // Refresh data setelah mengedit
+      await _fetchData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data berhasil diupdate!')),
+        );
+      }
     } catch (e) {
       print("Error editing data: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal mengedit data: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mengedit data: $e')),
+        );
+      }
     }
   }
 
@@ -126,13 +189,14 @@ class TempatKerjaState extends State<TempatKerja> {
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.search, color: Color(0xFF009688)),
+                      const Icon(Icons.search, color: Color(0xFF009688)),
                       Expanded(
                         child: TextField(
-                          style: TextStyle(color: Color(0xFF009688)),
-                          decoration: InputDecoration(
+                          controller: _searchController,
+                          style: const TextStyle(color: Color(0xFF009688)),
+                          decoration: const InputDecoration(
                             hintText: "Cari data...",
                             hintStyle: TextStyle(color: Color(0xFF009688)),
                             border: InputBorder.none,
@@ -163,14 +227,14 @@ class TempatKerjaState extends State<TempatKerja> {
                             color: Colors.teal,
                             child: Row(
                               children: [
-                                _headerCell("No.", 50),
-                                _headerCell("Tahun", 100),
-                                _headerCell("Jumlah Lulusan", 120),
-                                _headerCell("Lulusan Terlacak", 120),
-                                _headerCell("Bekerja Lokal", 120),
-                                _headerCell("Bekerja Nasional", 120),
-                                _headerCell("Bekerja Internasional", 150),
-                                _headerCell("Aksi", 80),
+                                _HeaderCell("No.", 50),
+                                _HeaderCell("Tahun", 100),
+                                _HeaderCell("Jumlah Lulusan", 120),
+                                _HeaderCell("Lulusan Terlacak", 120),
+                                _HeaderCell("Bekerja Lokal", 120),
+                                _HeaderCell("Bekerja Nasional", 120),
+                                _HeaderCell("Bekerja Internasional", 150),
+                                _HeaderCell("Aksi", 80),
                               ],
                             ),
                           ),
@@ -188,7 +252,7 @@ class TempatKerjaState extends State<TempatKerja> {
                               6: FixedColumnWidth(150),
                               7: FixedColumnWidth(80),
                             },
-                            children: dataList.asMap().entries.map((entry) {
+                            children: filteredDataList.asMap().entries.map((entry) {
                               final data = entry.value;
                               return TableRow(
                                 children: [
@@ -299,13 +363,13 @@ class TempatKerjaState extends State<TempatKerja> {
     );
   }
 
-  Widget _headerCell(String text, double width) {
+  static Widget _HeaderCell(String text, double width) {
     return Container(
       width: width,
       padding: const EdgeInsets.all(8.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black54), // Menambahkan border
+        border: Border.all(color: Colors.black54),
       ),
       child: Text(
         text,
@@ -327,7 +391,7 @@ class TempatKerjaState extends State<TempatKerja> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Tambah Data Tempat Kerja Lulusan'),
+          title: const Text('Tambah Data Alumni Tracking'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -374,7 +438,6 @@ class TempatKerjaState extends State<TempatKerja> {
             ),
             TextButton(
               onPressed: () {
-                // Validasi input
                 if (tahunController.text.isEmpty ||
                     jumlahLulusanController.text.isEmpty ||
                     jumlahLulusanTerlacakController.text.isEmpty ||
@@ -406,7 +469,7 @@ class TempatKerjaState extends State<TempatKerja> {
     );
   }
 
-  void _showEditDialog(int id, TempatKerjaModel currentData) {
+  void _showEditDialog(int? id, TempatKerjaModel currentData) {
     final TextEditingController tahunController = TextEditingController(text: currentData.tahun);
     final TextEditingController jumlahLulusanController = TextEditingController(text: currentData.jumlahLulusan.toString());
     final TextEditingController jumlahLulusanTerlacakController = TextEditingController(text: currentData.jumlahLulusanTerlacak.toString());
@@ -418,7 +481,7 @@ class TempatKerjaState extends State<TempatKerja> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Data Tempat Kerja Lulusan'),
+          title: const Text('Edit Data Alumni Tracking'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -465,7 +528,6 @@ class TempatKerjaState extends State<TempatKerja> {
             ),
             TextButton(
               onPressed: () {
-                // Validasi input
                 if (tahunController.text.isEmpty ||
                     jumlahLulusanController.text.isEmpty ||
                     jumlahLulusanTerlacakController.text.isEmpty ||
@@ -479,7 +541,7 @@ class TempatKerjaState extends State<TempatKerja> {
                 }
 
                 _editData(id, {
-                  'id': id, // Pastikan ID dikirim kembali untuk update
+                  'id': id,
                   'user_id': userId,
                   'tahun': tahunController.text,
                   'jumlah_lulusan': int.tryParse(jumlahLulusanController.text) ?? 0,
