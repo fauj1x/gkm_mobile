@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/services/api_services.dart';
-import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/auth_service.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
 import 'package:gkm_mobile/pages/rekapdata/tambahdataKT.dart';
 

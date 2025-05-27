@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gkm_mobile/models/tahun_ajaran.dart';
-import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/auth_service.dart';
 import 'package:gkm_mobile/services/api_services.dart';
 import 'package:gkm_mobile/utils/kategori_tabel.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/pkm_dtps.dart';

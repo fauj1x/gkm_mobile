@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/login/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class onboarding extends StatelessWidget {
-  const onboarding({super.key});
+class Onboarding extends StatelessWidget {
+  const Onboarding({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class OnboardingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const login()),
+                        MaterialPageRoute(builder: (context) => const Login()),
                       );
                     },
                     child: Text(

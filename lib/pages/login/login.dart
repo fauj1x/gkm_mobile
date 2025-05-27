@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/dashboard/dashboard.dart';
 import 'package:gkm_mobile/pages/register/register.dart';
-import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class login extends StatefulWidget {
-  const login({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreen createState() => LoginScreen();
 }
 
-class _LoginScreenState extends State<login> {
+class LoginScreen extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _obscurePassword = true; // Untuk toggle visibilitas password
@@ -215,15 +215,27 @@ class _LoginScreenState extends State<login> {
       return;
     }
 
-    var loginSuccess = await Provider.of<AuthProvider>(context, listen: false)
+    var loginResult = await Provider.of<AuthProvider>(context, listen: false)
         .login(email, password);
 
-    if (!loginSuccess) {
-      _showDialog(context, "Email atau kata sandi salah!");
-      return;
+    switch (loginResult) {
+      case 200:
+        break;
+      case 401:
+        _showDialog(context, "Email atau kata sandi salah!");
+        return;
+      case 403:
+        _showDialog(context, "Link verifikasi dikirim ulang ke E-mail anda!");
+        _showDialog(context, "Email belum diverifikasi!");
+        return;
+      case 422:
+        _showDialog(context, "Email atau kata sandi tidak valid!");
+        return;
+      default:
+        _showDialog(context, "Terjadi kesalahan! Silakan coba lagi!");
+        return;
     }
 
-    // TODO: sudah masuk ke dashboard tapi animasi loading masih ada
     // Menampilkan loading dialog
     showDialog(
       context: context,

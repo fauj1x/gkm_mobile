@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/login/login.dart';
 import 'package:gkm_mobile/pages/dashboard/dashboard.dart';
+import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:provider/provider.dart';
+
+import '../../services/auth_service.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -12,20 +16,24 @@ class register extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<register> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   bool _obscurePassword = true; // Untuk toggle password visibility
 
   void showSuccessNotification(BuildContext context) {
     Flushbar(
-      message: "Registrasi berhasil! 🎉",
+      message: "Registrasi berhasil! 🎉\nLink verifikasi telah dikirim ke email Anda.",
       icon: const Icon(Icons.check_circle, color: Colors.white, size: 28),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
       flushbarPosition: FlushbarPosition.TOP,
       margin: const EdgeInsets.all(10),
       borderRadius: BorderRadius.circular(8),
-      backgroundGradient: const LinearGradient(colors: [Color(0xFF00B98F), Colors.teal]),
+      backgroundGradient:
+          const LinearGradient(colors: [Color(0xFF00B98F), Colors.teal]),
       boxShadows: const [
         BoxShadow(color: Colors.black45, offset: Offset(2, 2), blurRadius: 4)
       ],
@@ -33,13 +41,19 @@ class _RegisterPageState extends State<register> {
     ).show(context);
   }
 
-  void register() {
+  Future<void> register() async {
+    String name = nameController.text.trim();
+    String username = usernameController.text.trim();
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      _showDialog("Harap isi semua field!");
+    if (username.isEmpty ||
+        name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      _showDialog("Tolong lengkapi semua kolom!");
       return;
     }
 
@@ -48,14 +62,29 @@ class _RegisterPageState extends State<register> {
       return;
     }
 
+    var registerResult = await Provider.of<AuthProvider>(context, listen: false)
+        .register(name, username, email, password);
+
+    switch (registerResult) {
+      case 200:
+        break;
+      case 401:
+        _showDialog("Registrasi gagal! Data yang anda masukan tidak valid.");
+        return;
+      default:
+        // Gagal karena alasan lain
+        _showDialog("Terjadi kesalahan. Silakan coba lagi.");
+        return;
+    }
+
     // Tampilkan notifikasi modern saat registrasi berhasil
     showSuccessNotification(context);
 
-    // Pindah ke Dashboard setelah 2.5 detik
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    // Pindah ke Login setelah 2
+    Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const Login()),
       );
     });
   }
@@ -65,13 +94,15 @@ class _RegisterPageState extends State<register> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.info_outline, size: 50, color: Color(0xFF00B98F)),
+                const Icon(Icons.info_outline,
+                    size: 50, color: Color(0xFF00B98F)),
                 const SizedBox(height: 10),
                 Text(
                   "Pemberitahuan",
@@ -129,7 +160,8 @@ class _RegisterPageState extends State<register> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Pusatkan form di tengah
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Pusatkan form di tengah
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -143,12 +175,28 @@ class _RegisterPageState extends State<register> {
                     const SizedBox(height: 10),
                     Text(
                       "Silahkan buat akunmu untuk memulai petualangan bersama GKM!",
-                      style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black),
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
                     ),
                     const SizedBox(height: 20),
-                    _buildInputField("Email", "Masukkan emailmu di sini", emailController, false),
-                    _buildInputField("Kata Sandi", "Masukkan passwordmu di sini", passwordController, true),
-                    _buildInputField("Konfirmasi Kata Sandi", "Ketik ulang kata sandimu", confirmPasswordController, false),
+                    _buildInputField("Nama Lengkap", "Masukkan nama anda",
+                        nameController, false),
+                    _buildInputField("Username", "Masukkan username anda",
+                        usernameController, false),
+                    _buildInputField("Email", "Masukkan emailmu di sini",
+                        emailController, false),
+                    _buildInputField(
+                        "Kata Sandi",
+                        "Masukkan passwordmu di sini",
+                        passwordController,
+                        true),
+                    _buildInputField(
+                        "Konfirmasi Kata Sandi",
+                        "Ketik ulang kata sandi anda",
+                        confirmPasswordController,
+                        true),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: register,
@@ -178,7 +226,7 @@ class _RegisterPageState extends State<register> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const login()),
+                      MaterialPageRoute(builder: (context) => const Login()),
                     );
                   },
                   child: Text.rich(
@@ -208,38 +256,45 @@ class _RegisterPageState extends State<register> {
     );
   }
 
-  Widget _buildInputField(String label, String hint, TextEditingController controller, bool isPassword) {
+  Widget _buildInputField(String label, String hint,
+      TextEditingController controller, bool isPassword) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
         Text(
           label,
-          style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
+          style: GoogleFonts.poppins(
+              fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
         const SizedBox(height: 5),
         TextField(
           controller: controller,
-          obscureText: isPassword && controller != confirmPasswordController ? _obscurePassword : false,
+          obscureText: isPassword ? _obscurePassword : false,
           style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w400),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+            hintStyle: GoogleFonts.poppins(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.grey),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Color(0xFF00B98F), width: 2), // Hover warna 0xFF00B98F
+              borderSide: const BorderSide(
+                  color: Color(0xFF00B98F), width: 2), // Hover warna 0xFF00B98F
               borderRadius: BorderRadius.circular(10),
             ),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            suffixIcon: isPassword && controller != confirmPasswordController
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            suffixIcon: isPassword
                 ? IconButton(
-              icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
+              icon: Icon(_obscurePassword
+                  ? Icons.visibility_off
+                  : Icons.visibility),
               onPressed: () {
                 setState(() {
                   _obscurePassword = !_obscurePassword;

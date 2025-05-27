@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
 import 'package:gkm_mobile/pages/splashscreen/splashscreen.dart';
 import 'package:provider/provider.dart';
-import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/auth_service.dart';
 
 void main() {
   runApp(

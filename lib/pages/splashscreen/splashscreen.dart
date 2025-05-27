@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gkm_mobile/pages/onboarding/onboarding.dart';
-import 'package:gkm_mobile/services/auth.dart';
+import 'package:gkm_mobile/services/auth_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
