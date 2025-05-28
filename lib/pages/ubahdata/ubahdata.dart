@@ -12,6 +12,7 @@ import 'package:gkm_mobile/pages/data_dosen/ewmp_dosen.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pendidikan.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/penelitian.dart';
 import 'package:gkm_mobile/pages/kerjasama_tridharma/pengabdian_masyarakat.dart';
+import 'package:gkm_mobile/pages/kerjasama_tridharma/test.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/buku_chapter_dosen.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_hak_cipta.dart';
 import 'package:gkm_mobile/pages/kinerja_dosen/luaran_penelitian_lain/hki_paten.dart';
@@ -76,6 +77,9 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
         break;
       case "Pengabdian Masyarakat":
         page = PengabdianMasyarakat(tahunAjaran: widget.tahunAjaran);
+        break;
+      case "test":
+        page = TestPage();
         break;
       // Data Mahasiswa
       case "Seleksi Mahasiswa":
@@ -376,7 +380,7 @@ class UbahDataPageState extends State<UbahData> with TickerProviderStateMixin {
                       "assets/images/ilustrasi1.png",
                       Colors.teal,
                       Colors.grey.shade300,
-                      ["Pendidikan", "Penelitian", "Pengabdian Masyarakat"]),
+                      ["Pendidikan", "Penelitian", "Pengabdian Masyarakat","test"]),
                   buildMenu(
                       "Data Mahasiswa",
                       "assets/images/ilustrasi2.png",
